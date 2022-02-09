@@ -1,0 +1,7 @@
+{
+  "name": "college-notifier",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
