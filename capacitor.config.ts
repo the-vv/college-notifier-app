@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'college-notifier',
+  appId: 'com.thevv.collegenotifier',
+  appName: 'College Notifier',
   webDir: 'www',
   bundledWebRuntime: false
 };

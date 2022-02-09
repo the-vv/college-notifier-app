@@ -1,0 +1,6 @@
+{
+	"appId": "com.thevv.collegenotifier",
+	"appName": "College Notifier",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

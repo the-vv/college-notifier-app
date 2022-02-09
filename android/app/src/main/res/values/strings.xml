@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">College Notifier</string>
+    <string name="title_activity_main">College Notifier</string>
+    <string name="package_name">com.thevv.collegenotifier</string>
+    <string name="custom_url_scheme">com.thevv.collegenotifier</string>
+</resources>
