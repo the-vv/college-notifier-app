@@ -1,9 +1,18 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>signup</ion-title>
+    <ion-title>{{'collegeNotifier' | string}} {{'signUp' | string}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-row class="mt-2">
+    <ion-col>
+      <p-steps [model]="items" [activeIndex]="1"></p-steps>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <router-outlet></router-outlet>
+    </ion-col>
+  </ion-row>
 </ion-content>

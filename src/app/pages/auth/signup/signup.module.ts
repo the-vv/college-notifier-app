@@ -7,14 +7,29 @@ import { IonicModule } from '@ionic/angular';
 import { SignupPageRoutingModule } from './signup-routing.module';
 
 import { SignupPage } from './signup.page';
+import { CommonExportsModule } from 'src/app/common-exports.module';
+import { StepsModule } from 'primeng/steps';
+import { RoleChooseComponent } from './role-choose/role-choose.component';
+import { CreateCollegeComponent } from './create-college/create-college.component';
+import { JoinCollegeComponent } from './join-college/join-college.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SignupPageRoutingModule
+    SignupPageRoutingModule,
+    CommonExportsModule,
+    StepsModule
   ],
-  declarations: [SignupPage]
+  declarations: [
+    SignupPage,
+    RoleChooseComponent,
+    CreateCollegeComponent,
+    JoinCollegeComponent,
+    UserDetailsComponent
+  ]
 })
-export class SignupPageModule {}
+export class SignupPageModule { }

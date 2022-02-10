@@ -164,3 +164,58 @@ $val in $valueforhn {
 .h-100 {
     height: 100%;   
 }
+
+.v-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.flex-dir-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-dir-column {
+    display: flex;
+    flex-direction: column;
+}
+
+// verflow related all classes
+.overflow-hidden {
+    overflow: hidden;
+}
+.overflow-visible {
+    overflow: visible;
+}
+.overflow-scroll {
+    overflow: scroll;
+}
+.overflow-auto {
+    overflow: auto;
+}
+.overflow-x-hidden {
+    overflow-x: hidden;
+}
+.overflow-x-visible {
+    overflow-x: visible;
+}
+.overflow-x-scroll {
+    overflow-x: scroll;
+}
+.overflow-x-auto {
+    overflow-x: auto;
+}
+.overflow-y-hidden {
+    overflow-y: hidden;
+}
+.overflow-y-visible {
+    overflow-y: visible;
+}
+.overflow-y-scroll {
+    overflow-y: scroll;
+}
+.overflow-y-auto {
+    overflow-y: auto;
+}
