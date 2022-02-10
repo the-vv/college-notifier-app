@@ -1,9 +1,42 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
 
-  constructor() { }
+  baseUrl = environment.baseUrl;
+
+  constructor(
+    private http: HttpClient,
+  ){}
+
+  postAsync(body: any, endpoint: string): Observable<any> {
+    return this.http.post<any>([this.baseUrl, endpoint].join('/'), body, {
+      withCredentials: true
+    });
+  }
+
+  putAsync(body, endpoint: string): Observable<any> {
+    return this.http.put<any>([this.baseUrl, endpoint].join('/'), body, {
+      withCredentials: true
+    });
+  }
+
+  deleteByIdAsync(endpoint: string, id: string): Observable<any> {
+    return this.http.delete<any>([this.baseUrl, endpoint, id].join('/'), {
+      withCredentials: true
+    });
+  }
+
+  getByIdAsync(endpoint: string, id: string): Observable<any> {
+    return this.http.get<any>([this.baseUrl, endpoint, id].join('/'), {
+      withCredentials: true
+    });
+  }
+
+
 }

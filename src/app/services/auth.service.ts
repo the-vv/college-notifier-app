@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { IUser } from '../interfaces/commons-interfaces';
 import { HttpService } from './http.service';
 
 @Injectable({
@@ -7,7 +8,7 @@ import { HttpService } from './http.service';
 })
 export class AuthService {
 
-  public user$: BehaviorSubject<any> = new BehaviorSubject(null);
+  public user$: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
   private authAPiUrl = 'api/auth';
 
   constructor(

@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{'collegeNotifier' | string}} {{'login' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="h-100">
+    <ion-col size-md="8" *ngIf="currentBreakPoint === 'medium'">
+      <ion-row class="v-center">
+        <ion-col class="text-center">
+          <!-- vertical aligned div -->
+          <img src="assets/images/login-image.png" alt="" style="max-height: 70vh;">
+        </ion-col>
+      </ion-row>
+    </ion-col>
+    <ion-col size-md="4" size="12">
+      <ion-row class="ion-align-items-center ion-justify-content-center text-center mt-3">
+        <ion-col size="12">
+          <p-avatar icon="pi pi-user text-dark" styleClass="mr-2" size="xlarge" shape="circle" class="my-2"></p-avatar>
+          <form>
+            <ion-item class="my-2">
+              <ion-label position="floating">{{'email' | string}}</ion-label>
+              <ion-input type="email"></ion-input>
+            </ion-item>
+            <ion-item class="my-2">
+              <ion-label position="floating">{{'password' | string}}</ion-label>
+              <ion-input type="password"></ion-input>
+            </ion-item>
+            <ion-button type="submit" size="block">{{'login' | string}}</ion-button>
+          </form>
+        </ion-col>
+      </ion-row>      
+      <ion-row>
+        <ion-col size="12" class="text-center mt-1">          
+          <ion-button size="block" fill="solid" color="danger">
+            {{'login' | string}} {{'with' | string}} {{'google' | string}}
+            <ion-icon name="logo-google" class="ml-1"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" class="text-center mt-4">          
+          <ion-label position="floating">{{'newUser' | string}}? {{'signUp' | string}}</ion-label>
+          <ion-button size="block" fill="outline">{{'signUp' | string}}</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+</ion-content> 

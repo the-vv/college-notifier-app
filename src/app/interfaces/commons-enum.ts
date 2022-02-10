@@ -27,3 +27,11 @@ export enum ENotificationType {
     notification = 'notification',
     event = 'event',
 }
+
+export enum EBreakPoints {
+    xs = 'xsmall',
+    sm = 'small',
+    md = 'medium',
+    lg = 'large',
+    xl = 'xlarge',
+}

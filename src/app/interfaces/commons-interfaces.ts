@@ -64,3 +64,7 @@ export interface IBatch {
     admins: string[];
 }
 
+export interface IEmailPassword {
+    email: string;
+    password: string;
+}
