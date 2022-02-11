@@ -7,3 +7,26 @@
     // border: 1px solid var(--ion-color-tertiary);
     border-radius: 5px;
 }
+
+.image-preview img {
+    height: 100px;
+}
+
+.floating-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background: var(--ion-color-danger);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.floating-loader {
+    position: absolute;
+    top: 0px;
+    right: 35px;
+}

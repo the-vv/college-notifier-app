@@ -18,17 +18,17 @@ const routes: Routes = [
         component: RoleChooseComponent
       },
       {
-        path: ':role',
-        component: UserDetailsComponent
-      },
-      {
-        path: '/create-college',
+        path: 'create-college',
         component: CreateCollegeComponent
       },
       {
-        path: '/join-college',
+        path: 'join-college',
         component: JoinCollegeComponent
-      }
+      },
+      {
+        path: ':role',
+        component: UserDetailsComponent
+      },
     ]
   },
 ];

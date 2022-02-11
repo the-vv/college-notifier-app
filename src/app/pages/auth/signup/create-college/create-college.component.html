@@ -1,3 +1,52 @@
-<p>
-  create-college works!
-</p>
+<ion-row class="h-100 v-center">
+  <ion-col size-md="8" *ngIf="currentBreakPoint === 'medium'">
+    <ion-row class="v-center">
+      <ion-col class="text-center">
+        <!-- vertical aligned div -->
+        <img src="assets/images/college.png" alt="" style="height: 70vh;">
+      </ion-col>
+    </ion-row>
+  </ion-col>
+  <ion-col size="12" size-md="4" class="text-center border-rounded"  [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''"> 
+    <p-avatar icon="pi pi-building text-dark" styleClass="" size="xlarge" shape="circle"></p-avatar>
+    <h5>{{'enter' | string}} {{'college' | string}} {{'details' | string}}</h5>
+    <form>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item class="mt-1">
+            <ion-label position="floating">{{'college' | string}} {{'name' | string}}</ion-label>
+            <ion-input type="text"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="mt-1">
+            <ion-label position="floating">{{'address' | string}}</ion-label>
+            <ion-textarea></ion-textarea>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="mt-1">
+            <ion-label position="floating">{{'phone' | string}}</ion-label>
+            <ion-input type="number"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="mt-1">
+            <ion-label position="floating">{{'website' | string}}</ion-label>
+            <ion-input type="text"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="mt-1" button>
+            <app-image-upload class="v-100"></app-image-upload>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">{{'submit' | string}}</ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-col>
+</ion-row>

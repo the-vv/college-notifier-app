@@ -21,29 +21,32 @@ export class SignupPage implements OnInit {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
         const url = e.url;
-        const role = url.split('/')[3];
-        if (role === EUserRoles.admin) {
+        const urlEnding = url.split('/')[3];
+        if (urlEnding === EUserRoles.admin) {
           this.items = [...this.items, { label: [EStrings.create, EStrings.college].join(' ') }];
           this.activeStep = 1;
         }
-        else if (role === EUserRoles.faculty) {
+        else if (urlEnding === EUserRoles.faculty) {
           this.items = [...this.items, { label: [EStrings.join, EStrings.college].join(' ') }];
           this.activeStep = 1;
         }
-        else if (role === EUserRoles.student) {
+        else if (urlEnding === EUserRoles.student) {
           this.items = [...this.items, { label: [EStrings.join, EStrings.class].join(' ') }];
           this.activeStep = 1;
         }
-        else if (role === EUserRoles.parent) {
+        else if (urlEnding === EUserRoles.parent) {
           this.items = [...this.items, { label: [EStrings.access, EStrings.child, EStrings.account].join(' ') }];
           this.activeStep = 1;
         }
-        else if (role === 'role') {
+        else if (urlEnding === 'role') {
           this.items = [
             { label: [EStrings.choose, EStrings.role].join(' ') },
             { label: [EStrings.user, EStrings.details].join(' ') },
           ];
           this.activeStep = 0;
+        }
+        else if(urlEnding === 'create-college') {
+          this.activeStep = 2;
         }
       }
     });

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { CommonExportsModule } from '../common-exports.module';
+import { IonicModule } from '@ionic/angular';
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import { CommonExportsModule } from '../common-exports.module';
   ],
   imports: [
     CommonModule,
-    CommonExportsModule
+    CommonExportsModule,
+    IonicModule
   ],
   exports: [
     SideMenuComponent,

@@ -12,7 +12,7 @@ $valueforn: 1 10px,
 6 70px;
 
 $bcolorvalues: "danger"#dc3545,
-"dark"#212529,
+"dark"var(--ion-color-step-100),
 "warning"#ffc107,
 "info"#101414,
 "success"#198754,
@@ -222,4 +222,8 @@ $val in $valueforhn {
 }
 .overflow-y-auto {
     overflow-y: auto;
+}
+
+.border-rounded {
+    border-radius: 1rem;
 }
