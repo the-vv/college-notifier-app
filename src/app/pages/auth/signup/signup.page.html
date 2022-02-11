@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>{{'collegeNotifier' | string}} {{'signUp' | string}}</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -7,7 +10,7 @@
 <ion-content>
   <ion-row class="mt-2">
     <ion-col>
-      <p-steps [model]="items" [activeIndex]="1"></p-steps>
+      <p-steps [model]="items" [activeIndex]="activeStep"></p-steps>
     </ion-col>
   </ion-row>
   <ion-row>

@@ -13,6 +13,8 @@ import { RoleChooseComponent } from './role-choose/role-choose.component';
 import { CreateCollegeComponent } from './create-college/create-college.component';
 import { JoinCollegeComponent } from './join-college/join-college.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { AvatarModule } from 'primeng/avatar';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { UserDetailsComponent } from './user-details/user-details.component';
     IonicModule,
     SignupPageRoutingModule,
     CommonExportsModule,
-    StepsModule
+    StepsModule,
+    AvatarModule,
+    SharedModule
   ],
   declarations: [
     SignupPage,

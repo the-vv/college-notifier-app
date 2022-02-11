@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EUserRoles } from 'src/app/interfaces/commons-enum';
 
 @Component({
   selector: 'app-role-choose',
@@ -7,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RoleChooseComponent implements OnInit {
 
-  constructor() { }
+  public eUserRoles = EUserRoles;
+
+  constructor() {
+   }
 
   ngOnInit() {}
 

@@ -1,20 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SideMenuComponent } from './side-menu/side-menu.component';
+import { ImageUploadComponent } from './image-upload/image-upload.component';
+import { CommonExportsModule } from '../common-exports.module';
 
-const components = [
-  SideMenuComponent
-];
 
 @NgModule({
   declarations: [
-    SideMenuComponent
+    SideMenuComponent,
+    ImageUploadComponent
   ],
   imports: [
     CommonModule,
+    CommonExportsModule
   ],
   exports: [
-    ...components
+    SideMenuComponent,
+    ImageUploadComponent
   ]
 })
 export class SharedModule { }

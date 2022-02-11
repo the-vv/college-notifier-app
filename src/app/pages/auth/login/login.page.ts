@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EBreakPoints } from 'src/app/interfaces/commons-enum';
 import { CommonService } from 'src/app/services/common.service';
@@ -8,7 +8,7 @@ import { CommonService } from 'src/app/services/common.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
 
   public currentBreakPoint: EBreakPoints;
   private subs: Subscription = new Subscription();
@@ -21,6 +21,10 @@ export class LoginPage implements OnInit {
     this.subs.add(this.commonService.breakPointChanges$.subscribe(
       (val: EBreakPoints) => this.currentBreakPoint = val
     ));
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
 }
