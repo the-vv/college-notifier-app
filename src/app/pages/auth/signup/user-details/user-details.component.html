@@ -7,7 +7,8 @@
       </ion-col>
     </ion-row>
   </ion-col>
-  <ion-col size="12" size-md="4" class="text-center border-rounded"  [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''"> 
+  <ion-col size="12" size-md="4" class="text-center border-rounded"
+    [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''">
     <p-avatar icon="pi pi-user text-dark" styleClass="" size="xlarge" shape="circle"></p-avatar>
     <h5>{{'enter' | string}} {{'user' | string}} {{'details' | string}}</h5>
     <form>
@@ -22,18 +23,30 @@
           <ion-item class="mt-1">
             <ion-label position="floating">{{'email' | string}}</ion-label>
             <ion-input type="email"></ion-input>
+            <small class="text-danger" *ngIf="f.email.errors?.required && f.email.touched">{{'email' | string}}
+              {{'isEequired' | string}}</small>
+            <small class="text-danger" *ngIf="f.email.errors?.email && f.email.touched">{{'email' | string}}
+              {{'isInvalid' | string}}</small>
           </ion-item>
         </ion-col>
         <ion-col size="12">
           <ion-item class="mt-1">
             <ion-label position="floating">{{'password' | string}}</ion-label>
             <ion-input type="password"></ion-input>
+            <small class="text-danger" *ngIf="f.password.errors?.required && f.password.touched">{{'password' | string}}
+              {{'isEequired' | string}}</small>
+            <small class="text-danger" *ngIf="f.password.errors?.password && f.password.touched">{{'password' | string}}
+              {{'isInvalid' | string}}</small>
           </ion-item>
         </ion-col>
         <ion-col size="12">
           <ion-item class="mt-1">
             <ion-label position="floating">{{'confirmPassword' | string}}</ion-label>
             <ion-input type="password"></ion-input>
+            <small class="text-danger" *ngIf="f.cPassword.errors?.required && f.cPassword.touched">{{'password' | string}}
+              {{'isEequired' | string}}</small>
+            <small class="text-danger" *ngIf="f.cPassword.errors?.confirm && f.cPassword.touched">{{'password' | string}}
+              {{'isInvalid' | string}}</small>
           </ion-item>
         </ion-col>
         <ion-col size="12">

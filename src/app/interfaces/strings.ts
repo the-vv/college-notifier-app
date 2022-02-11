@@ -81,4 +81,6 @@ export enum EStrings {
     collegeRequestedText = 'Your college has been requested. Please wait for approval.',
     collegeCreated = 'College Created',
     goTo = 'Go to',
+    isInvalid = 'is invalid',
+    isRequired = 'is required',
 }

@@ -7,6 +7,7 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { EBreakPoints } from '../interfaces/commons-enum';
 import { EStrings } from '../interfaces/strings';
+import { HttpService } from './http.service';
 
 
 @Injectable({
@@ -15,10 +16,13 @@ import { EStrings } from '../interfaces/strings';
 export class CommonService {
 
   public breakPointChanges$: BehaviorSubject<EBreakPoints> = new BehaviorSubject<EBreakPoints>(getCurrentBreakpoint());
-  successMessageTitle: string = EStrings.success;
-  successMessageDescription: string = EStrings.done;
+  public successMessageTitle: string = EStrings.success;
+  public successMessageDescription: string = EStrings.done;
+  private commonApiEndPoint = 'api/common';
 
-  constructor() {
+  constructor(
+    private http: HttpService
+  ) {
     initBreakpoints({
       medium: '(min-width: 768px)',
       small: '(min-width: 0px)'
@@ -31,4 +35,13 @@ export class CommonService {
     this.successMessageTitle = title;
     this.successMessageDescription = description;
   }
+
+  uploadFiles(files: any) {
+    return this.http.postAsync(files, [this.commonApiEndPoint, 'upload-files'].join('/'));
+  }
+
+  deleteFiles(urls: string[]) {
+    return this.http.postAsync(urls, [this.commonApiEndPoint, 'delete-files'].join('/'));
+  }
 }
+

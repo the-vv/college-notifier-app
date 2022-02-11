@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://collegenotifier.eastus.cloudapp.azure.com/'
+  baseUrl: 'http://localhost:3000'
 };
 
 /*
