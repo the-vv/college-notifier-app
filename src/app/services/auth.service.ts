@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { IUser } from '../interfaces/commons-interfaces';
 import { HttpService } from './http.service';
 
@@ -15,9 +15,12 @@ export class AuthService {
     private httpService: HttpService
   ) { }
 
-  login(username: string, password: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      resolve(true);
-    });
+  loginAsync(email: string, password: string): Observable<IUser> {
+    return this.httpService.postAsync({ email, password }, [this.authAPiUrl, 'login'].join('/'));
+  };
+
+  sugnupAsync(user: IUser): Observable<IUser> {
+    return this.httpService.postAsync(user, [this.authAPiUrl, 'signup'].join('/'));
   }
+
 }

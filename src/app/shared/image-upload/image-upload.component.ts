@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Camera, CameraResultType } from '@capacitor/camera';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
 
 
@@ -8,23 +9,37 @@ import { CommonService } from 'src/app/services/common.service';
   selector: 'app-image-upload',
   templateUrl: './image-upload.component.html',
   styleUrls: ['./image-upload.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi:true,
+      useExisting: ImageUploadComponent
+    }
+  ]
 })
-export class ImageUploadComponent implements OnInit {
+export class ImageUploadComponent implements OnInit, ControlValueAccessor {
 
   @Input() public previewImage: string;
-  @Output() public imageUploaded = new EventEmitter<string>();
 
   public loading = false;
-  private uploaded = true;
-  private uploader: Subscription;
+  touched = false;
+  disabled = false;
+  uploaded = true;
+  uploader: Subscription;
 
   constructor(
     private commonService: CommonService
   ) { }
 
+  onChange = (quantity) => {};
+  onTouched = () => {};
+
   ngOnInit() { }
 
   public promptImageUpload() {
+    if(this.disabled) {
+      return;
+    }
     this.uploaded = false;
     Camera.getPhoto({
       quality: 50,
@@ -40,8 +55,8 @@ export class ImageUploadComponent implements OnInit {
         this.loading = false;
         this.uploaded = true;
         if(res.length) {
-          this.imageUploaded.emit(res[0].url);
           this.previewImage = res[0].url;
+          this.onChange(this.previewImage);
         }
       }, (err: any) => {
         this.loading = false;
@@ -50,19 +65,39 @@ export class ImageUploadComponent implements OnInit {
   }
 
   public removeImage(event: any) {
+    if(this.disabled) {
+      return;
+    }
     this.previewImage = null;
     event.stopPropagation();
-    this.imageUploaded.emit(null);
     if(!this.uploaded) {
+      this.onChange(null);
       this.uploader.unsubscribe();
       this.uploaded = false;
-    } else {
+    } else if(this.previewImage) {
       this.uploaded = false;
       this.commonService.deleteFiles([this.previewImage]).subscribe(() => {
         this.uploaded = false;
       });
     }
   }
+
+  writeValue(url: string) {
+    this.previewImage = url;
+  }
+
+  registerOnChange(onChange: any) {
+    this.onChange = onChange;
+  }
+
+  registerOnTouched(onTouched: any) {
+    this.onTouched = onTouched;
+  }
+
+  setDisabledState(disabled: boolean) {
+    this.disabled = disabled;
+  }
+
 
   private dataUriToBlob(dataURI: string) {
     const splitDataURI = dataURI.split(',');

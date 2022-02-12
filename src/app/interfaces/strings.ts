@@ -83,4 +83,6 @@ export enum EStrings {
     goTo = 'Go to',
     isInvalid = 'is invalid',
     isRequired = 'is required',
+    notMatch = 'does not match',
+    tooShort = 'is too short',
 }

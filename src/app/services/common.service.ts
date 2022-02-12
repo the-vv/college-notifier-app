@@ -15,7 +15,7 @@ import { HttpService } from './http.service';
 })
 export class CommonService {
 
-  public breakPointChanges$: BehaviorSubject<EBreakPoints> = new BehaviorSubject<EBreakPoints>(getCurrentBreakpoint());
+  public breakPointChanges$: BehaviorSubject<EBreakPoints> = new BehaviorSubject<EBreakPoints>(null);
   public successMessageTitle: string = EStrings.success;
   public successMessageDescription: string = EStrings.done;
   private commonApiEndPoint = 'api/common';
@@ -29,6 +29,7 @@ export class CommonService {
     });
     const breakpointsBroadcast = getBreakpointsBroadcast();
     breakpointsBroadcast.subscribe((val: EBreakPoints) => this.breakPointChanges$.next(val));
+    this.breakPointChanges$.next(getCurrentBreakpoint());
   }
 
   showSuccessPage(title: string, description: string, showContinueButton: boolean = false) {

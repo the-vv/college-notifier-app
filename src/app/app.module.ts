@@ -10,16 +10,15 @@ import { SharedModule } from './shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    IonicModule.forRoot(),
-    AppRoutingModule,
-    SharedModule,
-    HttpClientModule
-  ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule.withServerTransition({ appId: 'serverApp' }),
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        SharedModule,
+        HttpClientModule
+    ],
+    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

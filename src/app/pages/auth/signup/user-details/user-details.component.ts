@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EBreakPoints, EUserRoles } from 'src/app/interfaces/commons-enum';
+import { AuthService } from 'src/app/services/auth.service';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   public currentBreakPoint: EBreakPoints;
   public userForm: FormGroup;
+  public showErrors = false;
   private subs: Subscription = new Subscription();
   private currentRole: EUserRoles;
 
@@ -21,7 +23,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     private commonService: CommonService,
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: AuthService
   ) { }
 
   public get f() { return this.userForm?.controls; }
@@ -34,11 +37,14 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       cPassword: ['', [Validators.required, this.confirmPassword()]],
       role: [this.currentRole],
       active: [true],
       image: [''],
+    });
+    this.userForm.get('password').valueChanges.subscribe(() => {
+      this.userForm.get('cPassword').updateValueAndValidity();
     });
   }
 
@@ -47,11 +53,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log('onSubmit');
-    console.log(this.currentRole);
-    if (this.currentRole === EUserRoles.admin) {
-      this.router.navigate(['/', 'auth', 'signup', 'create-college']);
+    this.showErrors = true;
+    this.userForm.markAllAsTouched();
+    if(this.userForm.invalid) {
+      return;
     }
+    this.authService.sugnupAsync({...this.userForm.value, cPassword: undefined}).subscribe((user) => {
+      if(user) {
+        console.log(user);
+        // this.router.navigate(['/auth/login']);
+      }
+    });
   }
 
   confirmPassword(): ValidatorFn {
