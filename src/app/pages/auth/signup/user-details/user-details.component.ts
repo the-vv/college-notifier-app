@@ -16,6 +16,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public currentBreakPoint: EBreakPoints;
   public userForm: FormGroup;
   public showErrors = false;
+  public loading = false;
   private subs: Subscription = new Subscription();
   private currentRole: EUserRoles;
 
@@ -34,6 +35,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       (val: EBreakPoints) => this.currentBreakPoint = val
     ));
     this.currentRole = this.route.snapshot.params.role;
+    if(Object.keys(EUserRoles).includes(this.currentRole)) {
+      this.router.navigate(['/auth/signup', this.currentRole]);
+    }
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -55,15 +59,34 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.showErrors = true;
     this.userForm.markAllAsTouched();
-    if(this.userForm.invalid) {
+    if (this.userForm.invalid) {
       return;
     }
-    this.authService.sugnupAsync({...this.userForm.value, cPassword: undefined}).subscribe((user) => {
-      if(user) {
-        console.log(user);
-        // this.router.navigate(['/auth/login']);
-      }
-    });
+    this.loading = true;
+    this.authService.sugnupAsync({ ...this.userForm.value, cPassword: undefined })
+      .subscribe((user) => {
+        if (user) {
+          console.log(user);
+          this.loading = false;
+          this.authService.saveUser(user);
+          switch (this.currentRole) {
+            case EUserRoles.admin:
+              this.router.navigate(['/auth/signup','create-college']);
+              break;
+            case EUserRoles.faculty:
+              this.router.navigate(['/auth/signup','join-college']);
+              break;
+            case EUserRoles.student:
+              this.router.navigate(['/auth/signup','join-college']);
+              break;
+            case EUserRoles.parent:
+              this.router.navigate(['/auth/signup', '']);
+              break;
+          }
+        }
+      }, err => {
+        this.loading = false;
+      });
   }
 
   confirmPassword(): ValidatorFn {

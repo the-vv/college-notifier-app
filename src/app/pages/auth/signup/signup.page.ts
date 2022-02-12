@@ -18,9 +18,14 @@ export class SignupPage implements OnInit {
   constructor(
     private router: Router
   ) {
+    this.items = [
+      { label: [EStrings.choose, EStrings.role].join(' ') },
+      { label: [EStrings.user, EStrings.details].join(' ') },
+    ];
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
         const url = e.url;
+        console.log(url);
         const urlEnding = url.split('/')[3];
         if (urlEnding === EUserRoles.admin) {
           this.items = [...this.items, { label: [EStrings.create, EStrings.college].join(' ') }];
@@ -56,10 +61,6 @@ export class SignupPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.items = [
-      { label: [EStrings.choose, EStrings.role].join(' ') },
-      { label: [EStrings.user, EStrings.details].join(' ') },
-    ];
   }
 
   onRoleSelect(role: EUserRoles) {

@@ -17,7 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subs.add(
-      this.authService.user$.subscribe(user => {
+      this.authService.currentUser$.subscribe(user => {
         this.enableMenu = user !== null;
       })
     );

@@ -35,3 +35,8 @@ export enum EBreakPoints {
     lg = 'large',
     xl = 'xlarge',
 }
+
+export enum EStorageKeys {
+    user = 'user',
+    college = 'college',
+}
