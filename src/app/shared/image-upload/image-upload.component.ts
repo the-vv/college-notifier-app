@@ -15,7 +15,7 @@ export class ImageUploadComponent implements OnInit {
   @Output() public imageUploaded = new EventEmitter<string>();
 
   public loading = false;
-  private uploaded = false;
+  private uploaded = true;
   private uploader: Subscription;
 
   constructor(
@@ -25,6 +25,7 @@ export class ImageUploadComponent implements OnInit {
   ngOnInit() { }
 
   public promptImageUpload() {
+    this.uploaded = false;
     Camera.getPhoto({
       quality: 50,
       allowEditing: true,
@@ -33,7 +34,7 @@ export class ImageUploadComponent implements OnInit {
       this.previewImage = `data:image/${image.format};base64,${image.base64String}`;
       const imageBlob = this.dataUriToBlob(this.previewImage);
       const form: FormData = new FormData();
-      form.append('image', imageBlob, `picture_${new Date().getTime()}.${image.format}`);
+      form.append('image', imageBlob, `picture.${image.format}`);
       this.loading = true;
       this.uploader = this.commonService.uploadFiles(form).subscribe((res: any) => {
         this.loading = false;
