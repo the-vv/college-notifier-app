@@ -51,6 +51,11 @@ export class SignupPage implements OnInit {
           this.activeStep = 0;
         }
         else if(urlEnding === 'create-college') {
+          this.items = [
+            { label: [EStrings.choose, EStrings.role].join(' ') },
+            { label: [EStrings.user, EStrings.details].join(' ') },
+            { label: [EStrings.create, EStrings.college].join(' ') },
+          ];
           this.activeStep = 2;
         }
       }

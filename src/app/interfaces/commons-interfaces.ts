@@ -46,12 +46,12 @@ export interface IDepartment {
 export interface ICollege {
     _id: string;
     name: string;
-    owner: string;
     address: string;
     phone: string;
     website?: string;
     image?: string;
     status?: ERequestStatus;
+    admins: string[];
 }
 
 export interface IBatch {

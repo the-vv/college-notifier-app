@@ -11,7 +11,7 @@
     [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''">
     <div class="text-center">
       <p-avatar icon="pi pi-user text-dark" styleClass="" size="xlarge" shape="circle"></p-avatar>
-      <h5>{{'enter' | string}} {{'user' | string}} {{'details' | string}}</h5>
+      <h5>{{currentRole | string}} {{'signUp' | string}}</h5>
     </div>
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <ion-row class="text-left">

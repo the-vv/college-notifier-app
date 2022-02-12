@@ -19,6 +19,7 @@ export class AuthService {
     Storage.get({ key: EStorageKeys.user }).then(user => {
       if (user.value) {
         this.currentUser$.next(JSON.parse(user.value));
+        console.log(this.currentUser$.value);
       }
     });
   }
