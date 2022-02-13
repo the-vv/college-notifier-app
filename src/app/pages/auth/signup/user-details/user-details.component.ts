@@ -1,8 +1,10 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Toast } from '@capacitor/toast';
 import { Subscription } from 'rxjs';
 import { EBreakPoints, EUserRoles } from 'src/app/interfaces/commons-enum';
+import { EStrings } from 'src/app/interfaces/strings';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -42,6 +44,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
                 }
               })
             );
+          }
+          if (user.role === EUserRoles.faculty) {
+            console.log('faculty');
           }
         }
       })
@@ -83,16 +88,19 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       return;
     }
     this.loading = true;
-    this.authService.sugnupAsync({ ...this.userForm.value, cPassword: undefined })
+    this.authService.signupAsync({ ...this.userForm.value, cPassword: undefined })
       .subscribe((user) => {
         if (user) {
           console.log(user);
           this.loading = false;
-          this.authService.saveUser(user);
+          this.authService.onLogin(user);
           this.navigateByRole(this.currentRole);
         }
       }, err => {
         this.loading = false;
+        Toast.show({
+          text: [EStrings.error + ':', err.error?.message].join(' '),
+        });
       });
   }
 

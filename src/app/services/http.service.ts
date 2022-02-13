@@ -26,6 +26,12 @@ export class HttpService {
     });
   }
 
+  getAsync(endpoint: string): Observable<any> {
+    return this.http.get<any>([this.baseUrl, endpoint].join('/'), {
+      withCredentials: true
+    });
+  }
+
   deleteByIdAsync(endpoint: string, id: string): Observable<any> {
     return this.http.delete<any>([this.baseUrl, endpoint, id].join('/'), {
       withCredentials: true
@@ -37,6 +43,7 @@ export class HttpService {
       withCredentials: true
     });
   }
+
 
 
 }

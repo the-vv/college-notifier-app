@@ -39,4 +39,5 @@ export enum EBreakPoints {
 export enum EStorageKeys {
     user = 'user',
     college = 'college',
+    token = 'token',
 }

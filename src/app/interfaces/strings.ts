@@ -85,4 +85,5 @@ export enum EStrings {
     isRequired = 'is required',
     notMatch = 'does not match',
     tooShort = 'is too short',
+    or = 'or',
 }

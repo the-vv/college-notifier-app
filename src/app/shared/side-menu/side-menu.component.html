@@ -1,3 +1,13 @@
-<p>
-  side-menu works!
-</p>
+<ion-list id="inbox-list">
+  <ion-list-header>
+    {{authService.currentUser$.value?.name}}
+  </ion-list-header>
+  <ion-note>{{authService.currentUser$.value?.role | string}}</ion-note>
+  <ion-menu-toggle auto-hide="false">
+    <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" button
+      (click)="authService.onLogout()">
+      <ion-icon slot="start" [ios]="'log-out-outline'" [md]="'log-out-outline'"></ion-icon>
+      <ion-label>Logout</ion-label>
+    </ion-item>
+  </ion-menu-toggle>
+</ion-list>

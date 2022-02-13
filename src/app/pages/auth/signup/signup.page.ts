@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { Subscription } from 'rxjs';
 import { EUserRoles } from 'src/app/interfaces/commons-enum';
 import { EStrings } from 'src/app/interfaces/strings';
-import { trigger, transition, group, query, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-signup',
@@ -14,6 +14,7 @@ export class SignupPage implements OnInit {
 
   public items: MenuItem[] = [];
   public activeStep = 0;
+  private subs: Subscription = new Subscription();
 
   constructor(
     private router: Router
@@ -22,50 +23,78 @@ export class SignupPage implements OnInit {
       { label: [EStrings.choose, EStrings.role].join(' ') },
       { label: [EStrings.user, EStrings.details].join(' ') },
     ];
-    this.router.events.subscribe((e) => {
-      if (e instanceof NavigationEnd) {
-        const url = e.url;
-        console.log(url);
-        const urlEnding = url.split('/')[3];
-        if (urlEnding === EUserRoles.admin) {
-          this.items = [...this.items, { label: [EStrings.create, EStrings.college].join(' ') }];
-          this.activeStep = 1;
+    this.subs.add(
+      this.router.events.subscribe((e) => {
+        if (e instanceof NavigationEnd) {
+          const url = e.url;
+          console.log(url);
+          const urlEnding = url.split('/')[3];
+          if (urlEnding === EUserRoles.admin) {
+            this.items = [
+              { label: [EStrings.choose, EStrings.role].join(' ') },
+              { label: [EStrings.admin, EStrings.details].join(' ') },
+              { label: [EStrings.create, EStrings.college].join(' ') },
+            ];
+            this.activeStep = 1;
+          }
+          else if (urlEnding === EUserRoles.faculty) {
+            this.items = [
+              { label: [EStrings.choose, EStrings.role].join(' ') },
+              { label: [EStrings.faculty, EStrings.details].join(' ') },
+              { label: [EStrings.join, EStrings.college].join(' ') },
+            ];
+            this.activeStep = 1;
+          }
+          else if (urlEnding === EUserRoles.student) {
+            this.items = [
+              { label: [EStrings.choose, EStrings.role].join(' ') },
+              { label: [EStrings.student, EStrings.details].join(' ') },
+              { label: [EStrings.join, EStrings.college].join(' ') },
+            ];
+            this.activeStep = 1;
+          }
+          else if (urlEnding === EUserRoles.parent) {
+            this.items = [
+              { label: [EStrings.choose, EStrings.role].join(' ') },
+              { label: [EStrings.parent, EStrings.details].join(' ') },
+              { label: [EStrings.join, EStrings.college].join(' ') },
+            ];
+            this.activeStep = 1;
+          }
+          else if (urlEnding === 'role') {
+            this.items = [
+              { label: [EStrings.choose, EStrings.role].join(' ') },
+              { label: [EStrings.admin, EStrings.details].join(' ') },
+              { label: [EStrings.create, EStrings.college].join(' ') },
+            ];
+            this.activeStep = 0;
+          }
+          else if (urlEnding === 'create-college') {
+            this.items = [
+              { label: [EStrings.choose, EStrings.role].join(' ') },
+              { label: [EStrings.user, EStrings.details].join(' ') },
+              { label: [EStrings.create, EStrings.college].join(' ') },
+            ];
+            this.activeStep = 2;
+          }
+          else if (urlEnding === 'join-college') {
+            this.items = [
+              { label: [EStrings.choose, EStrings.role].join(' ') },
+              { label: [EStrings.user, EStrings.details].join(' ') },
+              { label: [EStrings.join, EStrings.college].join(' ') },
+            ];
+            this.activeStep = 2;
+          }
         }
-        else if (urlEnding === EUserRoles.faculty) {
-          this.items = [...this.items, { label: [EStrings.join, EStrings.college].join(' ') }];
-          this.activeStep = 1;
-        }
-        else if (urlEnding === EUserRoles.student) {
-          this.items = [...this.items, { label: [EStrings.join, EStrings.class].join(' ') }];
-          this.activeStep = 1;
-        }
-        else if (urlEnding === EUserRoles.parent) {
-          this.items = [...this.items, { label: [EStrings.access, EStrings.child, EStrings.account].join(' ') }];
-          this.activeStep = 1;
-        }
-        else if (urlEnding === 'role') {
-          this.items = [
-            { label: [EStrings.choose, EStrings.role].join(' ') },
-            { label: [EStrings.user, EStrings.details].join(' ') },
-          ];
-          this.activeStep = 0;
-        }
-        else if(urlEnding === 'create-college') {
-          this.items = [
-            { label: [EStrings.choose, EStrings.role].join(' ') },
-            { label: [EStrings.user, EStrings.details].join(' ') },
-            { label: [EStrings.create, EStrings.college].join(' ') },
-          ];
-          this.activeStep = 2;
-        }
-      }
-    });
+      })
+    );
   }
 
   ngOnInit() {
   }
 
-  ionViewWillEnter() {
+  ionViewWillLeave() {
+    this.subs.unsubscribe();
   }
 
   onRoleSelect(role: EUserRoles) {

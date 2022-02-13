@@ -15,24 +15,50 @@
       </ion-row>
     </ion-col>
     <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''">
-      <ion-row class="ion-align-items-center ion-justify-content-center text-center mt-3">
+      <ion-row class="ion-align-items-center ion-justify-content-center mt-2">
         <ion-col size="12">
-          <p-avatar icon="pi pi-user text-dark" styleClass="my-2" size="xlarge" shape="circle"></p-avatar>
-          <form>
-            <ion-item class="my-2">
-              <ion-label position="floating">{{'email' | string}}</ion-label>
-              <ion-input type="email"></ion-input>
-            </ion-item>
-            <ion-item class="my-2">
-              <ion-label position="floating">{{'password' | string}}</ion-label>
-              <ion-input type="password"></ion-input>
-            </ion-item>
-            <ion-button type="submit" size="block">{{'login' | string}}</ion-button>
+          <div class="text-center">
+            <p-avatar icon="pi pi-user text-dark" styleClass="" size="xlarge" shape="circle"></p-avatar>
+            <h5>{{'login' | string}}</h5>
+          </div>
+          <form [formGroup]="loginForm">
+            <ion-col size="12">
+              <ion-item class="">
+                <ion-label position="floating">{{'email' | string}}</ion-label>
+                <ion-input type="email" formControlName="email"></ion-input>
+              </ion-item>
+              <small class="text-danger" *ngIf="f.email.errors?.required && (f.email.touched || showErrors)">{{'email' |
+                string}}
+                {{'isRequired' | string}}</small>
+              <small class="text-danger" *ngIf="f.email.errors?.email && (f.email.touched || showErrors)">{{'email' |
+                string}}
+                {{'isInvalid' | string}}</small>
+            </ion-col>
+            <ion-col size="12">
+              <ion-item class="mt-1">
+                <ion-label position="floating">{{'password' | string}}</ion-label>
+                <ion-input type="password" formControlName="password"></ion-input>
+              </ion-item>
+              <small class="text-danger"
+                *ngIf="f.password.errors?.required && (f.password.touched || showErrors)">{{'password' | string}}
+                {{'isRequired' | string}}</small>
+            </ion-col>
+            <ion-col size="12">
+              <ion-button type="submit" size="block" class="mt-1" (click)="onLogin()">
+                <span *ngIf="!loading">{{'login' | string}}</span>
+                <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+              </ion-button>
+            </ion-col>
           </form>
         </ion-col>
-      </ion-row>      
+      </ion-row>
       <ion-row>
-        <ion-col size="12" class="text-center mt-1">          
+        <ion-col size="12" class="text-center">
+          <div class="separator">
+            <div class="line"></div>
+            <h6>{{'or' | string | uppercase}}</h6>
+            <div class="line"></div>
+          </div>
           <ion-button size="block" fill="solid" color="danger">
             {{'login' | string}} {{'with' | string}} {{'google' | string}}
             <ion-icon name="logo-google" class="ml-1"></ion-icon>
@@ -40,11 +66,11 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col size="12" class="text-center mt-4">          
+        <ion-col size="12" class="text-center mt-4">
           <ion-label position="floating">{{'newUser' | string}}? {{'signUp' | string}}</ion-label>
           <ion-button routerLink="/auth/signup" size="block" fill="outline">{{'signUp' | string}}</ion-button>
         </ion-col>
       </ion-row>
     </ion-col>
   </ion-row>
-</ion-content> 
+</ion-content>

@@ -6,7 +6,7 @@ import { EStrings } from '../interfaces/strings';
 })
 export class StringPipe implements PipeTransform {
 
-  transform(value: string, ...args: unknown[]): unknown {
+  transform(value: string, ...args: unknown[]): string {
     return EStrings[value] || value;
   }
 
