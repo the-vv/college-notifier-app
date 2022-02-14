@@ -5,8 +5,8 @@ import {
   getCurrentBreakpoint,
 } from 'media-breakpoints-watcher';
 import { BehaviorSubject } from 'rxjs';
-import { EBreakPoints } from '../interfaces/commons-enum';
-import { EStrings } from '../interfaces/strings';
+import { EBreakPoints } from '../interfaces/common.enum';
+import { EStrings } from '../interfaces/strings.enum';
 import { HttpService } from './http.service';
 
 

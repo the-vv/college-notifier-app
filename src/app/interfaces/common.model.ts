@@ -1,4 +1,4 @@
-import { ERequestStatus, ESourceTargetType, EUserRoles } from './commons-enum';
+import { ERequestStatus, ESourceTargetType, EUserRoles } from './common.enum';
 
 export interface ISource {
     college?: string;

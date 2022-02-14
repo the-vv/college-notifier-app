@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EUserRoles } from 'src/app/interfaces/commons-enum';
+import { EUserRoles } from 'src/app/interfaces/common.enum';
 
 @Component({
   selector: 'app-role-choose',

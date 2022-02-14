@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IUser } from '../interfaces/commons-interfaces';
+import { IUser } from '../interfaces/common.model';
 import { HttpService } from './http.service';
 import { Storage } from '@capacitor/storage';
-import { EStorageKeys } from '../interfaces/commons-enum';
+import { EStorageKeys } from '../interfaces/common.enum';
 import { Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
-import { EStrings } from '../interfaces/strings';
+import { EStrings } from '../interfaces/strings.enum';
 
 @Injectable({
   providedIn: 'root'

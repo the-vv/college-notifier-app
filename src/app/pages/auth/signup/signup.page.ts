@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { EUserRoles } from 'src/app/interfaces/commons-enum';
-import { EStrings } from 'src/app/interfaces/strings';
+import { EUserRoles } from 'src/app/interfaces/common.enum';
+import { EStrings } from 'src/app/interfaces/strings.enum';
 
 @Component({
   selector: 'app-signup',

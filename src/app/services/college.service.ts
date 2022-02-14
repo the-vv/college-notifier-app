@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@capacitor/storage';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { EStorageKeys } from '../interfaces/commons-enum';
-import { ICollege } from '../interfaces/commons-interfaces';
+import { EStorageKeys } from '../interfaces/common.enum';
+import { ICollege } from '../interfaces/common.model';
 import { HttpService } from './http.service';
 
 @Injectable({

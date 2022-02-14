@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { mergeMap } from 'rxjs/operators';
 import { Storage } from '@capacitor/storage';
-import { EStorageKeys } from 'src/app/interfaces/commons-enum';
+import { EStorageKeys } from 'src/app/interfaces/common.enum';
 import { Observable, of } from 'rxjs';
 
 @Injectable({

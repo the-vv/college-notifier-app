@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { EStrings } from '../interfaces/strings';
+import { EStrings } from '../interfaces/strings.enum';
 
 @Pipe({
   name: 'string'

@@ -3,8 +3,8 @@ import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
 import { Subscription } from 'rxjs';
-import { EBreakPoints, EUserRoles } from 'src/app/interfaces/commons-enum';
-import { EStrings } from 'src/app/interfaces/strings';
+import { EBreakPoints, EUserRoles } from 'src/app/interfaces/common.enum';
+import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';

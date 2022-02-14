@@ -5,7 +5,7 @@ export enum EUserRoles {
     parent = 'parent',
     faculty = 'faculty',
     custom = 'custom',
-    superAdmin = 'superAdmin',
+    superAdmin = 'super-admin',
 }
 
 export enum ERequestStatus {

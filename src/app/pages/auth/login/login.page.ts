@@ -2,11 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { EBreakPoints } from 'src/app/interfaces/commons-enum';
+import { EBreakPoints } from 'src/app/interfaces/common.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CommonService } from 'src/app/services/common.service';
 import { Toast } from '@capacitor/toast';
-import { EStrings } from 'src/app/interfaces/strings';
+import { EStrings } from 'src/app/interfaces/strings.enum';
 
 @Component({
   selector: 'app-login',
