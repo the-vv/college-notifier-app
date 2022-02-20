@@ -41,3 +41,16 @@ export enum EStorageKeys {
     college = 'college',
     token = 'token',
 }
+
+export enum ERedirectTo {
+    createCollege = 'create-college',
+    joinCollege = 'join-college',
+    createDepartment = 'create-department',
+    joinDepartment = 'join-department',
+    createBatch = 'create-batch',
+    joinBatch = 'join-batch',
+    createClass = 'create-class',
+    joinClass = 'join-class',
+    createRoom = 'create-room',
+    joinRoom = 'join-room'
+}

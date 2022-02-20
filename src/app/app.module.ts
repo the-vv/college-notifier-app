@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHeaderService } from './services/resolvers/auth-header.service';
+import { DashboardModule } from './pages/dashboard/dashboard.module';
 
 @NgModule({
     declarations: [AppComponent],
@@ -17,7 +18,8 @@ import { AuthHeaderService } from './services/resolvers/auth-header.service';
         IonicModule.forRoot(),
         AppRoutingModule,
         SharedModule,
-        HttpClientModule
+        HttpClientModule,
+        DashboardModule
     ],
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

@@ -3,7 +3,7 @@ import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } fro
 import { mergeMap } from 'rxjs/operators';
 import { Storage } from '@capacitor/storage';
 import { EStorageKeys } from 'src/app/interfaces/common.enum';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
