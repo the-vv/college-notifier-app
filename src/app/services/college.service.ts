@@ -39,4 +39,8 @@ export class CollegeService {
     return this.http.postAsync(data, this.collegeUrl);
   }
 
+  getAllCollegeAsync(): Observable<ICollege[]> {
+    return this.http.getAsync(this.collegeUrl);
+  }
+
 }

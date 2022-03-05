@@ -6,13 +6,5 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item button *ngFor="let item of homeListItems">
-      <ion-icon slot="start" name="{{item.logo}}" style="color: black"></ion-icon>
-      <ion-label>
-        <h3>{{item.title}}</h3>
-        <p>{{item.description}}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <router-outlet></router-outlet>
 </ion-content>

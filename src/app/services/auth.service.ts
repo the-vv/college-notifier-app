@@ -16,21 +16,32 @@ export class AuthService {
   public currentUser$: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
   public isLoggedIn: boolean;
   private authAPiUrl = 'api/auth';
+  public currentUserRole: string;
 
   constructor(
     private httpService: HttpService,
     private router: Router
   ) {
-    Storage.get({ key: EStorageKeys.user }).then(user => {
-      if (user.value) {
-        this.currentUser$.next(JSON.parse(user.value));
-        console.log(this.currentUser$.value);
-      }
+  }
+
+  initAuth(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      Storage.get({ key: EStorageKeys.user }).then(user => {
+        if (user.value) {
+          this.currentUser$.next(JSON.parse(user.value));
+          this.currentUserRole = this.currentUser$.value.role;
+          console.log(this.currentUser$.value);
+        }
+        resolve(true);
+      }).catch(err => {
+        reject(err);
+      })
     });
   }
 
   saveUser(user: IUser) {
     this.currentUser$.next(user);
+    this.currentUserRole = user.role;
     Storage.set({
       key: EStorageKeys.user,
       value: JSON.stringify(user)
@@ -38,7 +49,7 @@ export class AuthService {
   }
 
   onLogin(user: any) {
-    if(!(user.user && user.token)) {
+    if (!(user.user && user.token)) {
       return;
     }
     this.isLoggedIn = true;
@@ -52,16 +63,17 @@ export class AuthService {
   onLogout() {
     this.isLoggedIn = false;
     this.currentUser$.next(null);
+    this.currentUserRole = null;
     Storage.remove({ key: EStorageKeys.user });
     Storage.remove({ key: EStorageKeys.token });
     this.httpService.getAsync([this.authAPiUrl, 'logout'].join('/'))
-    .subscribe(_ => {
-      this.router.navigate(['/auth']);
-    }, _ => {
-      Toast.show({
-        text: [EStrings.error + ':', , EStrings.logout].join(' '),
+      .subscribe(_ => {
+        this.router.navigate(['/auth']);
+      }, _ => {
+        Toast.show({
+          text: [EStrings.error + ': ', , EStrings.logout].join(' '),
+        });
       });
-    });
   }
 
   loginAsync(email: string, password: string): Observable<any> {

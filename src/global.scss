@@ -25,6 +25,9 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+@import url("~primeng/resources/themes/md-dark-indigo/theme.css") (prefers-color-scheme: dark);
+@import url("~primeng/resources/themes/md-light-indigo/theme.css") (prefers-color-scheme: light);
+
 // custom styles
 @import "./assets/styles/common.scss";
 @import "./assets/styles/misc.scss";

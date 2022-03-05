@@ -1,0 +1,26 @@
+<ion-content>
+  <p-table responsiveLayout="stack" [value]="collegeData">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+          <th>{{'name' | string}}</th>
+          <th>{{'address' | string}}</th>
+          <th>{{'phone' | string}}</th>          
+          <th>{{'website' | string}}</th>          
+          <th>{{'status' | string}}</th>          
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-college let-columns="columns">
+      <tr>
+          <td><span class="p-column-title">{{'name' | string}}</span>{{college.name}}</td>
+          <td><span class="p-column-title">{{'address' | string}}</span>{{college.address}}</td>
+          <td><span class="p-column-title">{{'phone' | string}}</span>{{college.phone}}</td>
+          <td><span class="p-column-title">{{'website' | string}}</span>{{college.website}}</td>
+          <td>
+            <span class="p-column-title">{{'status' | string}}</span>
+            <ion-button color="success">{{'approve' | string}}</ion-button>
+            <ion-button color="danger">{{'reject' | string}}</ion-button>
+          </td>
+      </tr>
+  </ng-template>
+  </p-table>
+</ion-content>

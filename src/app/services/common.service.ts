@@ -8,6 +8,8 @@ import { BehaviorSubject } from 'rxjs';
 import { EBreakPoints } from '../interfaces/common.enum';
 import { EStrings } from '../interfaces/strings.enum';
 import { HttpService } from './http.service';
+import { LoadingController } from '@ionic/angular';
+
 
 
 @Injectable({
@@ -21,7 +23,8 @@ export class CommonService {
   private commonApiEndPoint = 'api/common';
 
   constructor(
-    private http: HttpService
+    private http: HttpService,
+    public loadingController: LoadingController
   ) {
     initBreakpoints({
       medium: '(min-width: 768px)',
@@ -35,6 +38,15 @@ export class CommonService {
   showSuccessPage(title: string, description: string, showContinueButton: boolean = false) {
     this.successMessageTitle = title;
     this.successMessageDescription = description;
+  }
+
+  async showLoading(message: string = `${EStrings.loading}, ${EStrings.pleaseWait}`) {
+    const loader = await this.loadingController.create({
+      message: message,
+      spinner: 'dots'
+    });
+    loader.present();
+    return loader;
   }
 
   uploadFiles(files: any) {

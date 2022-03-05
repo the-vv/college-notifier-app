@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EUserRoles } from 'src/app/interfaces/common.enum';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -7,23 +10,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePage implements OnInit {
 
-  homeListItems: any[] = [];
-
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+  ) { }
 
   ngOnInit() {
-    this.setHomeListItems();
-  }
-
-  setHomeListItems() {
-    this.homeListItems = [
-      {
-        title: 'Dashboard',
-        icon: 'home',
-        route: '/dashboard',
-        description: 'primary'
-      }
-    ];
+    console.log(this.authService.currentUserRole);
+    switch(this.authService.currentUserRole) {
+      case EUserRoles.superAdmin:
+        this.router.navigate(['admin'], { relativeTo: this.activatedRoute });
+        break;
+      case EUserRoles.admin:
+        this.router.navigate(['college-admin'], { relativeTo: this.activatedRoute });
+        break;
+      case EUserRoles.faculty:
+        this.router.navigate(['faculty'], { relativeTo: this.activatedRoute });
+        break;
+      case EUserRoles.student:
+        this.router.navigate(['student'], { relativeTo: this.activatedRoute });
+        break;
+      default:
+        this.router.navigate(['auth'], { relativeTo: this.activatedRoute });
+        break;
+    }
   }
 
 }

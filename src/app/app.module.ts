@@ -10,6 +10,8 @@ import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHeaderService } from './services/resolvers/auth-header.service';
 import { DashboardModule } from './pages/dashboard/dashboard.module';
+import { AdminModule } from './pages/admin/admin.module';
+import { CollegeModule } from './pages/college/college.module';
 
 @NgModule({
     declarations: [AppComponent],
@@ -19,7 +21,9 @@ import { DashboardModule } from './pages/dashboard/dashboard.module';
         AppRoutingModule,
         SharedModule,
         HttpClientModule,
-        DashboardModule
+        DashboardModule,
+        AdminModule,
+        CollegeModule
     ],
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
