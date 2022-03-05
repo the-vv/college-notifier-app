@@ -55,7 +55,7 @@ export class ImageUploadComponent implements OnInit, ControlValueAccessor {
         this.loading = false;
         this.uploaded = true;
         if(res.length) {
-          this.previewImage = res[0].url;
+          this.previewImage = `${res[0].url}?fid=${res[0].fileId}`;
           this.onChange(this.previewImage);
         }
       }, (err: any) => {

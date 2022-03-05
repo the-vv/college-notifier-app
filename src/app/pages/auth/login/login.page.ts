@@ -51,14 +51,15 @@ export class LoginPage implements OnInit, OnDestroy {
       .subscribe(res => {
         this.loading = false;
         if (res.user && res.token) {
-          console.log(res);
+          // console.log(res);
           this.loading = false;
           this.authService.onLogin(res);
+          this.router.navigate(['/dashboard']);
         }
       }, err => {
         this.loading = false;
         Toast.show({
-          text: [EStrings.error + ':', err.error?.message].join(' '),
+          text: [EStrings.error + ': ', err.error?.message].join(' '),
         });
       });
   }
