@@ -68,10 +68,9 @@ export class ImageUploadComponent implements OnInit, ControlValueAccessor {
     if(this.disabled) {
       return;
     }
-    this.previewImage = null;
     event.stopPropagation();
+    this.onChange(null);
     if(!this.uploaded) {
-      this.onChange(null);
       this.uploader.unsubscribe();
       this.uploaded = false;
     } else if(this.previewImage) {
@@ -80,6 +79,7 @@ export class ImageUploadComponent implements OnInit, ControlValueAccessor {
         this.uploaded = false;
       });
     }
+    this.previewImage = null;
   }
 
   writeValue(url: string) {

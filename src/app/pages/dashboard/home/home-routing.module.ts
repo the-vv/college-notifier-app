@@ -13,8 +13,9 @@ const routes: Routes = [
         loadChildren: () => import('src/app/pages/admin/admin.module').then( m => m.AdminModule)
       },
       {
-        path: 'college', loadChildren: () => import('src/app/pages/college/college.module').then(m => m.CollegeModule),
-      },
+        path: 'list',
+        loadChildren: () => import('./list/list.module').then( m => m.ListPageModule)
+      }
     ]
   }
 ];

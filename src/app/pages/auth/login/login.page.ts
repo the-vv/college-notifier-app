@@ -54,7 +54,7 @@ export class LoginPage implements OnInit, OnDestroy {
           // console.log(res);
           this.loading = false;
           this.authService.onLogin(res);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/dashboard'], { replaceUrl: true });
         }
       }, err => {
         this.loading = false;

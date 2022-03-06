@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -12,6 +12,11 @@ import { AuthHeaderService } from './services/resolvers/auth-header.service';
 import { DashboardModule } from './pages/dashboard/dashboard.module';
 import { AdminModule } from './pages/admin/admin.module';
 import { CollegeModule } from './pages/college/college.module';
+import { MainResolverService } from './services/resolvers/main-resolver.service';
+
+export function mainResolverFactory(provider: MainResolverService) {
+    return () => provider.init();
+}
 
 @NgModule({
     declarations: [AppComponent],
@@ -27,7 +32,8 @@ import { CollegeModule } from './pages/college/college.module';
     ],
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        { provide: HTTP_INTERCEPTORS, useClass: AuthHeaderService, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: AuthHeaderService, multi: true },
+        { provide: APP_INITIALIZER, useFactory: mainResolverFactory, deps: [MainResolverService], multi: true }
     ],
     bootstrap: [AppComponent]
 })

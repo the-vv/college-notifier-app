@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@capacitor/storage';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { EStorageKeys } from '../interfaces/common.enum';
+import { ERequestStatus, EStorageKeys } from '../interfaces/common.enum';
 import { ICollege } from '../interfaces/common.model';
 import { HttpService } from './http.service';
 
@@ -39,8 +39,24 @@ export class CollegeService {
     return this.http.postAsync(data, this.collegeUrl);
   }
 
+  putAsync(data: ICollege): Observable<ICollege> {
+    return this.http.putAsync(data, this.collegeUrl);
+  }
+
   getAllCollegeAsync(): Observable<ICollege[]> {
     return this.http.getAsync(this.collegeUrl);
+  }
+
+  getByIdAsync(id: string): Observable<ICollege> {
+    return this.http.getAsync(`${this.collegeUrl}/${id}`);
+  }
+
+  approveRejectAsync(id: string, status: ERequestStatus): Observable<ICollege> {
+    return this.http.putByIdAsync([this.collegeUrl, 'approveReject'].join('/'), id, { status });
+  }
+
+  getByAdminIdAsync(id: string): Observable<ICollege> {
+    return this.http.getAsync(`${this.collegeUrl}/getByAdmin/${id}`);
   }
 
 }

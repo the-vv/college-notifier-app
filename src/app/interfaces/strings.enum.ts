@@ -99,4 +99,12 @@ export enum EStrings {
     loading = 'Loading',
     pleaseWait = 'Please Wait',
     status = 'Status',
+    "super-admin" = 'Super Admin',
+    approve = 'Approve',
+    reject = 'Reject',
+    approved = 'Approved',
+    rejected = 'Rejected',
+    list = 'List',
+    home = 'Home',
+    requested = 'Requested',
 }

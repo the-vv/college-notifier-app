@@ -17,24 +17,25 @@ export class HomePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    
+  }
+
+  ionViewWillEnter() {
     console.log(this.authService.currentUserRole);
     switch(this.authService.currentUserRole) {
       case EUserRoles.superAdmin:
         this.router.navigate(['admin'], { relativeTo: this.activatedRoute });
         break;
       case EUserRoles.admin:
-        this.router.navigate(['college-admin'], { relativeTo: this.activatedRoute });
-        break;
       case EUserRoles.faculty:
-        this.router.navigate(['faculty'], { relativeTo: this.activatedRoute });
-        break;
       case EUserRoles.student:
-        this.router.navigate(['student'], { relativeTo: this.activatedRoute });
+        this.router.navigate(['list'], { relativeTo: this.activatedRoute });
         break;
       default:
-        this.router.navigate(['auth'], { relativeTo: this.activatedRoute });
+        this.router.navigate(['/auth'], { relativeTo: this.activatedRoute });
         break;
     }
   }
+
 
 }

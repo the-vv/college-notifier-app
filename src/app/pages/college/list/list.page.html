@@ -1,26 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'college' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
-  <p-table responsiveLayout="stack" [value]="collegeData">
-    <ng-template pTemplate="header" let-columns>
-      <tr>
+  <ion-card>
+    <ion-row class="v-center">
+      <ion-col size="6" class="ion-text-start">
+        <h3>{{'college' | string }} {{'list' | string }}</h3>
+      </ion-col>
+      <ion-col size="6" class="ion-text-end">
+        <ion-button color="primary" size="small" (click)="null">
+          <ion-icon name="add"></ion-icon>
+          {{'add' | string}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <p-table responsiveLayout="stack" [value]="collegeData" [loading]="loading">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
           <th>{{'name' | string}}</th>
           <th>{{'address' | string}}</th>
-          <th>{{'phone' | string}}</th>          
-          <th>{{'website' | string}}</th>          
-          <th>{{'status' | string}}</th>          
-      </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-college let-columns="columns">
-      <tr>
-          <td><span class="p-column-title">{{'name' | string}}</span>{{college.name}}</td>
+          <th>{{'phone' | string}}</th>
+          <th>{{'website' | string}}</th>
+          <th>{{'status' | string}}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-college let-columns="columns">
+        <tr>
+          <td><span class="p-column-title">
+            {{'name' | string}}</span>
+            <a [routerLink]="['/', 'college', 'manage', college._id]">
+              {{college.name}}
+            </a>
+          </td>
           <td><span class="p-column-title">{{'address' | string}}</span>{{college.address}}</td>
           <td><span class="p-column-title">{{'phone' | string}}</span>{{college.phone}}</td>
           <td><span class="p-column-title">{{'website' | string}}</span>{{college.website}}</td>
-          <td>
+          <td *ngIf="college.status === eRequestStatus.pending">
             <span class="p-column-title">{{'status' | string}}</span>
-            <ion-button color="success">{{'approve' | string}}</ion-button>
-            <ion-button color="danger">{{'reject' | string}}</ion-button>
+            <ion-button color="success" size="small" (click)="onStatusChange(eRequestStatus.active, college._id)">
+              {{'approve' | string}}</ion-button>
+            <ion-button color="danger" size="small" (click)="onStatusChange(eRequestStatus.rejected, college._id)">
+              {{'reject' | string}}</ion-button>
           </td>
-      </tr>
-  </ng-template>
-  </p-table>
+          <td *ngIf="college.status === eRequestStatus.active">
+            <span class="p-column-title">{{'status' | string}}</span>
+            <ion-badge mode="ios" color="success" class="v-center">{{'approved' | string}} 
+              <ion-icon name="checkmark-circle-outline" size="small"></ion-icon>
+            </ion-badge>
+          </td>
+          <td *ngIf="college.status === eRequestStatus.rejected">
+            <span class="p-column-title">{{'status' | string}}</span>
+            <ion-badge mode="ios" color="danger" class="v-center">{{'rejected' | string}} 
+              <ion-icon name="close-circle-outline" size="small"></ion-icon>
+            </ion-badge>
+          </td>          
+        </tr>
+      </ng-template>
+    </p-table>
+  </ion-card>
 </ion-content>

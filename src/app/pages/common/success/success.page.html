@@ -1,12 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{'done' | string}}</ion-title>
+    <ion-title>{{'success' | string}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-row>
-    <ion-col size="12" size-md="6" offset-md="3">
+    <ion-col size="12" size-md="8" offset-md="2">
       <ion-card class="text-center">
         <ion-row class="v-center">
           <ion-col size="12">
@@ -29,5 +29,5 @@
 </ion-content>
 
 <ion-footer>
-  <ion-button fill="outline" size="block" color="primary" routerLink="/dashboard">{{'goTo' | string}} {{'dashboard' | string}}</ion-button>
+  <ion-button fill="outline" size="block" color="primary" routerLink="/dashboard" [replaceUrl]="true">{{'goTo' | string}} {{'dashboard' | string}}</ion-button>
 </ion-footer>

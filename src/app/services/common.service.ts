@@ -9,8 +9,8 @@ import { EBreakPoints } from '../interfaces/common.enum';
 import { EStrings } from '../interfaces/strings.enum';
 import { HttpService } from './http.service';
 import { LoadingController } from '@ionic/angular';
-
-
+import { Toast } from '@capacitor/toast';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,8 @@ export class CommonService {
 
   constructor(
     private http: HttpService,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    private router: Router
   ) {
     initBreakpoints({
       medium: '(min-width: 768px)',
@@ -38,6 +39,7 @@ export class CommonService {
   showSuccessPage(title: string, description: string, showContinueButton: boolean = false) {
     this.successMessageTitle = title;
     this.successMessageDescription = description;
+    this.router.navigate(['/success'], {replaceUrl: true});
   }
 
   async showLoading(message: string = `${EStrings.loading}, ${EStrings.pleaseWait}`) {
@@ -49,12 +51,19 @@ export class CommonService {
     return loader;
   }
 
+  showToast(message: string) {
+    Toast.show({
+      text: message,
+      duration: 'long',
+    });
+  }
+
   uploadFiles(files: any) {
     return this.http.postAsync(files, [this.commonApiEndPoint, 'upload-files'].join('/'));
   }
 
   deleteFiles(urls: string[]) {
-    return this.http.postAsync(urls, [this.commonApiEndPoint, 'delete-files'].join('/'));
+    return this.http.postAsync({ urls }, [this.commonApiEndPoint, 'delete-files'].join('/'));
   }
 }
 

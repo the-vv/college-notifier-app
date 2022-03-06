@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'college' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="h-100 v-center">
+    <ion-col size-md="8" *ngIf="currentBreakPoint === 'medium'">
+      <ion-row class="v-center">
+        <ion-col class="text-center">
+          <img src="assets/images/college.png" alt="" style="height: 70vh;">
+        </ion-col>
+      </ion-row>
+    </ion-col>
+    <ion-col size="12" size-md="4" class="border-rounded" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''">
+      <div class="text-center">
+        <p-avatar icon="pi pi-building" styleClass="" size="xlarge" shape="circle"></p-avatar>
+        <h5>{{'college' | string}} {{'details' | string}}</h5>
+      </div>
+      <form [formGroup]="collegeForm">
+        <ion-row>
+          <ion-col size="12">
+            <ion-item class="mt-1">
+              <ion-label position="floating">{{'college' | string}} {{'name' | string}}</ion-label>
+              <ion-input type="text" formControlName="name"></ion-input>
+            </ion-item>
+            <small class="text-danger" *ngIf="f.name.errors?.required && (f.name.touched || showErrors)">{{'name' |
+              string}} {{'isRequired' | string}}</small>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item class="mt-1">
+              <ion-label position="floating">{{'address' | string}}</ion-label>
+              <ion-textarea formControlName="address"></ion-textarea>
+            </ion-item>
+            <small class="text-danger"
+              *ngIf="f.address.errors?.required && (f.address.touched || showErrors)">{{'address'
+              | string}} {{'isRequired' | string}}</small>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item class="mt-1">
+              <ion-label position="floating">{{'phone' | string}}</ion-label>
+              <ion-input type="number" formControlName="phone"></ion-input>
+            </ion-item>
+            <small class="text-danger" *ngIf="f.phone.errors?.required && (f.phone.touched || showErrors)">{{'phone' |
+              string}} {{'isRequired' | string}}</small>
+            <small class="text-danger" *ngIf="f.phone.errors?.pattern && (f.phone.touched || showErrors)">{{'phone' |
+              string}} {{'isInvalid' | string}}</small>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item class="mt-1">
+              <ion-label position="floating">{{'website' | string}}</ion-label>
+              <ion-input type="text" formControlName="website"></ion-input>
+            </ion-item>
+            <small class="text-danger"
+              *ngIf="f.website.errors?.pattern && (f.website.touched || showErrors)">{{'website' |
+              string}} {{'isInvalid' | string}}</small>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item class="mt-1" button>
+              <app-image-upload class="v-100" formControlName="image"></app-image-upload>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-button type="button" size="block" class="mt-1" (click)="onSubmit()">
+              <span *ngIf="!loading">{{isUpdate ? 'update' : 'create' | string}}</span>
+              <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </form>
+    </ion-col>
+  </ion-row>
+</ion-content>

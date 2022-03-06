@@ -1,7 +1,7 @@
 <div class="v-center image-choose" (click)="promptImageUpload()" *ngIf="!previewImage?.length">
   {{'chooseImage' | string}}
 </div>
-<div class="v-center image-preview" *ngIf="previewImage?.length" (click)="promptImageUpload()">
+<div class="v-center image-preview" *ngIf="previewImage?.length">
   <img [src]="previewImage" alt="">
   <ion-icon name="close-outline" class="floating-close" (click)="removeImage($event)" *ngIf="!disabled">
   </ion-icon>

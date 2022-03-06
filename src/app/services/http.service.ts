@@ -20,8 +20,14 @@ export class HttpService {
     });
   }
 
-  putAsync(body, endpoint: string): Observable<any> {
+  putAsync(body: any, endpoint: string): Observable<any> {
     return this.http.put<any>([this.baseUrl, endpoint].join('/'), body, {
+      withCredentials: true
+    });
+  }
+
+  putByIdAsync(endpoint: string, id: string, body: any): Observable<any> {
+    return this.http.put<any>([this.baseUrl, endpoint, id].join('/'), body, {
       withCredentials: true
     });
   }

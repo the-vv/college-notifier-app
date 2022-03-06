@@ -5,13 +5,13 @@ import { AuthService } from '../auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class MainResolverService implements Resolve<any> {
+export class MainResolverService {
 
   constructor(
     private authService: AuthService
   ) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  init() {
     return new Promise((resolve, reject) => {
       this.authService.initAuth().then(() => {
         resolve(true);
