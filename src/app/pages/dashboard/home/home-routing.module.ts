@@ -9,12 +9,24 @@ const routes: Routes = [
     component: HomePage,
     children: [
       {
-        path: 'admin',
-        loadChildren: () => import('src/app/pages/admin/admin.module').then( m => m.AdminModule)
+        path: '',
+        redirectTo: 'notifications',
       },
       {
-        path: 'list',
-        loadChildren: () => import('./list/list.module').then( m => m.ListPageModule)
+        path: 'notifications',
+        loadChildren: () => import('./notification-list/notification-list.module').then(m => m.NotificationListPageModule)
+      },
+      {
+        path: 'resources',
+        loadChildren: () => import('./resources-list/resources-list.module').then( m => m.ResourcesListPageModule)
+      },
+      {
+        path: 'forms',
+        loadChildren: () => import('./forms-list/forms-list.module').then( m => m.FormsListPageModule)
+      },
+      {
+        path: 'time-table',
+        loadChildren: () => import('./time-table/time-table.module').then( m => m.TimeTablePageModule)
       }
     ]
   }
@@ -24,4 +36,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class HomePageRoutingModule {}
+export class HomePageRoutingModule { }

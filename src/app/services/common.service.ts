@@ -5,12 +5,13 @@ import {
   getCurrentBreakpoint,
 } from 'media-breakpoints-watcher';
 import { BehaviorSubject } from 'rxjs';
-import { EBreakPoints } from '../interfaces/common.enum';
+import { EBreakPoints, EUserRoles } from '../interfaces/common.enum';
 import { EStrings } from '../interfaces/strings.enum';
 import { HttpService } from './http.service';
 import { LoadingController } from '@ionic/angular';
 import { Toast } from '@capacitor/toast';
 import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,8 @@ export class CommonService {
   constructor(
     private http: HttpService,
     public loadingController: LoadingController,
-    private router: Router
+    private router: Router,
+    private authServce: AuthService
   ) {
     initBreakpoints({
       medium: '(min-width: 768px)',
@@ -49,6 +51,14 @@ export class CommonService {
     });
     loader.present();
     return loader;
+  }
+
+  goToDashboard() {
+    if(this.authServce.currentUser$.value.role === EUserRoles.superAdmin) {
+      this.router.navigate(['/admin'], {replaceUrl: true});
+    } else {
+      this.router.navigate(['/dashboard'], {replaceUrl: true});
+    }
   }
 
   showToast(message: string) {

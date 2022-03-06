@@ -1,7 +1,7 @@
 <ion-list id="inbox-list">
   <div class="d-flex ion-align-items-center">
     <ion-avatar style="margin-left: 10px;">
-      <img [src]="authService.currentUser$.value?.image">
+      <img [src]="authService.currentUser$.value?.image || 'assets/images/avatar.png'">
     </ion-avatar>
     <ion-list-header class="text-center">
       {{authService.currentUser$.value?.name}}

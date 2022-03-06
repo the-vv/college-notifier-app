@@ -1,14 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'admin' | string}} {{'dashboard' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
-  <ion-list-header>
-    <h2>{{ 'administration' | string }}</h2>
-  </ion-list-header>
   <ion-grid class="ion-align-items-center ion-justify-content-center overflow-y-auto" #roleContainer ani>
     <ion-row class="">
-      <ion-col size="12" size-md="6">
+      <ion-col size="12" size-md="12">
         <ion-card button class="v-center" [routerLink]="['/', 'college', 'list']">
             <ion-row class="v-center">
               <ion-col size="5" class="v-center h-100">
-                <img src="/assets/images/college.png" alt="">
+                <img src="/assets/images/college.png" alt="" class="card-image">
               </ion-col>
               <ion-col size="7" class="">
                 <h3><ion-text color="dark">{{'manage' | string}} {{'college' | string}}</ion-text></h3>
@@ -17,11 +26,11 @@
             </ion-row>
         </ion-card>
       </ion-col>
-      <ion-col size="12" size-md="6">
+      <ion-col size="12" size-md="12">
         <ion-card button class="v-center" [routerLink]="['']">
             <ion-row class="v-center">
               <ion-col size="5" class="v-center h-100">
-                <img src="/assets/images/user.webp" alt="">
+                <img src="/assets/images/user.webp" alt="" class="card-image">
               </ion-col>
               <ion-col size="7" class="">
                 <h3><ion-text color="dark">{{'manage' | string}} {{'user' | string}}</ion-text></h3>

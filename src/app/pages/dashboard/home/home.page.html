@@ -6,10 +6,46 @@
     <ion-buttons slot="end">
       <ion-menu-button slot="end"></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{'admin' | string}} {{'home' | string}}</ion-title>
+    <ion-title>{{'dashboard' | string}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <router-outlet></router-outlet>
+  <ion-row *ngIf="loading; else content">
+    <ion-col size="12" *ngFor="let _ of [1,2,3,4,5,6]">
+      <div class="ion-padding custom-skeleton">
+        <ion-skeleton-text animated style="width: 60%; height: 10px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 70%; height: 10px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%; height: 10px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 90%; height: 10px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 10px;"></ion-skeleton-text>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ng-template #content>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="notifications">
+          <ion-icon name="notifications-outline"></ion-icon>
+          <ion-label>{{'notifications' | string}}</ion-label>
+        </ion-tab-button>
+    
+        <ion-tab-button tab="resources">
+          <ion-icon name="easel-outline"></ion-icon>
+          <ion-label>{{'resources' | string}}</ion-label>
+        </ion-tab-button>
+    
+        <ion-tab-button tab="forms">
+          <ion-icon name="document-outline"></ion-icon>
+          <ion-label>{{'forms' | string }}</ion-label>
+        </ion-tab-button>
+    
+        <ion-tab-button tab="time-table">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <ion-label>{{'timeTable' | string}}</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ng-template>
 </ion-content>
+ 

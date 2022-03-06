@@ -11,6 +11,8 @@ export class MainResolverService {
     private authService: AuthService
   ) { }
 
+  //TODO: add user verification with user id
+
   init() {
     return new Promise((resolve, reject) => {
       this.authService.initAuth().then(() => {

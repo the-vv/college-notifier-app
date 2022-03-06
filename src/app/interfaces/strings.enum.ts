@@ -107,4 +107,7 @@ export enum EStrings {
     list = 'List',
     home = 'Home',
     requested = 'Requested',
+    resources = 'Resources',
+    forms = 'Forms',
+    timeTable = 'Time Table',
 }

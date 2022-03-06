@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EUserRoles } from 'src/app/interfaces/common.enum';
+import { ERequestStatus, EUserRoles } from 'src/app/interfaces/common.enum';
+import { ICollege } from 'src/app/interfaces/common.model';
+import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
+import { CollegeService } from 'src/app/services/college.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-home',
@@ -10,31 +14,39 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HomePage implements OnInit {
 
+  public currentCollege: ICollege;
+  public loading: boolean = true;
+
   constructor(
     private authService: AuthService,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
+    private commonService: CommonService,
+    private collegeService: CollegeService
   ) { }
 
   ngOnInit() {
     
   }
 
-  ionViewWillEnter() {
-    console.log(this.authService.currentUserRole);
-    switch(this.authService.currentUserRole) {
-      case EUserRoles.superAdmin:
-        this.router.navigate(['admin'], { relativeTo: this.activatedRoute });
-        break;
-      case EUserRoles.admin:
-      case EUserRoles.faculty:
-      case EUserRoles.student:
-        this.router.navigate(['list'], { relativeTo: this.activatedRoute });
-        break;
-      default:
-        this.router.navigate(['/auth'], { relativeTo: this.activatedRoute });
-        break;
-    }
+  async ionViewDidEnter() {
+    this.collegeService.getByAdminIdAsync(this.authService.currentUser$.value._id)
+      .subscribe(res => {
+        this.loading = false;
+        console.log(res)
+        if (res) {
+          if (res.status === ERequestStatus.pending) {
+            this.commonService.showSuccessPage(`${EStrings.college} ${EStrings.requested}`, EStrings.collegeRequestedText);
+          } else {
+            this.currentCollege = res;
+          }
+        } else {
+          this.router.navigate(['/', 'auth', 'signup', 'create-college'], {replaceUrl: true});
+        }
+      }, err => {
+        this.loading = false;
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+        this.router.navigate(['/', 'auth', 'signup', 'create-college'], {replaceUrl: true});
+      });
   }
 
 
