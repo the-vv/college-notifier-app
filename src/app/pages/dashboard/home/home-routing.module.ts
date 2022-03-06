@@ -27,6 +27,10 @@ const routes: Routes = [
       {
         path: 'time-table',
         loadChildren: () => import('./time-table/time-table.module').then( m => m.TimeTablePageModule)
+      },
+      {
+        path: 'rooms',
+        loadChildren: () => import('./rooms-list/rooms-list.module').then( m => m.RoomsListPageModule)
       }
     ]
   }
