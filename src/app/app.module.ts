@@ -13,6 +13,7 @@ import { DashboardModule } from './pages/dashboard/dashboard.module';
 import { AdminModule } from './pages/admin/admin.module';
 import { CollegeModule } from './pages/college/college.module';
 import { MainResolverService } from './services/resolvers/main-resolver.service';
+import { DepartmentModule } from './pages/department/department.module';
 
 export function mainResolverFactory(provider: MainResolverService) {
     return () => provider.init();
@@ -28,7 +29,8 @@ export function mainResolverFactory(provider: MainResolverService) {
         HttpClientModule,
         DashboardModule,
         AdminModule,
-        CollegeModule
+        CollegeModule,
+        DepartmentModule
     ],
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

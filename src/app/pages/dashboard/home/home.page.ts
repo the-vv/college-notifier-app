@@ -29,7 +29,7 @@ export class HomePage implements OnInit {
   }
 
   async ionViewDidEnter() {
-    this.collegeService.getByAdminIdAsync(this.authService.currentUser$.value._id)
+    this.collegeService.currentCollege$
       .subscribe(res => {
         this.loading = false;
         console.log(res)

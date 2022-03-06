@@ -9,7 +9,7 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    loadChildren: () => import('src/app/pages/admin/admin.module').then( m => m.AdminModule)
+    loadChildren: () => import('src/app/pages/admin/admin.module').then(m => m.AdminModule)
   },
   {
     path: 'college', loadChildren: () => import('./pages/college/college.module').then(m => m.CollegeModule)
@@ -20,6 +20,9 @@ const routes: Routes = [
   },
   {
     path: 'college', loadChildren: () => import('src/app/pages/college/college.module').then(m => m.CollegeModule)
+  },
+  {
+    path: 'department', loadChildren: () => import('src/app/pages/department/department.module').then(m => m.DepartmentModule)
   }
 ];
 
