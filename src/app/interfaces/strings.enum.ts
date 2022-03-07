@@ -110,4 +110,5 @@ export enum EStrings {
     resources = 'Resources',
     forms = 'Forms',
     timeTable = 'Time Table',
+    under = 'under',
 }

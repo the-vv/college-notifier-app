@@ -8,6 +8,7 @@ import { ListPageRoutingModule } from './list-routing.module';
 
 import { ListPage } from './list.page';
 import { CommonExportsModule } from 'src/app/common-exports.module';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { CommonExportsModule } from 'src/app/common-exports.module';
     FormsModule,
     IonicModule,
     ListPageRoutingModule,
-    CommonExportsModule
+    CommonExportsModule,
+    TableModule
   ],
   declarations: [ListPage]
 })

@@ -23,7 +23,7 @@ export class MainResolverService {
   init() {
     return new Promise((resolve, reject) => {
       this.authService.initAuth().then(() => {
-        if (this.authService.currentUser$.value.role === EUserRoles.admin) {
+        if (this.authService.currentUser$?.value?.role === EUserRoles.admin) {
           this.collegeService.getByAdminIdAsync(this.authService.currentUser$.value._id)
             .subscribe(res => {
               this.collegeService.saveCollege(res);

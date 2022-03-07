@@ -40,6 +40,10 @@ export enum EStorageKeys {
     user = 'user',
     college = 'college',
     token = 'token',
+    department = 'department',
+    batch = 'batch',
+    class = 'class',
+    room = 'room',
 }
 
 export enum ERedirectTo {

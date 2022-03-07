@@ -10,7 +10,32 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content>
-
+<ion-card>
+  <ion-row class="v-center ion-justify-content-between">
+    <ion-col size="auto" class="ion-text-start">
+      <h6>{{'departments' | string}} {{'under' | string}} {{(collegeService.currentCollege$ | async)?.name}}</h6>
+    </ion-col>
+    <ion-col size="auto" class="ion-text-end">
+      <ion-button color="primary" size="small" [routerLink]="['/', 'department', 'manage']">
+        <ion-icon name="add"></ion-icon>
+        {{'create' | string}}
+      </ion-button>
+    </ion-col>
+  </ion-row>
+  <p-table responsiveLayout="stack" [value]="departmentsData">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th>{{'name' | string}}</th>
+            <th>{{'description' | string}}</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product let-columns="columns">
+        <tr>
+            <td><span class="p-column-title">{{'name' | string}}</span>{{product.name}}</td>
+            <td><span class="p-column-title">{{'description' | string}}</span>{{product.name}}</td>
+        </tr>
+    </ng-template>
+</p-table>
+</ion-card>
 </ion-content>
