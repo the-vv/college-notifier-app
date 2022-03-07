@@ -111,4 +111,8 @@ export enum EStrings {
     forms = 'Forms',
     timeTable = 'Time Table',
     under = 'under',
+    settings = 'Settings',
+    faculties = 'Faculties',
+    students = 'Students',
+    parents = 'Parents',
 }

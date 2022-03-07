@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
+import { ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { EBreakPoints, ERequestStatus, EUserRoles } from 'src/app/interfaces/common.enum';
 import { IDepartment } from 'src/app/interfaces/common.model';
@@ -31,7 +32,8 @@ export class DepartmentManagePage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private departmentService: DepartmentService
+    private departmentService: DepartmentService,
+    private modalController: ModalController
   ) { }
 
   get f() { return this.dptForm.controls; }

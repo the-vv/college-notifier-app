@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ERequestStatus, EUserRoles } from 'src/app/interfaces/common.enum';
 import { ICollege } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
@@ -16,6 +17,7 @@ export class HomePage implements OnInit {
 
   public currentCollege: ICollege;
   public loading: boolean = true;
+  private subs: Subscription = new Subscription();
 
   constructor(
     private authService: AuthService,
@@ -29,6 +31,7 @@ export class HomePage implements OnInit {
   }
 
   async ionViewDidEnter() {
+    this.subs.add(
     this.collegeService.currentCollege$
       .subscribe(res => {
         this.loading = false;
@@ -46,7 +49,12 @@ export class HomePage implements OnInit {
         this.loading = false;
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
         this.router.navigate(['/', 'auth', 'signup', 'create-college'], {replaceUrl: true});
-      });
+      })
+    )
+  }
+
+  ionViewWillLeave() {
+    this.subs.unsubscribe();
   }
 
 

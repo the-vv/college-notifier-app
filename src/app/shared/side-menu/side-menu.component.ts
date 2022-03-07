@@ -27,4 +27,11 @@ export class SideMenuComponent implements OnInit {
     this.commonService.goToDashboard();
   }
 
+  goToSettings() {
+    if(this.router.url.includes('/settings')) {
+      return
+    }
+    this.router.navigate(['/', 'settings']);
+  }
+
 }

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'department', pathMatch: 'full' },
+  { path: '', redirectTo: 'settings', pathMatch: 'full' },
   { path: 'auth', loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthModule) },
   {
     path: 'dashboard', loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule)
@@ -17,6 +17,10 @@ const routes: Routes = [
   {
     path: 'success',
     loadChildren: () => import('./pages/common/success/success.module').then(m => m.SuccessPageModule)
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule)
   },
   {
     path: 'college', loadChildren: () => import('src/app/pages/college/college.module').then(m => m.CollegeModule)

@@ -4,12 +4,14 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { CommonExportsModule } from '../common-exports.module';
 import { IonicModule } from '@ionic/angular';
+import { UsersImportComponent } from './users-import/users-import.component';
 
 
 @NgModule({
   declarations: [
     SideMenuComponent,
-    ImageUploadComponent
+    ImageUploadComponent,
+    UsersImportComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +20,8 @@ import { IonicModule } from '@ionic/angular';
   ],
   exports: [
     SideMenuComponent,
-    ImageUploadComponent
+    ImageUploadComponent,
+    UsersImportComponent
   ]
 })
 export class SharedModule { }
