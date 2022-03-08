@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'faculties' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+
+  <ion-card>
+    <ion-row class="v-center ion-justify-content-between">
+      <ion-col size="auto" class="ion-text-start">
+        <h6>{{'faculties' | string}} {{'under' | string}} {{(collegeService.currentCollege$ | async)?.name}}</h6>
+      </ion-col>
+      <ion-col size="auto" class="ion-text-end">
+        <ion-button color="success" size="small" (click)="showImportFacultyModal()">
+          <ion-icon name="add"></ion-icon>
+          {{'import' | string}}
+        </ion-button>
+        <ion-button color="primary" size="small" [routerLink]="['/', 'department', 'manage']">
+          <ion-icon name="add"></ion-icon>
+          {{'add' | string}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <p-table responsiveLayout="stack" [value]="facultiesData">
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+              <th>{{'name' | string}}</th>
+              <th>{{'email' | string}}</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product let-columns="columns">
+          <tr>
+              <td><span class="p-column-title">{{'name' | string}}</span>{{product.name}}</td>
+              <td><span class="p-column-title">{{'email' | string}}</span>{{product.email}}</td>
+          </tr>
+      </ng-template>
+  </p-table>
+  </ion-card>
+</ion-content>

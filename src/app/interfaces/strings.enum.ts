@@ -115,4 +115,6 @@ export enum EStrings {
     faculties = 'Faculties',
     students = 'Students',
     parents = 'Parents',
+    import = 'Import',
+    downloadTemplateText = 'Click here to download the template',
 }

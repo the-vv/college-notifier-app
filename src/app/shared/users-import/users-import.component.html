@@ -1,5 +1,16 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>{{'import' | string}} {{role | string}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button  (click)="dismissModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
-  <ion-row>
-    <img src="assets/images/user.webp" alt="">
-  </ion-row>
+  <div class="ion-page">
+    <ion-row class="ion-justify-content-center ion-align-items-center flex-dir-column">
+      <img src="assets/images/user.webp" alt="" class="img-w-50">
+      <span><a [href]="fileUrl" target="_blank" download>{{'downloadTemplateText' | string}}</a></span>
+    </ion-row>
+  </div>
 </ion-content>

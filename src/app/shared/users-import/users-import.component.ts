@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-users-import',
@@ -7,8 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsersImportComponent implements OnInit {
 
-  constructor() { }
+  @Input() role: string;
+  @Input() collegeId: string;
+
+  public fileUrl: string = `${environment.baseUrl}/excel/user.xlsx`;
+
+  constructor(
+    private modalController: ModalController
+  ) { }
 
   ngOnInit() {}
 
+  dismissModal() {
+    this.modalController.dismiss();
+  }
 }
