@@ -4,6 +4,8 @@ import { CollegeService } from 'src/app/services/college.service';
 import { ModalController } from '@ionic/angular';
 import { UsersImportComponent } from 'src/app/shared/users-import/users-import.component';
 import { EUserRoles } from 'src/app/interfaces/common.enum';
+import { UserService } from 'src/app/services/user.service';
+import { CommonService } from 'src/app/services/common.service';
 
 
 @Component({
@@ -17,10 +19,19 @@ export class FacultyListPage implements OnInit {
 
   constructor(
     public collegeService: CollegeService,
-    public modalController: ModalController
+    public modalController: ModalController,
+    public userService: UserService,
+    private commonService: CommonService
   ) { }
 
   ngOnInit() {
+    this.userService.getUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id)
+      .subscribe(data => {
+        this.facultiesData = data;
+        console.log(data);
+      }, err => {
+        this.commonService.showToast(err.error.message);
+      })
   }
 
   async showImportFacultyModal() {
@@ -33,10 +44,6 @@ export class FacultyListPage implements OnInit {
       }
     });
     modal.present();
-  }
-
-  onFileChoose($event) {
-    
   }
 
 }

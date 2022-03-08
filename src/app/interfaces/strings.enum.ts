@@ -117,4 +117,11 @@ export enum EStrings {
     parents = 'Parents',
     import = 'Import',
     downloadTemplateText = 'Click here to download the template',
+    excelErrorText = "Please check your excel file and make sure it's in the correct format",
+    uploading = 'Uploading',
+    items = 'Items',
+    imported = 'Imported',
+    are = 'are',
+    failed = 'Failed',
+    duplicateFoundText = 'Duplicates found',
 }

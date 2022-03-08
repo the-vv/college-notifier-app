@@ -12,6 +12,7 @@ import { LoadingController } from '@ionic/angular';
 import { Toast } from '@capacitor/toast';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
+import * as XLSX from 'xlsx';
 
 @Injectable({
   providedIn: 'root'
@@ -75,5 +76,25 @@ export class CommonService {
   deleteFiles(urls: string[]) {
     return this.http.postAsync({ urls }, [this.commonApiEndPoint, 'delete-files'].join('/'));
   }
+
+  readExcelFile(file :any) {
+    return new Promise((resolve, reject) => {
+      const reader: FileReader = new FileReader();
+      reader.readAsBinaryString(file);
+      reader.onload = (e: any) => {
+        const binarystr: string = e.target.result;
+        const wb: XLSX.WorkBook = XLSX.read(binarystr, { type: 'binary' });
+        const wsname: string = wb.SheetNames[0];
+        const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json(ws);
+        resolve(data);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    })
+  }
+
+
 }
 

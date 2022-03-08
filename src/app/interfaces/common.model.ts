@@ -5,7 +5,6 @@ export interface ISource {
     department?: string;
     batch?: string;
     class?: string;
-    room?: string;
     source: ESourceTargetType;
 }
 
@@ -14,7 +13,6 @@ export interface ITarget {
     department?: string;
     batch?: string;
     class?: string;
-    room?: string;
     target: ESourceTargetType;
 }
 
@@ -24,7 +22,7 @@ export interface ISchedule {
 }
 
 export interface IUser {
-    _id: string;
+    _id?: string;
     name: string;
     email: string;
     password?: string;

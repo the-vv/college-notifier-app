@@ -8,9 +8,27 @@
 </ion-header>
 <ion-content>
   <div class="ion-page">
-    <ion-row class="ion-justify-content-center ion-align-items-center flex-dir-column">
-      <img src="assets/images/user.webp" alt="" class="img-w-50">
-      <span><a [href]="fileUrl" target="_blank" download>{{'downloadTemplateText' | string}}</a></span>
-    </ion-row>
+    <ion-grid *ngIf="!userData.length; else uploading" class="ion-justify-content-center ion-align-items-center flex-dir-column">
+      <ion-row class="ion-justify-content-center">
+        <img src="assets/images/user.webp" alt="" class="img-w-50">
+      </ion-row>
+      <ion-row>        
+        <span><a [href]="fileUrl" target="_blank" download>{{'downloadTemplateText' | string}}</a></span>
+      </ion-row>
+      <ion-row class="mt-3">
+        <ion-item>
+          <!-- <ion-label position="stacked">{{'uploadFile' | string}}</ion-label> -->
+          <input type="file" (change)="onFileChoose($event)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+        </ion-item>
+      </ion-row>
+    </ion-grid>
+    <ng-template #uploading>
+      <ion-grid class="ion-justify-content-center ion-align-items-center flex-dir-column">
+        <ion-row>
+          {{'uploading' | string}} {{userData?.length}} {{'users' | string}}
+            <ion-progress-bar class="mt-3" type="indeterminate"></ion-progress-bar>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
   </div>
 </ion-content>
