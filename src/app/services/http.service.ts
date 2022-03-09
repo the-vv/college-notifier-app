@@ -32,9 +32,10 @@ export class HttpService {
     });
   }
 
-  getAsync(endpoint: string): Observable<any> {
+  getAsync(endpoint: string, args?: any): Observable<any> {
     return this.http.get<any>([this.baseUrl, endpoint].join('/'), {
-      withCredentials: true
+      withCredentials: true,
+      params: args
     });
   }
 

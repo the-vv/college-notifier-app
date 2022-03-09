@@ -25,13 +25,23 @@ export class FacultyListPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.userService.getUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id)
-      .subscribe(data => {
-        this.facultiesData = data;
-        console.log(data);
-      }, err => {
-        this.commonService.showToast(err.error.message);
-      })
+    
+  }
+
+  ionViewWillEnter() {
+    this.getFaculties();
+  }
+
+  async getFaculties() {
+    const loader = await this.commonService.showLoading()
+    this.userService.getUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id, EUserRoles.faculty)
+    .subscribe(data => {
+      loader.dismiss();
+      this.facultiesData = data;
+    }, err => {
+      loader.dismiss();
+      this.commonService.showToast(err.error.message);
+    })
   }
 
   async showImportFacultyModal() {
@@ -43,6 +53,9 @@ export class FacultyListPage implements OnInit {
         collegeId: this.collegeService.currentCollege$.value._id
       }
     });
+    modal.onWillDismiss().then(() => {
+      this.getFaculties();
+    })
     modal.present();
   }
 
