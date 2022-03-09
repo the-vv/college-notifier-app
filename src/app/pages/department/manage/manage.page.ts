@@ -5,11 +5,13 @@ import { Toast } from '@capacitor/toast';
 import { ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { EBreakPoints, ERequestStatus, EUserRoles } from 'src/app/interfaces/common.enum';
-import { IDepartment } from 'src/app/interfaces/common.model';
+import { IDepartment, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
+import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DepartmentService } from 'src/app/services/department.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-manage',
@@ -25,6 +27,8 @@ export class DepartmentManagePage implements OnInit {
   private subs: Subscription = new Subscription();
   public isUpdate: boolean = false;
   public dptId: string;
+  public availableFaculties: IUser[] = [];
+  public selectedAdmins: IUser[] = [];
 
   constructor(
     private commonService: CommonService,
@@ -33,7 +37,8 @@ export class DepartmentManagePage implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private departmentService: DepartmentService,
-    private modalController: ModalController
+    private userService: UserService,
+    private collegeService: CollegeService
   ) { }
 
   get f() { return this.dptForm.controls; }
@@ -45,6 +50,7 @@ export class DepartmentManagePage implements OnInit {
       name: ['', [Validators.required]],
       description: [''],
       image: [''],
+      admins: [[], [Validators.required]],
     });
   }
 
@@ -53,9 +59,18 @@ export class DepartmentManagePage implements OnInit {
     if (this.dptId) {
       this.isUpdate = true;
     }
+    this.userService.getUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id, EUserRoles.faculty)
+      .subscribe((res: IUser[]) => {
+        this.availableFaculties = res;
+      }, err => {
+        console.log(err);
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+      })
+
   }
 
   onSubmit() {
+    console.log(this.dptForm.value);
     this.showErrors = true;
     this.dptForm.markAllAsTouched();
     if (this.dptForm.invalid) {

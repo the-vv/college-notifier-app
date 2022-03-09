@@ -124,4 +124,5 @@ export enum EStrings {
     are = 'are',
     failed = 'Failed',
     duplicateFoundText = 'Duplicates found',
+    admins = 'Admins',
 }

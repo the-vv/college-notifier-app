@@ -9,10 +9,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHeaderService } from './services/resolvers/auth-header.service';
-// import { DashboardModule } from './pages/dashboard/dashboard.module';
-// import { AdminModule } from './pages/admin/admin.module';
-// import { CollegeModule } from './pages/college/college.module';
-// import { DepartmentModule } from './pages/department/department.module';
 import { MainResolverService } from './services/resolvers/main-resolver.service';
 
 export function mainResolverFactory(provider: MainResolverService) {
@@ -27,10 +23,6 @@ export function mainResolverFactory(provider: MainResolverService) {
         AppRoutingModule,
         SharedModule,
         HttpClientModule,
-        // DashboardModule,
-        // AdminModule,
-        // CollegeModule,
-        // DepartmentModule
     ],
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

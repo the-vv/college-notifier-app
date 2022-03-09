@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -9,7 +9,7 @@ import { ManagePageRoutingModule } from './manage-routing.module';
 import { DepartmentManagePage } from './manage.page';
 import { CommonExportsModule } from 'src/app/common-exports.module';
 import { AvatarModule } from 'primeng/avatar';
-import {AutoCompleteModule} from 'primeng/autocomplete';
+import { IonicSelectableModule } from 'ionic-selectable';
 
 
 @NgModule({
@@ -21,8 +21,9 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
     CommonExportsModule,
     ReactiveFormsModule,
     AvatarModule,
-    AutoCompleteModule
+    IonicSelectableModule
   ],
-  declarations: [DepartmentManagePage]
+  declarations: [DepartmentManagePage],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ManagePageModule {}

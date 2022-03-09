@@ -41,6 +41,7 @@
     "@nguniversal/express-engine": "^13.0.1",
     "domino": "^2.1.6",
     "express": "^4.15.2",
+    "ionic-selectable": "^4.9.0",
     "media-breakpoints-watcher": "^1.0.4",
     "primeicons": "^5.0.0",
     "primeng": "^13.1.1",

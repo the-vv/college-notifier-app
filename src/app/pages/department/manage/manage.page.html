@@ -44,6 +44,29 @@
             {{'isRequired' | string}}</small>
         </ion-col>
         <ion-col size="12">
+          <ion-item class="mt-1">
+            <ion-label>{{'admins' | string}}</ion-label>
+            <ionic-selectable #portComponent formControlName="admins" [items]="availableFaculties" itemValueField="_id"
+              itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
+              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
+              <ionic-selectable>
+                <ng-template ionicSelectableTitleTemplate>
+                  {{'choose' | string}} {{'admins' | string}}
+                </ng-template>
+              </ionic-selectable>
+              <ng-template ionicSelectablePlaceholderTemplate>
+                {{f.admins.value ? f.admins.value.length : 0}} {{'admins' | string}}
+              </ng-template>
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                {{f.admins.value ? f.admins.value.length : 0}} {{'admins' | string}}
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+          <small class="text-danger" *ngIf="f.admins.errors?.required && (f.admins.touched || showErrors)">{{'admins' |
+            string}}
+            {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12">
           <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
             <span *ngIf="!loading">{{'submit' | string}}</span>
             <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
