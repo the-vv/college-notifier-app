@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'class' | string}} {{'list' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-row class="v-center ion-justify-content-between">
+      <ion-col size="auto" class="ion-text-start">
+        <h6>{{'classes' | string}} {{'under' | string}} {{(collegeService.currentCollege$ | async)?.name}}</h6>
+      </ion-col>
+      <ion-col size="auto" class="ion-text-end">
+        <ion-button color="primary" size="small" [routerLink]="['/', 'class', 'manage']">
+          <ion-icon name="add"></ion-icon>
+          {{'create' | string}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <p-table responsiveLayout="stack" [value]="classData">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th>{{'name' | string}}</th>
+          <th>{{'description' | string}}</th>
+          <th>{{'admins' | string}}</th>
+          <th>{{'department' | string}}</th>
+          <th>{{'batch' | string}}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item let-columns="columns">
+        <tr>
+          <td><span class="p-column-title">{{'title' | string}}</span>
+            <a [routerLink]="['/', 'class', 'manage', item._id]">{{item.name}}</a>
+          </td>
+          <td><span class="p-column-title">{{'description' | string}}</span>{{item.description}}</td>
+          <td><span class="p-column-title">{{'admins' | string}}</span>{{getAdminNames(item)}}</td>
+          <td><span class="p-column-title">{{'department' | string}}</span>{{item.source.department?.name}}</td>
+          <td><span class="p-column-title">{{'batch' | string}}</span>
+            {{item.source.batch?.startDate}} - {{item.source.batch?.endDate}}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ion-card>
+</ion-content>

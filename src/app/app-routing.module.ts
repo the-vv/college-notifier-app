@@ -53,6 +53,12 @@ const routes: Routes = [
     loadChildren: () => import('src/app/pages/batch/batch.module').then(m => m.BatchModule),
     canActivate: [AuthGuard],
     // canLoad: [AuthGuard],
+  },
+  {
+    path: 'class',
+    loadChildren: () => import('src/app/pages/class/class.module').then(m => m.ClassModule),
+    canActivate: [AuthGuard],
+    // canLoad: [AuthGuard],
   }
 ];
 

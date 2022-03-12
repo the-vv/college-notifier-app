@@ -1,0 +1,131 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'class' | string}} {{'manage' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="h-100">
+    <ion-col size-md="8" *ngIf="currentBreakPoint === 'medium'">
+      <ion-row class="v-center">
+        <ion-col class="text-center">
+          <img src="assets/images/class.webp" alt="" style="max-height: 70vh;">
+        </ion-col>
+      </ion-row>
+    </ion-col>
+    <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''">
+      <div class="text-center mt-3">
+        <h4>{{(isUpdate ? 'update' : 'create') | string}} {{'class' | string}}</h4>
+      </div>
+      <form [formGroup]="classForm">
+        <ion-col size="12">
+          <ion-item class="">
+            <ion-label position="floating">{{'name' | string}}</ion-label>
+            <ion-input type="text" formControlName="name"></ion-input>
+          </ion-item>
+          <small class="text-danger" *ngIf="f.name.errors?.required && (f.name.touched || showErrors)">{{'name' |
+            string}}
+            {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="">
+            <ion-label position="floating">{{'description' | string}}</ion-label>
+            <ion-input type="text" formControlName="description"></ion-input>
+          </ion-item>
+          <small class="text-danger" *ngIf="f.description.errors?.required && (f.description.touched || showErrors)">{{'description' |
+            string}}
+            {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12" *ngIf="!isUpdate">
+          <ion-item>
+            <ion-label position="floating">{{'department' | string}}</ion-label>
+            <ionic-selectable #portComponent [formControl]="departmentControl" [items]="availableDpts"
+              itemValueField="_id" itemTextField="name" [isMultiple]="false" [canSearch]="true" closeButtonSlot="end"
+              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="false">
+              <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'department' | string}}
+              </ng-template>
+              <!-- <ng-template ionicSelectablePlaceholderTemplate>
+                {{'notSelected' | string}}
+              </ng-template> -->
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                {{departmentControl.value?.name}}
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+          <small class="text-danger"
+            *ngIf="departmentControl.errors?.required && (departmentControl.touched || showErrors)">{{'department' |
+            string}}
+            {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12" *ngIf="!isUpdate">
+          <ion-item>
+            <ion-label position="floating">{{'batch' | string}}</ion-label>
+            <ionic-selectable #portComponent [formControl]="batchControl" [items]="availablebatches"
+              itemValueField="_id" itemTextField="title" [isMultiple]="false" [canSearch]="true" closeButtonSlot="end"
+              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="false">
+              <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'batch' | string}}
+              </ng-template>
+              <!-- <ng-template ionicSelectablePlaceholderTemplate>
+                {{'notSelected' | string}}
+              </ng-template> -->
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                {{batchControl.value?.title}}
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+          <small class="text-danger"
+            *ngIf="batchControl.errors?.required && (batchControl.touched || showErrors)">{{'batch' |
+            string}}
+            {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="floating">{{'admins' | string}}</ion-label>
+            <ionic-selectable #portComponent formControlName="admins" [items]="availableFaculties" itemValueField="_id"
+              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
+              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
+              <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'admins' | string}}
+              </ng-template>
+              <!-- <ng-template ionicSelectablePlaceholderTemplate>
+                {{f.admins.value ? f.admins.value.length : 0}} {{'selected' | string}}
+              </ng-template> -->
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                {{f.admins.value ? f.admins.value.length : 0}} {{'selected' | string}}
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+          <small class="text-danger" *ngIf="f.admins.errors?.required && (f.admins.touched || showErrors)">{{'admins' |
+            string}}
+            {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="mt-1" button>
+            <app-image-upload class="v-100" formControlName="image"></app-image-upload>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" *ngIf="currentBreakPoint === 'medium'">
+          <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
+            <span *ngIf="!loading">{{'submit' | string}}</span>
+            <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+          </ion-button>
+        </ion-col>
+      </form>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+<ion-footer *ngIf="currentBreakPoint !== 'medium'">
+  <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
+    <span *ngIf="!loading">{{'submit' | string}}</span>
+    <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+  </ion-button>
+</ion-footer>

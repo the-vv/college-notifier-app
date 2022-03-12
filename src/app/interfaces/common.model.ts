@@ -49,7 +49,7 @@ export interface ICollege {
     website?: string;
     image?: string;
     status?: ERequestStatus;
-    admins: string[];
+    admins: string[] | IUser[];
 }
 
 export interface IBatch {
@@ -57,6 +57,16 @@ export interface IBatch {
     startDate: Date;
     endDate: Date;
     active: boolean;
+    source: ISource;
+    image?: string;
+    admins: string[] | IUser[];
+}
+
+export interface IClass {
+    _id?: string;
+    name: string;
+    active: boolean;
+    description?: string;
     source: ISource;
     image?: string;
     admins: string[] | IUser[];
