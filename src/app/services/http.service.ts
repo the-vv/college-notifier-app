@@ -12,7 +12,7 @@ export class HttpService {
 
   constructor(
     private http: HttpClient,
-  ){}
+  ) { }
 
   postAsync(body: any, endpoint: string): Observable<any> {
     return this.http.post<any>([this.baseUrl, endpoint].join('/'), body, {

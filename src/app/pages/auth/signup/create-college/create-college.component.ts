@@ -66,7 +66,7 @@ export class CreateCollegeComponent implements OnInit, OnDestroy {
       if(res) {
         this.collegeService.saveCollege(res);
       }
-      this.router.navigate(['/dashboard']);
+      this.commonService.goToDashboard();
     }, (err) => {
       this.loading = false;
     });

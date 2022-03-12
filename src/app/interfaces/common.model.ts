@@ -59,7 +59,7 @@ export interface IBatch {
     active: boolean;
     source: ISource;
     image?: string;
-    admins: string[];
+    admins: string[] | IUser[];
 }
 
 export interface IEmailPassword {

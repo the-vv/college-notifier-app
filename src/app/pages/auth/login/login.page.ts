@@ -2,11 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { EBreakPoints } from 'src/app/interfaces/common.enum';
+import { EBreakPoints, ERequestStatus, EUserRoles } from 'src/app/interfaces/common.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CommonService } from 'src/app/services/common.service';
 import { Toast } from '@capacitor/toast';
 import { EStrings } from 'src/app/interfaces/strings.enum';
+import { CollegeService } from 'src/app/services/college.service';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,8 @@ export class LoginPage implements OnInit, OnDestroy {
     private commonService: CommonService,
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private collegeService: CollegeService
   ) { }
 
   get f() { return this.loginForm.controls; }
@@ -54,7 +56,29 @@ export class LoginPage implements OnInit, OnDestroy {
           // console.log(res);
           this.loading = false;
           this.authService.onLogin(res);
-          this.router.navigate(['/dashboard'], { replaceUrl: true });
+          if (this.authService.currentUser$?.value?.role === EUserRoles.admin) {
+            /* eslint no-underscore-dangle: 0 */
+            this.collegeService.getByAdminIdAsync(this.authService.currentUser$.value._id)
+              .subscribe(collegeRes => {
+                this.collegeService.saveCollege(collegeRes);
+                if (collegeRes) {
+                  if (collegeRes.status === ERequestStatus.pending) {
+                    this.commonService.showSuccessPage(`${EStrings.college} ${EStrings.requested}`, EStrings.collegeRequestedText);
+                  }
+                  else {
+                    this.commonService.goToDashboard();
+                  }
+                } else {
+                  this.router.navigate(['/', 'auth', 'signup', 'create-college'], { replaceUrl: true });
+                }
+              }, err => {
+                this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+                this.router.navigate(['/', 'auth', 'signup', 'create-college'], { replaceUrl: true });
+              });
+          }
+          else {
+            this.commonService.goToDashboard();
+          }
         }
       }, err => {
         this.loading = false;

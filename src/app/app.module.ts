@@ -10,15 +10,15 @@ import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHeaderService } from './services/resolvers/auth-header.service';
 import { MainResolverService } from './services/resolvers/main-resolver.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-export function mainResolverFactory(provider: MainResolverService) {
-    return () => provider.init();
-}
+const mainResolverFactory = (provider: MainResolverService) => () => provider.init();
 
 @NgModule({
     declarations: [AppComponent],
     imports: [
         BrowserModule.withServerTransition({ appId: 'serverApp' }),
+        BrowserAnimationsModule,
         IonicModule.forRoot(),
         AppRoutingModule,
         SharedModule,

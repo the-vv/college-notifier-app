@@ -1,0 +1,127 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'batch' | string}} {{'manage' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="h-100">
+    <ion-col size-md="8" *ngIf="currentBreakPoint === 'medium'">
+      <ion-row class="v-center">
+        <ion-col class="text-center">
+          <img src="assets/images/batch.webp" alt="" style="max-height: 70vh;">
+        </ion-col>
+      </ion-row>
+    </ion-col>
+    <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''">
+      <div class="text-center mt-3">
+        <h4>{{isUpdate ? 'update' : 'create' | string}} {{'batch' | string}}</h4>
+      </div>
+      <form [formGroup]="batchForm">
+        <ion-col size="12">
+          <ion-item class="" id="open-date-input-2">
+            <ion-label>{{'startDate' | string}}:</ion-label>
+            <ion-input formControlName="startDate"></ion-input>
+            <ion-button fill="clear">
+              <ion-icon icon="calendar"></ion-icon>
+            </ion-button>
+            <ion-popover trigger="open-date-input-2" show-backdrop="false">
+              <ng-template>
+                <ion-datetime #popoverDatetime2 presentation="year" [max]="3000" [showDefaultTimeLabel]="true"
+                  [showDefaultTitle]="true" [showDefaultButtons]="true"
+                  (ionChange)="onChooseDate(popoverDatetime2.value, 'startDate')">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <small class="text-danger"
+            *ngIf="f.startDate.errors?.required && (f.startDate.touched || showErrors)">{{'startDate' |
+            string}}
+            {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="" id="open-date-input-1">
+            <ion-label>{{'endDate' | string}}:</ion-label>
+            <ion-input formControlName="endDate"></ion-input>
+            <ion-button fill="clear">
+              <ion-icon icon="calendar"></ion-icon>
+            </ion-button>
+            <ion-popover trigger="open-date-input-1" show-backdrop="false">
+              <ng-template>
+                <ion-datetime #popoverDatetime2 presentation="year" [max]="3000" [showDefaultTimeLabel]="true"
+                  [showDefaultTitle]="true" [showDefaultButtons]="true"
+                  (ionChange)="onChooseDate(popoverDatetime2.value, 'endDate')">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <small class="text-danger" *ngIf="f.endDate.errors?.required && (f.endDate.touched || showErrors)">
+            {{'endDate' | string}}
+            {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12" *ngIf="!isUpdate">
+          <ion-item>
+            <ion-label position="floating">{{'department' | string}}</ion-label>
+            <ionic-selectable #portComponent [formControl]="departmentControl" [items]="availableDpts"
+              itemValueField="_id" itemTextField="name" [isMultiple]="false" [canSearch]="true" closeButtonSlot="end"
+              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="false">
+              <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'department' | string}}
+              </ng-template>
+              <!-- <ng-template ionicSelectablePlaceholderTemplate>
+                {{'notSelected' | string}}
+              </ng-template> -->
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                {{departmentControl.value?.name}}
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+          <small class="text-danger"
+            *ngIf="departmentControl.errors?.required && (departmentControl.touched || showErrors)">{{'department' |
+            string}}
+            {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label>{{'admins' | string}}</ion-label>
+            <ionic-selectable #portComponent formControlName="admins" [items]="availableFaculties" itemValueField="_id"
+              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
+              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
+              <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'admins' | string}}
+              </ng-template>
+              <ng-template ionicSelectablePlaceholderTemplate>
+                {{f.admins.value ? f.admins.value.length : 0}} {{'selected' | string}}
+              </ng-template>
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                {{f.admins.value ? f.admins.value.length : 0}} {{'selected' | string}}
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+          <small class="text-danger" *ngIf="f.admins.errors?.required && (f.admins.touched || showErrors)">{{'admins' |
+            string}}
+            {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12" *ngIf="currentBreakPoint === 'medium'">
+          <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
+            <span *ngIf="!loading">{{'submit' | string}}</span>
+            <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+          </ion-button>
+        </ion-col>
+      </form>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+<ion-footer *ngIf="currentBreakPoint !== 'medium'">
+  <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
+    <span *ngIf="!loading">{{'submit' | string}}</span>
+    <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+  </ion-button>
+</ion-footer>

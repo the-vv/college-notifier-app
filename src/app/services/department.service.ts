@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IDepartment } from '../interfaces/common.model';
+import { IDepartment, ISource } from '../interfaces/common.model';
 import { HttpService } from './http.service';
 
 @Injectable({
@@ -8,31 +8,30 @@ import { HttpService } from './http.service';
 })
 export class DepartmentService {
 
-  private collegeUrl = 'api/department';
+  private dptUrl = 'api/department';
 
   constructor(
     private http: HttpService
   ) { }
 
-  
   postAsync(data: IDepartment): Observable<IDepartment> {
-    return this.http.postAsync(data, this.collegeUrl);
+    return this.http.postAsync(data, this.dptUrl);
   }
 
   putAsync(data: IDepartment): Observable<IDepartment> {
-    return this.http.putAsync(data, this.collegeUrl);
+    return this.http.putAsync(data, this.dptUrl);
   }
 
   getByCollegeAsync(collegeId: string): Observable<IDepartment[]> {
-    return this.http.getAsync(`${this.collegeUrl}/getByCollege'/${collegeId}`);
+    return this.http.getAsync(`${this.dptUrl}/getByCollege/${collegeId}`);
   }
 
   getByIdAsync(id: string): Observable<IDepartment> {
-    return this.http.getAsync(`${this.collegeUrl}/${id}`);
+    return this.http.getAsync(`${this.dptUrl}/${id}`);
   }
 
   getByAdminIdAsync(id: string): Observable<IDepartment> {
-    return this.http.getAsync(`${this.collegeUrl}/getByAdmin/${id}`);
+    return this.http.getAsync(`${this.dptUrl}/getByAdmin/${id}`);
   }
 
 }

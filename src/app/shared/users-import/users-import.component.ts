@@ -17,9 +17,9 @@ export class UsersImportComponent implements OnInit {
   @Input() role: string;
   @Input() collegeId: string;
 
-  public fileUrl: string = `${environment.baseUrl}/excel/user.xlsx`;
+  public fileUrl = `${environment.baseUrl}/excel/user.xlsx`;
 
-  public userData: IUser[] = []
+  public userData: IUser[] = [];
 
   constructor(
     private modalController: ModalController,
@@ -38,7 +38,7 @@ export class UsersImportComponent implements OnInit {
   onFileChoose(event: any) {
     this.commonServicce.readExcelFile(event.target.files[0])
       .then((data: any) => {
-        if (!("Name" in data[0] && "Email" in data[0])) {
+        if (!('Name' in data[0] && 'Email' in data[0])) {
           this.alertController.create({
             header: EStrings.error,
             message: EStrings.excelErrorText,
@@ -54,15 +54,15 @@ export class UsersImportComponent implements OnInit {
           user.email = user.Email;
           delete user.Name;
           delete user.Email;
-        })
+        });
         this.userData = data;
-        const postData: { users: IUser[], source: ISource } = {
+        const postData: { users: IUser[]; source: ISource } = {
           users: this.userData,
           source: {
             college: this.collegeId,
             source: ESourceTargetType.college,
           }
-        }
+        };
         this.userService.postUsersAsync(postData)
           .subscribe(res => {
             this.commonServicce.showToast(`${EStrings.users} ${EStrings.imported}`);
@@ -72,13 +72,13 @@ export class UsersImportComponent implements OnInit {
             this.commonServicce.showToast(`${EStrings.error}: ${EStrings.users} ${EStrings.import} ${EStrings.failed},
               ${(err.error.message as string).includes('duplicate key error') ? EStrings.duplicateFoundText : err.error.message}`);
             this.modalController.dismiss();
-          })
+          });
       }).catch(() => {
         this.alertController.create({
           header: EStrings.error,
           message: EStrings.excelErrorText,
           buttons: ['OK']
         }).then(alert => alert.present());
-      })
+      });
   }
 }

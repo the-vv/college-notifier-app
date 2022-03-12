@@ -30,10 +30,10 @@
             <th>{{'description' | string}}</th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-product let-columns="columns">
+    <ng-template pTemplate="body" let-item let-columns="columns">
         <tr>
-            <td><span class="p-column-title">{{'name' | string}}</span>{{product.name}}</td>
-            <td><span class="p-column-title">{{'description' | string}}</span>{{product.name}}</td>
+            <td><span class="p-column-title">{{'name' | string}}</span>{{item.name}}</td>
+            <td><span class="p-column-title">{{'description' | string}}</span>{{item.description}}</td>
         </tr>
     </ng-template>
 </p-table>

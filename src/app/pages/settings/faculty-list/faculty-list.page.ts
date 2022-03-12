@@ -25,7 +25,6 @@ export class FacultyListPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    
   }
 
   ionViewWillEnter() {
@@ -33,7 +32,8 @@ export class FacultyListPage implements OnInit {
   }
 
   async getFaculties() {
-    const loader = await this.commonService.showLoading()
+    const loader = await this.commonService.showLoading();
+    /* eslint no-underscore-dangle: 0 */
     this.userService.getUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id, EUserRoles.faculty)
     .subscribe(data => {
       loader.dismiss();
@@ -41,7 +41,7 @@ export class FacultyListPage implements OnInit {
     }, err => {
       loader.dismiss();
       this.commonService.showToast(err.error.message);
-    })
+    });
   }
 
   async showImportFacultyModal() {
@@ -55,7 +55,7 @@ export class FacultyListPage implements OnInit {
     });
     modal.onWillDismiss().then(() => {
       this.getFaculties();
-    })
+    });
     modal.present();
   }
 

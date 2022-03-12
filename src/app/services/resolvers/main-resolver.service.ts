@@ -23,7 +23,12 @@ export class MainResolverService {
   init() {
     return new Promise((resolve, reject) => {
       this.authService.initAuth().then(() => {
-        if (this.authService.currentUser$?.value?.role === EUserRoles.admin) {
+        if (!this.authService.currentUser$.value) {
+          this.router.navigate(['/', 'auth', 'login'], { replaceUrl: true });
+          return resolve(true);
+        }
+        else if (this.authService.currentUser$?.value?.role === EUserRoles.admin) {
+          /* eslint no-underscore-dangle: 0 */
           this.collegeService.getByAdminIdAsync(this.authService.currentUser$.value._id)
             .subscribe(res => {
               this.collegeService.saveCollege(res);
@@ -40,7 +45,9 @@ export class MainResolverService {
               this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
               this.router.navigate(['/', 'auth', 'signup', 'create-college'], { replaceUrl: true });
             });
-        } else {
+        }
+        else {
+          console.log('user is not admin');
           resolve(true);
         }
       }).catch(err => {

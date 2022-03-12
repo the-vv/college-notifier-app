@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { ERequestStatus, EUserRoles } from 'src/app/interfaces/common.enum';
 import { ICollege } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
@@ -16,7 +17,7 @@ import { CommonService } from 'src/app/services/common.service';
 export class HomePage implements OnInit {
 
   public currentCollege: ICollege;
-  public loading: boolean = true;
+  public loading = true;
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -27,30 +28,34 @@ export class HomePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    
   }
 
   async ionViewDidEnter() {
-    this.subs.add(
-    this.collegeService.currentCollege$
-      .subscribe(res => {
-        this.loading = false;
-        console.log(res)
-        if (res) {
-          if (res.status === ERequestStatus.pending) {
-            this.commonService.showSuccessPage(`${EStrings.college} ${EStrings.requested}`, EStrings.collegeRequestedText);
+    if (this.authService.currentUserRole === EUserRoles.admin) {
+      const collegeSubscription = this.collegeService.currentCollege$
+        .pipe(take(1))
+        .subscribe(res => {
+          this.loading = false;
+          console.log(res);
+          if (res) {
+            if (res.status === ERequestStatus.pending) {
+              this.commonService.showSuccessPage(`${EStrings.college} ${EStrings.requested}`, EStrings.collegeRequestedText);
+            } else {
+              this.currentCollege = res;
+            }
           } else {
-            this.currentCollege = res;
+            this.router.navigate(['/', 'auth', 'signup', 'create-college'], { replaceUrl: true });
           }
-        } else {
-          this.router.navigate(['/', 'auth', 'signup', 'create-college'], {replaceUrl: true});
-        }
-      }, err => {
-        this.loading = false;
-        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
-        this.router.navigate(['/', 'auth', 'signup', 'create-college'], {replaceUrl: true});
-      })
-    )
+        }, err => {
+          console.log(err);
+          this.loading = false;
+          this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+          this.router.navigate(['/', 'auth', 'signup', 'create-college'], { replaceUrl: true });
+        });
+      this.subs.add(collegeSubscription);
+    } else if (this.authService.currentUserRole === EUserRoles.superAdmin) {
+      this.commonService.goToDashboard();
+    }
   }
 
   ionViewWillLeave() {

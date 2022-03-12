@@ -47,7 +47,7 @@ export class CommonService {
 
   async showLoading(message: string = `${EStrings.loading}, ${EStrings.pleaseWait}`) {
     const loader = await this.loadingController.create({
-      message: message,
+      message,
       spinner: 'dots'
     });
     loader.present();
@@ -77,7 +77,7 @@ export class CommonService {
     return this.http.postAsync({ urls }, [this.commonApiEndPoint, 'delete-files'].join('/'));
   }
 
-  readExcelFile(file :any) {
+  readExcelFile(file: any) {
     return new Promise((resolve, reject) => {
       const reader: FileReader = new FileReader();
       reader.readAsBinaryString(file);
@@ -92,7 +92,7 @@ export class CommonService {
       reader.onerror = (error) => {
         reject(error);
       };
-    })
+    });
   }
 
 

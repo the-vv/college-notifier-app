@@ -1,14 +1,15 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ManagePageRoutingModule } from './manage-routing.module';
+import { ListPageRoutingModule } from './list-routing.module';
 
-import { DepartmentManagePage } from './manage.page';
+import { BatchListPage } from './list.page';
 import { CommonExportsModule } from 'src/app/common-exports.module';
-import { AvatarModule } from 'primeng/avatar';
+import { TableModule } from 'primeng/table';
+import { SlideMenuModule } from 'primeng/slidemenu';
 import { IonicSelectableModule } from 'ionic-selectable';
 
 
@@ -17,12 +18,14 @@ import { IonicSelectableModule } from 'ionic-selectable';
     CommonModule,
     FormsModule,
     IonicModule,
-    ManagePageRoutingModule,
+    ListPageRoutingModule,
     CommonExportsModule,
+    TableModule,
+    SlideMenuModule,
+    IonicSelectableModule,
     ReactiveFormsModule,
-    AvatarModule,
-    IonicSelectableModule
+    FormsModule
   ],
-  declarations: [DepartmentManagePage]
+  declarations: [BatchListPage]
 })
-export class ManagePageModule {}
+export class ListPageModule { }

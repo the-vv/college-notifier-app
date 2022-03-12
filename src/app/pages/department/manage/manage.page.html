@@ -20,9 +20,8 @@
       </ion-row>
     </ion-col>
     <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''">
-      <div class="text-center mt-2">
-        <p-avatar icon="pi pi-user" styleClass="" size="xlarge" shape="circle"></p-avatar>
-        <h5>{{'login' | string}}</h5>
+      <div class="text-center mt-3">
+        <h4>{{isUpdate ? 'update' : 'create' | string}} {{'department' | string}}</h4>
       </div>
       <form [formGroup]="dptForm">
         <ion-col size="12">
@@ -47,18 +46,16 @@
           <ion-item class="mt-1">
             <ion-label>{{'admins' | string}}</ion-label>
             <ionic-selectable #portComponent formControlName="admins" [items]="availableFaculties" itemValueField="_id"
-              itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
+              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
               [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
-              <ionic-selectable>
-                <ng-template ionicSelectableTitleTemplate>
-                  {{'choose' | string}} {{'admins' | string}}
-                </ng-template>
-              </ionic-selectable>
+              <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'admins' | string}}
+              </ng-template>
               <ng-template ionicSelectablePlaceholderTemplate>
-                {{f.admins.value ? f.admins.value.length : 0}} {{'admins' | string}}
+                {{f.admins.value ? f.admins.value.length : 0}} {{'selected' | string}}
               </ng-template>
               <ng-template ionicSelectableValueTemplate let-port="value">
-                {{f.admins.value ? f.admins.value.length : 0}} {{'admins' | string}}
+                {{f.admins.value ? f.admins.value.length : 0}} {{'selected' | string}}
               </ng-template>
             </ionic-selectable>
           </ion-item>
@@ -66,7 +63,7 @@
             string}}
             {{'isRequired' | string}}</small>
         </ion-col>
-        <ion-col size="12">
+        <ion-col size="12" *ngIf="currentBreakPoint === 'medium'">
           <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
             <span *ngIf="!loading">{{'submit' | string}}</span>
             <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
@@ -76,3 +73,10 @@
     </ion-col>
   </ion-row>
 </ion-content>
+
+<ion-footer *ngIf="currentBreakPoint !== 'medium'">
+  <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
+    <span *ngIf="!loading">{{'submit' | string}}</span>
+    <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+  </ion-button>
+</ion-footer>

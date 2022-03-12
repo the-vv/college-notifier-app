@@ -13,10 +13,10 @@ import { EStrings } from '../interfaces/strings.enum';
 })
 export class AuthService {
 
+  public currentUserRole: string;
   public currentUser$: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
   public isLoggedIn: boolean;
   private authAPiUrl = 'api/auth';
-  public currentUserRole: string;
 
   constructor(
     private httpService: HttpService,
@@ -28,14 +28,14 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       Storage.get({ key: EStorageKeys.user }).then(user => {
         if (user.value) {
+          this.isLoggedIn = true;
           this.currentUser$.next(JSON.parse(user.value));
           this.currentUserRole = this.currentUser$.value.role;
-          console.log(this.currentUser$.value);
         }
         resolve(true);
       }).catch(err => {
         reject(err);
-      })
+      });
     });
   }
 
@@ -66,12 +66,12 @@ export class AuthService {
     this.currentUserRole = null;
     Storage.remove({ key: EStorageKeys.user });
     Storage.remove({ key: EStorageKeys.token });
+    this.router.navigate(['/auth']);
     this.httpService.getAsync([this.authAPiUrl, 'logout'].join('/'))
       .subscribe(_ => {
-        this.router.navigate(['/auth']);
       }, _ => {
         Toast.show({
-          text: [EStrings.error + ': ', , EStrings.logout].join(' '),
+          text: [EStrings.error + ':', EStrings.logout].join(' '),
         });
       });
   }

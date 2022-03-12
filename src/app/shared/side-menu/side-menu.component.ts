@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EUserRoles } from 'src/app/interfaces/common.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CommonService } from 'src/app/services/common.service';
 
@@ -10,6 +11,8 @@ import { CommonService } from 'src/app/services/common.service';
 })
 export class SideMenuComponent implements OnInit {
 
+  public eUserRoles = EUserRoles;
+
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -17,19 +20,18 @@ export class SideMenuComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    
   }
 
   goToHome() {
     if(this.router.url.includes('/dashboard')) {
-      return
+      return;
     }
     this.commonService.goToDashboard();
   }
 
   goToSettings() {
     if(this.router.url.includes('/settings')) {
-      return
+      return;
     }
     this.router.navigate(['/', 'settings']);
   }

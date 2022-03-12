@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotificationListPage implements OnInit {
 
-  public loading: boolean = true;
+  public loading = true;
 
   constructor() { }
 

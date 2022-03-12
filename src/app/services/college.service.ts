@@ -3,6 +3,7 @@ import { Storage } from '@capacitor/storage';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ERequestStatus, EStorageKeys } from '../interfaces/common.enum';
 import { ICollege } from '../interfaces/common.model';
+import { AuthService } from './auth.service';
 import { HttpService } from './http.service';
 
 @Injectable({
@@ -14,11 +15,17 @@ export class CollegeService {
   private collegeUrl = 'api/college';
 
   constructor(
-    private http: HttpService
+    private http: HttpService,
+    private authService: AuthService
   ) {
     Storage.get({ key: EStorageKeys.college }).then(college => {
       if (college.value) {
         this.currentCollege$.next(JSON.parse(college.value));
+      }
+    });
+    this.authService.currentUser$.subscribe(user => {
+      if(!user) {
+        this.currentCollege$.next(null);
       }
     });
   }
