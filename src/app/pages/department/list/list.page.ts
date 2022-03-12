@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IDepartment } from 'src/app/interfaces/common.model';
+import { IDepartment, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -39,6 +39,10 @@ export class ListPage implements OnInit {
         laoding.dismiss();
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
       });
+  }
+
+  getAdminNames(department: IDepartment) {
+    return( department.admins as IUser[]).map((admin) => admin.name).join(', ');
   }
 
 }

@@ -21,7 +21,7 @@
     </ion-col>
     <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''">
       <div class="text-center mt-3">
-        <h4>{{isUpdate ? 'update' : 'create' | string}} {{'department' | string}}</h4>
+        <h4>{{(isUpdate ? 'update' : 'create') | string}} {{'department' | string}}</h4>
       </div>
       <form [formGroup]="dptForm">
         <ion-col size="12">
@@ -44,16 +44,16 @@
         </ion-col>
         <ion-col size="12">
           <ion-item class="mt-1">
-            <ion-label>{{'admins' | string}}</ion-label>
+            <ion-label position="floating">{{'admins' | string}}</ion-label>
             <ionic-selectable #portComponent formControlName="admins" [items]="availableFaculties" itemValueField="_id"
               itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
               [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
               <ng-template ionicSelectableTitleTemplate>
                 {{'choose' | string}} {{'admins' | string}}
               </ng-template>
-              <ng-template ionicSelectablePlaceholderTemplate>
+              <!-- <ng-template ionicSelectablePlaceholderTemplate>
                 {{f.admins.value ? f.admins.value.length : 0}} {{'selected' | string}}
-              </ng-template>
+              </ng-template> -->
               <ng-template ionicSelectableValueTemplate let-port="value">
                 {{f.admins.value ? f.admins.value.length : 0}} {{'selected' | string}}
               </ng-template>
@@ -62,6 +62,11 @@
           <small class="text-danger" *ngIf="f.admins.errors?.required && (f.admins.touched || showErrors)">{{'admins' |
             string}}
             {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="mt-1" button>
+            <app-image-upload class="v-100" formControlName="image"></app-image-upload>
+          </ion-item>
         </ion-col>
         <ion-col size="12" *ngIf="currentBreakPoint === 'medium'">
           <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">

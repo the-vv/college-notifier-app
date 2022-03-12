@@ -28,12 +28,16 @@
         <tr>
             <th>{{'name' | string}}</th>
             <th>{{'description' | string}}</th>
+            <th>{{'admins' | string}}</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item let-columns="columns">
         <tr>
-            <td><span class="p-column-title">{{'name' | string}}</span>{{item.name}}</td>
+            <td><span class="p-column-title">{{'name' | string}}</span>
+              <a [routerLink]="['/', 'department', 'manage', item._id]">{{item.name}}</a>
+            </td>
             <td><span class="p-column-title">{{'description' | string}}</span>{{item.description}}</td>
+            <td><span class="p-column-title">{{'admins' | string}}</span>{{getAdminNames(item)}}</td>
         </tr>
     </ng-template>
 </p-table>

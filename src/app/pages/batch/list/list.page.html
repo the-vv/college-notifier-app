@@ -33,7 +33,8 @@
       </ng-template>
       <ng-template pTemplate="body" let-item let-columns="columns">
         <tr>
-          <td><span class="p-column-title">{{'title' | string}}</span>{{item.startDate}} - {{item.endDate}}</td>
+          <td><span class="p-column-title">{{'title' | string}}</span>
+            <a [routerLink]="['/', 'batch', 'manage', item._id]">{{item.startDate}} - {{item.endDate}}</a></td>
           <td><span class="p-column-title">{{'admins' | string}}</span>{{getAdminNames(item)}}</td>
           <td><span class="p-column-title">{{'department' | string}}</span>{{item.source.department?.name}}</td>
         </tr>

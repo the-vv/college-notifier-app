@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -10,6 +10,7 @@ import { DepartmentManagePage } from './manage.page';
 import { CommonExportsModule } from 'src/app/common-exports.module';
 import { AvatarModule } from 'primeng/avatar';
 import { IonicSelectableModule } from 'ionic-selectable';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { IonicSelectableModule } from 'ionic-selectable';
     CommonExportsModule,
     ReactiveFormsModule,
     AvatarModule,
-    IonicSelectableModule
+    IonicSelectableModule,
+    SharedModule
   ],
   declarations: [DepartmentManagePage]
 })

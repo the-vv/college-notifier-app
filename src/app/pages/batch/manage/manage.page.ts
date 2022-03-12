@@ -60,6 +60,14 @@ export class BatchManagePage implements OnInit, OnDestroy {
     this.batchId = this.activatedRoute.snapshot.params.id;
     if (this.batchId) {
       this.isUpdate = true;
+      this.batchService.getByIdAsync(this.batchId).subscribe((res: IBatch) => {
+        this.batchForm.patchValue({
+          startDate: res.startDate,
+          endDate: res.endDate,
+          image: res.image,
+          admins: (res.admins as IUser[])?.map((val: IUser) => val._id)
+        });
+      });
     }
     this.userService.getUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id, EUserRoles.faculty)
       .subscribe((res: IUser[]) => {

@@ -38,7 +38,7 @@ export interface IDepartment {
     source: ISource;
     image?: string;
     active: boolean;
-    admins: string[];
+    admins: string[] | IUser[];
 }
 
 export interface ICollege {

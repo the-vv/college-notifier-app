@@ -22,7 +22,6 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
   public isUpdate = false;
   public dptId: string;
   public availableFaculties: IUser[] = [];
-  public selectedAdmins: IUser[] = [];
   public currentBreakPoint: EBreakPoints;
   public showErrors = false;
   public dptForm: FormGroup;
@@ -52,10 +51,26 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
     });
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     this.dptId = this.activatedRoute.snapshot.params.id;
     if (this.dptId) {
       this.isUpdate = true;
+      const loading = await this.commonService.showLoading();
+      this.departmentService.getByIdAsync(this.dptId).subscribe((res: IDepartment) => {
+        loading.dismiss();
+        this.dptForm.patchValue({
+          name: res.name,
+          description: res.description,
+          image: res.image,
+          admins: (res.admins as IUser[])?.map((val: IUser) => val._id)
+        });
+        console.log(this.dptForm.value);
+      }, (err) => {
+        loading.dismiss();
+        Toast.show({
+          text: [EStrings.error + ':', err.error.message].join(' '),
+        });
+      });
     }
     this.userService.getUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id, EUserRoles.faculty)
       .subscribe((res: IUser[]) => {
