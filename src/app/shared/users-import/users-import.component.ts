@@ -4,6 +4,7 @@ import { ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
 import { ISource, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 
@@ -25,7 +26,8 @@ export class UsersImportComponent implements OnInit {
     private modalController: ModalController,
     private commonServicce: CommonService,
     public alertController: AlertController,
-    private userService: UserService
+    private userService: UserService,
+    private config: ConfigService
   ) { }
 
   ngOnInit() { }
@@ -48,7 +50,7 @@ export class UsersImportComponent implements OnInit {
         }
         (data as any[]).forEach(user => {
           user.active = true;
-          user.password = '12345678';
+          user.password = this.config.userDefaultPassword;
           user.role = this.role;
           user.name = user.Name;
           user.email = user.Email;
@@ -65,7 +67,7 @@ export class UsersImportComponent implements OnInit {
         };
         this.userService.postUsersAsync(postData)
           .subscribe(res => {
-            this.commonServicce.showToast(`${EStrings.users} ${EStrings.imported}`);
+            this.commonServicce.showToast(`${EStrings[this.role]} ${EStrings.imported}`);
             this.modalController.dismiss();
           }, err => {
             console.log(err);

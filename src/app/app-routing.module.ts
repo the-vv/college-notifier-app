@@ -12,19 +12,16 @@ const routes: Routes = [
     path: 'dashboard',
     loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
     canActivate: [AuthGuard],
-    // canLoad: [AuthGuard],
   },
   {
     path: 'admin',
     loadChildren: () => import('src/app/pages/admin/admin.module').then(m => m.AdminModule),
     canActivate: [AuthGuard],
-    // canLoad: [AuthGuard],
   },
   {
     path: 'college',
     loadChildren: () => import('./pages/college/college.module').then(m => m.CollegeModule),
     canActivate: [AuthGuard],
-    // canLoad: [AuthGuard],
   },
   {
     path: 'success',
@@ -34,37 +31,40 @@ const routes: Routes = [
     path: 'settings',
     loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule),
     canActivate: [AuthGuard],
-    // canLoad: [AuthGuard],
   },
   {
     path: 'college',
     loadChildren: () => import('src/app/pages/college/college.module').then(m => m.CollegeModule),
     canActivate: [AuthGuard],
-    // canLoad: [AuthGuard],
   },
   {
     path: 'department',
     loadChildren: () => import('src/app/pages/department/department.module').then(m => m.DepartmentModule),
     canActivate: [AuthGuard],
-    // canLoad: [AuthGuard],
   },
   {
     path: 'batch',
     loadChildren: () => import('src/app/pages/batch/batch.module').then(m => m.BatchModule),
     canActivate: [AuthGuard],
-    // canLoad: [AuthGuard],
   },
   {
     path: 'class',
     loadChildren: () => import('src/app/pages/class/class.module').then(m => m.ClassModule),
     canActivate: [AuthGuard],
-    // canLoad: [AuthGuard],
+  },
+  {
+    path: 'room',
+    loadChildren: () => import('src/app/pages/room/room.module').then(m => m.RoomModule),
+    canActivate: [AuthGuard],
   }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, initialNavigation: 'enabledBlocking' })
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: PreloadAllModules,
+      // initialNavigation: 'enabledBlocking'
+    })
   ],
   exports: [RouterModule]
 })

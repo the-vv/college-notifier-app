@@ -58,3 +58,13 @@ export enum ERedirectTo {
     createRoom = 'create-room',
     joinRoom = 'join-room'
 }
+
+export enum EPrivacyType {
+    public = 'public',
+    private = 'private'
+}
+
+export enum ESegmentViews {
+    edit = 'edit',
+    home = 'home',
+}

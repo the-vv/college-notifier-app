@@ -30,7 +30,7 @@ export class SideMenuComponent implements OnInit {
   }
 
   goToSettings() {
-    if(this.router.url.includes('/settings')) {
+    if(this.router.url.endsWith('/settings')) {
       return;
     }
     this.router.navigate(['/', 'settings']);

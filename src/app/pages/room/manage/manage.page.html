@@ -6,35 +6,24 @@
     <ion-buttons slot="end">
       <ion-menu-button slot="end"></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{'department' | string}} {{'manage' | string}}</ion-title>
-    </ion-toolbar>
-    <ion-toolbar *ngIf="currentBreakPoint !== 'medium'">
-    <ion-segment (ionChange)="onChangeSegment($event)" [swipeGesture]="true" [value]="segmentValue">
-      <ion-segment-button value="home">
-        <ion-label>{{'home' | string}}</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="edit">
-        <ion-label>{{'edit' | string}}</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+    <ion-title>{{'room' | string}} {{'manage' | string}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-row class="h-100">
-    <ion-col size-md="8" *ngIf="(currentBreakPoint === 'medium') || (segmentValue === 'home')">
+    <ion-col size-md="8" *ngIf="currentBreakPoint === 'medium'">
       <ion-row class="v-center">
         <ion-col class="text-center">
           <img src="assets/images/department.webp" alt="" style="max-height: 70vh;">
         </ion-col>
       </ion-row>
     </ion-col>
-    <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''"
-     *ngIf="(currentBreakPoint === 'medium') || (segmentValue === 'edit')">
+    <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''">
       <div class="text-center mt-3">
         <h4>{{(isUpdate ? 'update' : 'create') | string}} {{'department' | string}}</h4>
       </div>
-      <form [formGroup]="dptForm">
+      <form [formGroup]="roomForm">
         <ion-col size="12">
           <ion-item class="">
             <ion-label position="floating">{{'name' | string}}</ion-label>
@@ -73,6 +62,12 @@
           <small class="text-danger" *ngIf="f.admins.errors?.required && (f.admins.touched || showErrors)">{{'admins' |
             string}}
             {{'isRequired' | string}}</small>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="mt-1" button [detail]="false" (click)="privateToggle.checked = !privateToggle.checked">
+            <ion-label>{{'private' | string}} {{'room' | string}}</ion-label>
+            <ion-toggle #privateToggle formControlName="private" slot="end"></ion-toggle>
+          </ion-item>
         </ion-col>
         <ion-col size="12">
           <ion-item class="mt-1" button>

@@ -1,4 +1,4 @@
-import { ERequestStatus, ESourceTargetType, EUserRoles } from './common.enum';
+import { EPrivacyType, ERequestStatus, ESourceTargetType, EUserRoles } from './common.enum';
 
 export interface ISource {
     college?: string;
@@ -71,6 +71,19 @@ export interface IClass {
     image?: string;
     admins: string[] | IUser[];
 }
+export interface IRoom {
+    _id?: string;
+    name: string;
+    description?: string;
+    source: ISource;
+    image?: string;
+    active: boolean;
+    admins: string[] | IUser[];
+    createdAt: Date;
+    createdBy: string | IUser;
+    private: boolean;
+}
+
 
 export interface IEmailPassword {
     email: string;
