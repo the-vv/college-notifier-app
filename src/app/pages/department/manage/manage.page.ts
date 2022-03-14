@@ -2,11 +2,12 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { EBreakPoints, ESegmentViews, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
-import { IDepartment, IUser } from 'src/app/interfaces/common.model';
+import { IDepartment, IUser, IUserMap } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -20,7 +21,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class DepartmentManagePage implements OnInit, OnDestroy {
 
-  @ViewChild('model') public userModal: IonicSelectableComponent;
+  @ViewChild('modal') public userModal: IonicSelectableComponent;
   public isUpdate = false;
   public dptId: string;
   public availableFaculties: IUser[] = [];
@@ -34,6 +35,7 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
   public accordianLoading = false;
   public selectedStudents: IUser[] = [];
   public selectedFaculties: IUser[] = [];
+  public selectedModalUsers: string[] = [];
   public availableUsersToChoose: IUser[] = [];
   private subs: Subscription = new Subscription();
 
@@ -45,7 +47,8 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
     private departmentService: DepartmentService,
     private userService: UserService,
     private collegeService: CollegeService,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    public alertController: AlertController
   ) { }
 
   get f() { return this.dptForm.controls; }
@@ -132,20 +135,26 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
   }
 
   loadStudents() {
+    this.accordianLoading = true;
     this.userService.getBySourceAsync(ESourceTargetType.department, this.dptId, EUserRoles.student)
       .subscribe((res: IUser[]) => {
+        this.accordianLoading = false;
         this.allStudents = res?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
       }, err => {
         console.log(err);
+        this.accordianLoading = false;
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
       });
   }
 
   loadFaculties() {
+    this.accordianLoading = true;
     this.userService.getBySourceAsync(ESourceTargetType.department, this.dptId, EUserRoles.faculty)
       .subscribe((res: IUser[]) => {
+        this.accordianLoading = false;
         this.allFaculties = res?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
       }, err => {
+        this.accordianLoading = false;
         console.log(err);
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
       });
@@ -177,13 +186,13 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
         {
           text: EStrings.student,
           handler: () => {
-            // TODO: add students
+            this.showUserModal(EUserRoles.student);
           }
         },
         {
           text: EStrings.faculty,
           handler: () => {
-            // TODO: add faculties
+            this.showUserModal(EUserRoles.faculty);
           }
         },
         {
@@ -194,6 +203,65 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
     }).then(actionSheet => {
       actionSheet.present();
     });
+  }
+
+  showUserModal(role: EUserRoles) {
+    this.userModal.items = [];
+    this.userModal.open();
+    this.userModal.showLoading();
+    this.userService.getBySourceAsync(ESourceTargetType.college, this.collegeService.currentCollege$.value._id, role)
+      .subscribe((res: IUser[]) => {
+        const allUsers = res?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
+        this.userService.getBySourceAsync(ESourceTargetType.department, this.dptId, role)
+          .subscribe((mapRes: IUser[]) => {
+            this.userModal.hideLoading();
+            const mapped = mapRes?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
+            this.userModal.items = allUsers?.filter((val: any) => !mapped.find(mapVal => mapVal._id === val._id));
+          }, err => {
+            console.log(err);
+            this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+          });
+      }, err => {
+        this.userModal.hideLoading();
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+      });
+    this.userModal.onClose.pipe(take(1)).subscribe(() => {
+      this.submitUserMaps(this.selectedModalUsers);
+    });
+  }
+
+  submitUserMaps(users: string[]) {
+    if (!users || users.length === 0) {
+      return;
+    }
+    const postData: IUserMap[] = [];
+    users.forEach((val: string) => {
+      postData.push({
+        user: val,
+        source: {
+          college: this.collegeService.currentCollege$.value._id,
+          department: this.dptId,
+          source: ESourceTargetType.department,
+        }
+      });
+    });
+    this.loading = true;
+    this.userService.postUserMapsAsync(postData)
+      .subscribe((res: any) => {
+        this.loading = false;
+        Toast.show({
+          text: [EStrings.successfully, EStrings.mapped].join(' '),
+        });
+      }, (err: any) => {
+        this.loading = false;
+        Toast.show({
+          text: [EStrings.error + ':', err.error.message].join(' '),
+        });
+      });
+  }
+
+  onOptionsClick() {
+    console.log(this.selectedFaculties);
   }
 
 }

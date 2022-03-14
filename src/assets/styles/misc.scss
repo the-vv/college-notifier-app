@@ -6,6 +6,10 @@
     color: var(--ion-text-color) !important;
 }
 
+.p-listbox .p-listbox-list .p-listbox-item:focus {
+    box-shadow: none !important;
+}
+
 a {
     text-decoration: none;
 }

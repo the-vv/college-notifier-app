@@ -151,4 +151,9 @@ export enum EStrings {
     public = 'Public',
     management = 'Management',
     noItemsToShow = 'No items to show',
+    successfully = 'Successfully',
+    failedTo = 'Failed to',
+    added = 'Added',
+    addedBy = 'Added By',
+    mapped = 'mapped',
 }

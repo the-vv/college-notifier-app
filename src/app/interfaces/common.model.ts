@@ -89,3 +89,9 @@ export interface IEmailPassword {
     email: string;
     password: string;
 }
+
+export interface IUserMap {
+    _id?: string;
+    user: string | IUser;
+    source: ISource;
+}
