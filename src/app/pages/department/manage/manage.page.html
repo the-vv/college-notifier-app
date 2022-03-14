@@ -26,17 +26,17 @@
       <ng-container *ngIf="isUpdate; else createTemplate">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>{{'users' | string}} {{'management' | string | lowercase}}</ion-card-title>
+            <ion-card-title>{{'users' | string}}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <ion-accordion-group (ionChange)="onUserOpen($event)">
+            <ion-accordion-group (ionChange)="onUserOpen($event)" value="">
               <ion-accordion value="faculty">
                 <ion-item slot="header">
                   <ion-label>{{'faculties' | string}}</ion-label>
                 </ion-item>
                 <ion-list slot="content">
                   <ng-container *ngIf="!accordianLoading; else loadingTemplate">
-                    <p-listbox [options]="allFaculties" [(ngModel)]="selectedFaculties" [metaKeySelection]="false"
+                    <p-listbox [options]="allFaculties" [(ngModel)]="selectedUsers" [metaKeySelection]="false"
                       [checkbox]="true" [filter]="true" [multiple]="true" optionLabel="userName"
                       [listStyle]="{'max-height':'300px'}" filterPlaceHolder="{{'search' | string}}">
                       <ng-template let-country pTemplate="item">
@@ -54,7 +54,7 @@
                 </ion-item>
                 <ion-list slot="content">
                   <ng-container *ngIf="!accordianLoading; else loadingTemplate">
-                    <p-listbox [options]="allStudents" [(ngModel)]="selectedStudents" [metaKeySelection]="false"
+                    <p-listbox [options]="allStudents" [(ngModel)]="selectedUsers" [metaKeySelection]="false"
                       [checkbox]="true" [filter]="true" [multiple]="true" optionLabel="userName"
                       [listStyle]="{'max-height':'300px'}" filterPlaceHolder="{{'search' | string}}">
                       <ng-template let-country pTemplate="item">
@@ -73,7 +73,7 @@
               <ion-button expand="block" (click)="onMapClick()">{{'map' | string}}</ion-button>
             </ion-col>
             <ion-col>
-              <ion-button expand="block" (click)="onOptionsClick()">{{'options' | string}}</ion-button>
+              <ion-button expand="block" [disabled]="!selectedUsers.length" (click)="onOptionsClick()">{{'options' | string}}</ion-button>
             </ion-col>
           </ion-row>
         </ion-card>

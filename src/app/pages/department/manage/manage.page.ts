@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
-import { ActionSheetController, AlertController } from '@ionic/angular';
+import { ActionSheetController, AlertController, IonAccordionGroup } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -22,6 +22,8 @@ import { UserService } from 'src/app/services/user.service';
 export class DepartmentManagePage implements OnInit, OnDestroy {
 
   @ViewChild('modal') public userModal: IonicSelectableComponent;
+  @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
+
   public isUpdate = false;
   public dptId: string;
   public availableFaculties: IUser[] = [];
@@ -33,8 +35,7 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
   public allStudents: IUser[] = [];
   public allFaculties: IUser[] = [];
   public accordianLoading = false;
-  public selectedStudents: IUser[] = [];
-  public selectedFaculties: IUser[] = [];
+  public selectedUsers: IUser[] = [];
   public selectedModalUsers: string[] = [];
   public availableUsersToChoose: IUser[] = [];
   private subs: Subscription = new Subscription();
@@ -230,7 +231,7 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
     });
   }
 
-  submitUserMaps(users: string[]) {
+  submitUserMaps(users: string[], unMap: boolean = false) {
     if (!users || users.length === 0) {
       return;
     }
@@ -240,14 +241,18 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
         user: val,
         source: {
           college: this.collegeService.currentCollege$.value._id,
-          department: this.dptId,
-          source: ESourceTargetType.department,
+          department: unMap ? undefined : this.dptId,
+          batch: undefined,
+          class: undefined,
+          source: unMap ? ESourceTargetType.college : ESourceTargetType.department,
         }
       });
     });
     this.loading = true;
     this.userService.postUserMapsAsync(postData)
       .subscribe((res: any) => {
+        this.accordionGroup.value = undefined;
+        this.selectedUsers = [];
         this.loading = false;
         Toast.show({
           text: [EStrings.successfully, EStrings.mapped].join(' '),
@@ -261,7 +266,35 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
   }
 
   onOptionsClick() {
-    console.log(this.selectedFaculties);
+    this.actionSheetController.create({
+      header: `${EStrings.choose} ${EStrings.option}`,
+      buttons: [
+        {
+          text: EStrings.removeMap,
+          handler: async () => {
+            const alert = await this.alertController.create({
+              header: EStrings.areYouSure,
+              subHeader: `${EStrings.removingUserMap}...!`,
+              message: `${EStrings.thisActionWillRemove} 
+               ${this.selectedUsers.length} ${EStrings.users} ${EStrings.from} ${EStrings.department}`,
+              buttons: [{
+                text: EStrings.removeMap,
+                handler: () => {
+                  this.submitUserMaps(this.selectedUsers.map(el => el._id), true);
+                }
+              }]
+            });
+            await alert.present();
+          }
+        },
+        {
+          text: EStrings.cancel,
+          role: 'cancel'
+        }
+      ]
+    }).then(actionSheet => {
+      actionSheet.present();
+    });
   }
 
 }
