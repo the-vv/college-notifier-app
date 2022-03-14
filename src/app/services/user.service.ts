@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EUserRoles } from '../interfaces/common.enum';
-import { IUser } from '../interfaces/common.model';
+import { ESourceTargetType, EUserRoles } from '../interfaces/common.enum';
 import { HttpService } from './http.service';
 
 @Injectable({
@@ -23,4 +22,9 @@ export class UserService {
   getUserByCollegeIdAsync(collegeId: string, role: EUserRoles) {
     return this.http.getAsync(`${this.userMapUrl}/college/${collegeId}`, { role });
   }
+
+  getBySourceAsync(sourceType: ESourceTargetType, sourceId: string, role: EUserRoles) {
+    return this.http.getAsync(`${this.userMapUrl}/${sourceType}/${sourceId}`, { role });
+  }
+
 }

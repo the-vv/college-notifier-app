@@ -7,8 +7,8 @@
       <ion-menu-button slot="end"></ion-menu-button>
     </ion-buttons>
     <ion-title>{{'department' | string}} {{'manage' | string}}</ion-title>
-    </ion-toolbar>
-    <ion-toolbar *ngIf="currentBreakPoint !== 'medium'">
+  </ion-toolbar>
+  <ion-toolbar *ngIf="currentBreakPoint !== 'medium'">
     <ion-segment (ionChange)="onChangeSegment($event)" [swipeGesture]="true" [value]="segmentValue">
       <ion-segment-button value="home">
         <ion-label>{{'home' | string}}</ion-label>
@@ -20,17 +20,67 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="position-relative">
   <ion-row class="h-100">
     <ion-col size-md="8" *ngIf="(currentBreakPoint === 'medium') || (segmentValue === 'home')">
-      <ion-row class="v-center">
-        <ion-col class="text-center">
-          <img src="assets/images/department.webp" alt="" style="max-height: 70vh;">
-        </ion-col>
-      </ion-row>
+      <ng-container *ngIf="isUpdate; else createTemplate">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{'users' | string}} {{'management' | string | lowercase}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-accordion-group (ionChange)="onUserOpen($event)">
+              <ion-accordion value="faculty">
+                <ion-item slot="header">
+                  <ion-label>{{'faculties' | string}}</ion-label>
+                </ion-item>
+                <ion-list slot="content">
+                  <ng-container *ngIf="allFaculties.length; else loadingTemplate">
+                    <p-listbox [options]="allFaculties" [(ngModel)]="selectedFaculties" [metaKeySelection]="false"
+                      [checkbox]="true" [filter]="true" [multiple]="true" optionLabel="name"
+                      [listStyle]="{'max-height':'250px'}" >
+                      <ng-template let-country pTemplate="item">
+                        <div class="country-item">
+                          <div>{{country.name}}</div>
+                        </div>
+                      </ng-template>
+                    </p-listbox>
+                  </ng-container>
+                </ion-list>
+              </ion-accordion>
+              <ion-accordion value="student">
+                <ion-item slot="header">
+                  <ion-label>{{'students' | string}}</ion-label>
+                </ion-item>
+                <ion-list slot="content">
+                  <ng-container *ngIf="allStudents.length; else loadingTemplate">
+                    <p-listbox [options]="allStudents" [(ngModel)]="selectedStudents" [metaKeySelection]="false"
+                      [checkbox]="true" [filter]="true" [multiple]="true" optionLabel="name"
+                      [listStyle]="{'max-height':'250px'}" >
+                      <ng-template let-country pTemplate="item">
+                        <div class="country-item">
+                          <div>{{country.name}}</div>
+                        </div>
+                      </ng-template>
+                    </p-listbox>
+                  </ng-container>
+                </ion-list>
+              </ion-accordion>
+            </ion-accordion-group>
+          </ion-card-content>
+          <ion-row>
+            <ion-col>
+              <ion-button expand="block" (click)="onMapClick()">{{'map' | string}}</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button expand="block">{{'options' | string}}</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ng-container>
     </ion-col>
     <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''"
-     *ngIf="(currentBreakPoint === 'medium') || (segmentValue === 'edit')">
+      *ngIf="(currentBreakPoint === 'medium') || (segmentValue === 'edit')">
       <div class="text-center mt-3">
         <h4>{{(isUpdate ? 'update' : 'create') | string}} {{'department' | string}}</h4>
       </div>
@@ -90,9 +140,27 @@
   </ion-row>
 </ion-content>
 
-<ion-footer *ngIf="currentBreakPoint !== 'medium'">
+<ion-footer *ngIf="currentBreakPoint !== 'medium' && segmentValue === 'edit'">
   <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
     <span *ngIf="!loading">{{'submit' | string}}</span>
     <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
   </ion-button>
 </ion-footer>
+
+<ng-template #createTemplate>
+  <ion-row class="v-center">
+    <ion-col class="text-center">
+      <img src="assets/images/department.webp" alt="" style="max-height: 70vh;">
+    </ion-col>
+  </ion-row>
+</ng-template>
+
+<!-- loading template -->
+<ng-template #loadingTemplate>
+  <ion-row class="v-center">
+    <ion-col class="text-center scrollbox-custom">
+      <ion-spinner name="dots" *ngIf="accordianLoading"></ion-spinner>
+      <ion-label *ngIf="!accordianLoading">{{'noItemsToShow' | string}}</ion-label>
+    </ion-col>
+  </ion-row>
+</ng-template>

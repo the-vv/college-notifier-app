@@ -1,7 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
+import { ActionSheetController } from '@ionic/angular';
+import { IonicSelectableComponent } from 'ionic-selectable';
 import { Subscription } from 'rxjs';
 import { EBreakPoints, ESegmentViews, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
 import { IDepartment, IUser } from 'src/app/interfaces/common.model';
@@ -18,6 +20,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class DepartmentManagePage implements OnInit, OnDestroy {
 
+  @ViewChild('model') public userModal: IonicSelectableComponent;
   public isUpdate = false;
   public dptId: string;
   public availableFaculties: IUser[] = [];
@@ -26,6 +29,12 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
   public dptForm: FormGroup;
   public loading = false;
   public segmentValue: ESegmentViews = ESegmentViews.home;
+  public allStudents: IUser[] = [];
+  public allFaculties: IUser[] = [];
+  public accordianLoading = false;
+  public selectedStudents: IUser[] = [];
+  public selectedFaculties: IUser[] = [];
+  public availableUsersToChoose: IUser[] = [];
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -35,7 +44,8 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private departmentService: DepartmentService,
     private userService: UserService,
-    private collegeService: CollegeService
+    private collegeService: CollegeService,
+    private actionSheetController: ActionSheetController
   ) { }
 
   get f() { return this.dptForm.controls; }
@@ -74,7 +84,7 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
     }
     this.userService.getUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id, EUserRoles.faculty)
       .subscribe((res: IUser[]) => {
-        this.availableFaculties = res?.map((val: IUser) => ({...val, userName: `${val.name} (${val.email})`}));
+        this.availableFaculties = res?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
       }, err => {
         console.log(err);
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
@@ -121,12 +131,69 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
     }
   }
 
+  loadStudents() {
+    this.userService.getBySourceAsync(ESourceTargetType.department, this.dptId, EUserRoles.student)
+      .subscribe((res: IUser[]) => {
+        this.allStudents = res?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
+      }, err => {
+        console.log(err);
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+      });
+  }
+
+  loadFaculties() {
+    this.userService.getBySourceAsync(ESourceTargetType.department, this.dptId, EUserRoles.faculty)
+      .subscribe((res: IUser[]) => {
+        this.allFaculties = res?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
+      }, err => {
+        console.log(err);
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+      });
+  }
+
+
   onChangeSegment(event: any) {
     this.segmentValue = event.detail.value;
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+  }
+
+  onUserOpen(event: any) {
+    const accrdian = event?.detail?.value;
+    if (accrdian === EUserRoles.student) {
+      this.loadStudents();
+    }
+    else if (accrdian === EUserRoles.faculty) {
+      this.loadFaculties();
+    }
+  }
+
+  onMapClick() {
+    this.actionSheetController.create({
+      header: `${EStrings.choose} ${EStrings.role}`,
+      buttons: [
+        {
+          text: EStrings.student,
+          handler: () => {
+            // TODO: add students
+          }
+        },
+        {
+          text: EStrings.faculty,
+          handler: () => {
+            // TODO: add faculties
+          }
+        },
+        {
+          text: EStrings.cancel,
+          role: 'cancel'
+        }
+      ]
+    }).then(actionSheet => {
+      actionSheet.present();
+    });
   }
 
 }

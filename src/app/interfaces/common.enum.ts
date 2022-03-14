@@ -4,7 +4,6 @@ export enum EUserRoles {
     tutor = 'tutor',
     parent = 'parent',
     faculty = 'faculty',
-    custom = 'custom',
     superAdmin = 'super-admin',
 }
 

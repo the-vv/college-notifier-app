@@ -149,5 +149,6 @@ export enum EStrings {
     source = 'Source',
     private = 'Private',
     public = 'Public',
-
+    management = 'Management',
+    noItemsToShow = 'No items to show',
 }
