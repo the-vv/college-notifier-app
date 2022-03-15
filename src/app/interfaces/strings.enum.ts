@@ -179,5 +179,6 @@ export enum EStrings {
     sendToWholeCollege = 'Send to everyone in the college',
     to = 'to',
     publish = 'Publish',
+    schedule = 'Schedule',
 
 }

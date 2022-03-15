@@ -141,6 +141,24 @@
           </ion-item>
         </ion-col>
       </ion-row>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{'schedule' | string}} {{'notification' | string}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item class="" id="open-date-input-2">
+            <ion-label position="">{{'choose' | string}} {{'schedule' | string}}</ion-label>
+            <ion-input></ion-input>
+            <ion-button fill="clear" id="open-date-input-2">
+              <ion-icon icon="calendar"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-col>
+      </ion-row>
       <ion-row>
         <ion-col size="12" class="mt-1">
           <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
@@ -152,3 +170,9 @@
     </ion-card-content>
   </ion-card>
 </ion-content>
+<ion-popover trigger="open-date-input-2" show-backdrop="false" side="top" [alignment]="'top'"
+  style="--offset-y: -300px">
+  <ng-template>
+    <ion-datetime #popoverDatetime2 presentation="date-time"></ion-datetime>
+  </ng-template>
+</ion-popover>
