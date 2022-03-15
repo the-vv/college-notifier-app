@@ -171,5 +171,6 @@ export enum EStrings {
     basic = 'Basic',
     attatchement = 'Attachment',
     thisIsAnEvent = 'This is an event',
+    chooseFile = 'Tap to choose a file',
 
 }

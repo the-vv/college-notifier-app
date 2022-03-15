@@ -5,13 +5,15 @@ import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { CommonExportsModule } from '../common-exports.module';
 import { IonicModule } from '@ionic/angular';
 import { UsersImportComponent } from './users-import/users-import.component';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
 
 @NgModule({
   declarations: [
     SideMenuComponent,
     ImageUploadComponent,
-    UsersImportComponent
+    UsersImportComponent,
+    FileUploadComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,10 @@ import { UsersImportComponent } from './users-import/users-import.component';
   exports: [
     SideMenuComponent,
     ImageUploadComponent,
-    UsersImportComponent
+    UsersImportComponent,
+    FileUploadComponent
+  ],
+  providers: [
   ]
 })
 export class SharedModule { }

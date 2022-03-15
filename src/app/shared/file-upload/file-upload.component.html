@@ -1,3 +1,19 @@
-<p>
-  file-upload works!
-</p>
+<div class="v-center image-choose" (click)="chooseFile()" *ngIf="!previewUrl">
+  {{'chooseFile' | string}}
+</div>
+<div class="v-center image-preview" *ngIf="previewUrl">
+  <div>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="auto">
+        <ion-icon name="document-outline" style="font-size: 40px;"></ion-icon>
+      </ion-col>
+      <ion-col size="auto">
+        <p><strong>{{fileData.name}}</strong></p>
+        <p>{{fileData.size / 1024 | number:'1.2-2'}} KB, {{fileData.name?.split('.')?.slice(-1)?.toString() | uppercase}}</p>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ion-icon name="trash" color="danger" class="floating-close" (click)="removeImage($event)" *ngIf="!disabled">
+  </ion-icon>
+  <ion-spinner name="circles" class="floating-loader" *ngIf="loading"></ion-spinner>
+</div>

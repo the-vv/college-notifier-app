@@ -64,8 +64,8 @@
             {{'isRequired' | string}}</small>
         </ion-col>
         <ion-col size="12">
-          <ion-item class="mt-1" button [detail]="false" (click)="privateToggle.checked = !privateToggle.checked">
-            <ion-label>{{'private' | string}} {{'room' | string}}</ion-label>
+          <ion-item class="mt-1" button [detail]="false" >
+            <ion-label (click)="privateToggle.checked = !privateToggle.checked">{{'private' | string}} {{'room' | string}}</ion-label>
             <ion-toggle #privateToggle formControlName="private" slot="end"></ion-toggle>
           </ion-item>
         </ion-col>

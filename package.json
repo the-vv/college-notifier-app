@@ -39,6 +39,7 @@
     "@ionic/angular-server": "^6.0.8-dev.1644591364.1d3793d",
     "@ionic/pwa-elements": "^3.1.1",
     "@nguniversal/express-engine": "^13.0.1",
+    "@robingenz/capacitor-file-picker": "^0.3.0",
     "domino": "^2.1.6",
     "express": "^4.15.2",
     "ionic-selectable": "^4.9.0",

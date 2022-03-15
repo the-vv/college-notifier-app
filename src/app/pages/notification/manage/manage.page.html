@@ -26,14 +26,13 @@
           </ion-item>
         </ion-col>
         <ion-col size="12" class="mt-1">
-          <ion-item>
-            <ion-label>{{'attatchement' | string}}: </ion-label>
-            <ion-input type="file"></ion-input>
+          <ion-item button>
+            <app-file-upload class="v-100" [previewUrl]=""></app-file-upload>
           </ion-item>
         </ion-col>
         <ion-col size="12">
-          <ion-item class="mt-1" button [detail]="false" (click)="modeToggle.checked = !modeToggle.checked">
-            <ion-label>{{'thisIsAnEvent' | string}}: </ion-label>
+          <ion-item class="mt-1" button [detail]="false">
+            <ion-label (click)="modeToggle.checked = !modeToggle.checked">{{'thisIsAnEvent' | string}}: </ion-label>
             <ion-toggle #modeToggle slot="end"></ion-toggle>
           </ion-item>
         </ion-col>
