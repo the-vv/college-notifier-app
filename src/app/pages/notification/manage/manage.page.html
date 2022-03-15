@@ -26,7 +26,7 @@
           </ion-item>
         </ion-col>
         <ion-col size="12" class="mt-1">
-          <ion-item button>
+          <ion-item button [detail]="false">
             <app-file-upload class="v-100" [previewUrl]=""></app-file-upload>
           </ion-item>
         </ion-col>
@@ -35,6 +35,118 @@
             <ion-label (click)="modeToggle.checked = !modeToggle.checked">{{'thisIsAnEvent' | string}}: </ion-label>
             <ion-toggle #modeToggle slot="end"></ion-toggle>
           </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+  <ion-card style="overflow: visible;">
+    <ion-card-header>
+      <ion-card-title>
+        {{'content' | string}}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <quill-editor [modules]="quillModules" [styles]="{minHeight: '15vh'}"></quill-editor>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        {{'targets' | string}}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item class="mt-1" button [detail]="false">
+            <ion-label (click)="sendToggle.checked = !sendToggle.checked">{{'target' | string}} {{'to' | string}}
+              {{'college' | string}}
+            </ion-label>
+            <ion-toggle #sendToggle slot="end"></ion-toggle>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" size-md="6" [hidden]="sendToggle.checked">
+          <ion-item class="mt-1">
+            <ion-label position="floating">{{'departments' | string}}</ion-label>
+            <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
+              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
+              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
+              <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'admins' | string}}
+              </ng-template>
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                {{port.admins.value ? port.admins.value.length : 0}} {{'selected' | string}}
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" size-md="6" [hidden]="sendToggle.checked">
+          <ion-item class="mt-1">
+            <ion-label position="floating">{{'batches' | string}}</ion-label>
+            <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
+              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
+              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
+              <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'admins' | string}}
+              </ng-template>
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                {{port.admins.value ? port.admins.value.length : 0}} {{'selected' | string}}
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" size-md="6" [hidden]="sendToggle.checked">
+          <ion-item class="mt-1">
+            <ion-label position="floating">{{'classes' | string}}</ion-label>
+            <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
+              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
+              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
+              <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'admins' | string}}
+              </ng-template>
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                {{port.admins.value ? port.admins.value.length : 0}} {{'selected' | string}}
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" size-md="6" [hidden]="sendToggle.checked">
+          <ion-item class="mt-1">
+            <ion-label position="floating">{{'rooms' | string}}</ion-label>
+            <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
+              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
+              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
+              <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'admins' | string}}
+              </ng-template>
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                {{port.admins.value ? port.admins.value.length : 0}} {{'selected' | string}}
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" size-md="6" [hidden]="sendToggle.checked">
+          <ion-item class="mt-1">
+            <ion-label position="floating">{{'custom' | string}} {{'users' | string}}</ion-label>
+            <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
+              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
+              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
+              <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'admins' | string}}
+              </ng-template>
+              <ng-template ionicSelectableValueTemplate let-port="value">
+                {{port.admins.value ? port.admins.value.length : 0}} {{'selected' | string}}
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" class="mt-1">
+          <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
+            <span *ngIf="!loading">{{'publish' | string}}</span>
+            <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-card-content>

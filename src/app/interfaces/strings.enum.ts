@@ -172,5 +172,12 @@ export enum EStrings {
     attatchement = 'Attachment',
     thisIsAnEvent = 'This is an event',
     chooseFile = 'Tap to choose a file',
+    content = 'Content',
+    target = 'Target',
+    targets = 'Targets',
+    sendTo = 'Send to',
+    sendToWholeCollege = 'Send to everyone in the college',
+    to = 'to',
+    publish = 'Publish',
 
 }

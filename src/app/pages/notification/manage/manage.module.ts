@@ -9,6 +9,9 @@ import { ManagePageRoutingModule } from './manage-routing.module';
 import { NotificationManagePage } from './manage.page';
 import { CommonExportsModule } from 'src/app/common-exports.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { QuillModule } from 'ngx-quill';
+import { IonicSelectableModule } from 'ionic-selectable';
+
 
 @NgModule({
   imports: [
@@ -17,7 +20,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     IonicModule,
     ManagePageRoutingModule,
     CommonExportsModule,
-    SharedModule
+    SharedModule,
+    QuillModule.forRoot(),
+    IonicSelectableModule
   ],
   declarations: [NotificationManagePage]
 })

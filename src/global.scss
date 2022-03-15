@@ -28,6 +28,9 @@
 @import url("~primeng/resources/themes/arya-blue/theme.css") (prefers-color-scheme: dark);
 @import url("~primeng/resources/themes/saga-blue/theme.css") (prefers-color-scheme: light);
 
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.snow.css';
+
 // custom styles
 @import "./assets/styles/common.scss";
 @import "./assets/styles/misc.scss";

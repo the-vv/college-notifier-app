@@ -95,3 +95,12 @@ export interface IUserMap {
     user: string | IUser;
     source: ISource;
 }
+
+export interface ITarget {
+    college?: string;
+    departments?: string[];
+    batches?: string[];
+    classes?: string[];
+    rooms?: string[];
+    users?: string[];
+}
