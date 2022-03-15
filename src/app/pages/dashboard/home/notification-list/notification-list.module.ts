@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { NotificationListPageRoutingModule } from './notification-list-routing.module';
 
 import { NotificationListPage } from './notification-list.page';
+import {SpeedDialModule} from 'primeng/speeddial';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    NotificationListPageRoutingModule
+    NotificationListPageRoutingModule,
+    SpeedDialModule
   ],
   declarations: [NotificationListPage]
 })

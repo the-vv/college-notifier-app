@@ -13,6 +13,7 @@ import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { UserService } from 'src/app/services/user.service';
+import { ImageUploadComponent } from 'src/app/shared/image-upload/image-upload.component';
 
 @Component({
   selector: 'app-department-manage',
@@ -22,7 +23,8 @@ import { UserService } from 'src/app/services/user.service';
 export class DepartmentManagePage implements OnInit, OnDestroy {
 
   @ViewChild('modal') public userModal: IonicSelectableComponent;
-  @ViewChild(IonAccordionGroup) accordionGroup: IonAccordionGroup;
+  @ViewChild(IonAccordionGroup) public accordionGroup: IonAccordionGroup;
+  @ViewChild(ImageUploadComponent) public imageUploader: ImageUploadComponent;
 
   public isUpdate = false;
   public dptId: string;
@@ -95,11 +97,18 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
       });
   }
 
-  onSubmit() {
-    console.log(this.dptForm.value);
+  async onSubmit() {
     this.showErrors = true;
     this.dptForm.markAllAsTouched();
     if (this.dptForm.invalid) {
+      return;
+    }
+    try {
+      this.loading = true;
+      await this.imageUploader.uploadImage();
+    }
+    catch (err) {
+      this.loading = false;
       return;
     }
     /* eslint no-underscore-dangle: 0 */
@@ -285,6 +294,11 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
               }]
             });
             await alert.present();
+          }
+        },
+        {
+          text: `${EStrings.assign} ${EStrings.custom} ${EStrings.role}`,
+          handler: () => {
           }
         },
         {

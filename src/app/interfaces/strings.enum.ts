@@ -166,4 +166,10 @@ export enum EStrings {
     thisActionWillRemove = 'This action will remove',
     of = 'of',
     from = 'from',
+    assign = 'Assign',
+    custom = 'Custom',
+    basic = 'Basic',
+    attatchement = 'Attachment',
+    thisIsAnEvent = 'This is an event',
+
 }

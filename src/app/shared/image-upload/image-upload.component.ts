@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Subscription } from 'rxjs';
+import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CommonService } from 'src/app/services/common.service';
 
 
@@ -12,7 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      multi:true,
+      multi: true,
       useExisting: ImageUploadComponent
     }
   ]
@@ -26,18 +27,20 @@ export class ImageUploadComponent implements OnInit, ControlValueAccessor {
   disabled = false;
   uploaded = true;
   uploader: Subscription;
+  private toUpload: FormData;
+  private toDelete: string;
 
   constructor(
     private commonService: CommonService
   ) { }
 
-  onChange = (quantity) => {};
-  onTouched = () => {};
+  onChange = (val: any) => { };
+  onTouched = () => { };
 
   ngOnInit() { }
 
   public promptImageUpload() {
-    if(this.disabled) {
+    if (this.disabled) {
       return;
     }
     this.uploaded = false;
@@ -50,34 +53,24 @@ export class ImageUploadComponent implements OnInit, ControlValueAccessor {
       const imageBlob = this.dataUriToBlob(this.previewImage);
       const form: FormData = new FormData();
       form.append('image', imageBlob, `picture.${image.format}`);
-      this.loading = true;
-      this.uploader = this.commonService.uploadFiles(form).subscribe((res: any) => {
-        this.loading = false;
-        this.uploaded = true;
-        if(res.length) {
-          this.previewImage = `${res[0].url}?fid=${res[0].fileId}`;
-          this.onChange(this.previewImage);
-        }
-      }, (err: any) => {
-        this.loading = false;
-      });
+      this.toUpload = form;
     }).catch(e => { /* nothing */ });
   }
 
   public removeImage(event: any) {
-    if(this.disabled) {
+    if (this.disabled) {
       return;
     }
     event.stopPropagation();
     this.onChange(null);
-    if(!this.uploaded) {
+    if (!this.uploaded) {
       this.uploader.unsubscribe();
       this.uploaded = false;
-    } else if(this.previewImage) {
+    } else if (this.previewImage) {
       this.uploaded = false;
-      this.commonService.deleteFiles([this.previewImage]).subscribe(() => {
-        this.uploaded = false;
-      });
+    }
+    if (!this.previewImage.startsWith('data:')) {
+      this.toDelete = this.previewImage;
     }
     this.previewImage = null;
   }
@@ -98,6 +91,30 @@ export class ImageUploadComponent implements OnInit, ControlValueAccessor {
     this.disabled = disabled;
   }
 
+  public uploadImage() {
+    return new Promise<void>((resolve, reject) => {
+      if (this.toUpload) {
+        this.loading = true;
+        this.uploader = this.commonService.uploadFiles(this.toUpload).subscribe((res: any) => {
+          this.loading = false;
+          this.uploaded = true;
+          if (res.length) {
+            this.onChange(`${res[0].url}?fid=${res[0].fileId}`);
+            resolve();
+          }
+        }, (err: any) => {
+          reject(err);
+          this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+          this.loading = false;
+        });
+      } else {
+        resolve();
+      }
+      if (this.toDelete) {
+        this.commonService.deleteFiles([this.toDelete]).subscribe(() => { }, err => { });
+      }
+    });
+  }
 
   private dataUriToBlob(dataURI: string) {
     const splitDataURI = dataURI.split(',');
@@ -109,5 +126,6 @@ export class ImageUploadComponent implements OnInit, ControlValueAccessor {
     }
     return new Blob([ia], { type: mimeString });
   }
+
 
 }

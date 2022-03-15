@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'notifications' | string}} {{'manage' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        {{'basic' | string}} {{'details' | string}}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row>
+        <ion-col size="12" class="mt-1">
+          <ion-item>
+            <ion-label>{{'title' | string}}: </ion-label>
+            <ion-input type="text"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="mt-1">
+          <ion-item>
+            <ion-label>{{'attatchement' | string}}: </ion-label>
+            <ion-input type="file"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="mt-1" button [detail]="false" (click)="modeToggle.checked = !modeToggle.checked">
+            <ion-label>{{'thisIsAnEvent' | string}}: </ion-label>
+            <ion-toggle #modeToggle slot="end"></ion-toggle>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

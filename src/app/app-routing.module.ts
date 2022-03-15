@@ -3,7 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'notification/manage', pathMatch: 'full' },
   {
     path: 'auth',
     loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthModule),
@@ -55,6 +55,11 @@ const routes: Routes = [
   {
     path: 'room',
     loadChildren: () => import('src/app/pages/room/room.module').then(m => m.RoomModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'notification',
+    loadChildren: () => import('src/app/pages/notification/notification.module').then(m => m.NotificationModule),
     canActivate: [AuthGuard],
   }
 ];
