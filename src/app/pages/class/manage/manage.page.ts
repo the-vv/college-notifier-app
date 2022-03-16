@@ -59,17 +59,22 @@ export class ClassManagePage implements OnInit {
     });
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     this.classId = this.activatedRoute.snapshot.params.id;
     if (this.classId) {
+      const loading = await this.commonService.showLoading();
       this.isUpdate = true;
       this.classService.getByIdAsync(this.classId).subscribe((res: IClass) => {
+        loading.dismiss();
         this.classForm.patchValue({
           name: res.name,
           description: res.description,
           image: res.image,
           admins: (res.admins as IUser[])?.map((val: IUser) => val._id),
         });
+      }, err => {
+        loading.dismiss();
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
       });
     }
     this.userService.getBySourceAsync(ESourceTargetType.college, this.collegeService.currentCollege$.value._id, EUserRoles.faculty)

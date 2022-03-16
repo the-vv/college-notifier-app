@@ -183,5 +183,6 @@ export enum EStrings {
     dateAndTime = 'Date and Time',
     sendInstantly = 'Send Instantly',
     publishInstantly = 'Publish Instantly',
+    tapToViewFile = 'Tap to view the file',
 
 }

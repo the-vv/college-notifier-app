@@ -26,6 +26,7 @@ export class AuthHeaderService implements HttpInterceptor {
             })
           });
           observer.next(cloneReq);
+          observer.complete();
         });
     });
   }

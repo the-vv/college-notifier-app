@@ -25,6 +25,9 @@
               <ion-label>{{'title' | string}}: </ion-label>
               <ion-input type="text" formControlName="title"></ion-input>
             </ion-item>
+            <small class="text-danger" *ngIf="b.title.errors?.required && (b.title.touched || showErrors)">{{'title' |
+              string}}
+              {{'isRequired' | string}}</small>
           </ion-col>
           <ion-col size="12" class="mt-1">
             <ion-item button [detail]="false">
@@ -51,101 +54,103 @@
       </ion-card-content>
     </ion-card>
   </form>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>
-        {{'targets' | string}}
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-row>
-        <ion-col size="12">
-          <ion-item class="mt-1" button [detail]="false">
-            <ion-label (click)="sendToggle.checked = !sendToggle.checked">{{'target' | string}} {{'to' | string}}
-              {{'college' | string}}
-            </ion-label>
-            <ion-toggle #sendToggle slot="end" [(ngModel)]="sendToCollege" [ngModelOptions]="{standalone: true}">
-            </ion-toggle>
-          </ion-item>
-        </ion-col>
-        <ion-col size="12" size-md="6">
-          <ion-item class="mt-1">
-            <ion-label position="floating">{{'departments' | string}}</ion-label>
-            <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
-              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
-              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
-              <ng-template ionicSelectableTitleTemplate>
-                {{'choose' | string}} {{'admins' | string}}
-              </ng-template>
-              <ng-template ionicSelectableValueTemplate let-port="value">
-                {{port.admins.value ? port.admins.value.length : 0}} {{'selected' | string}}
-              </ng-template>
-            </ionic-selectable>
-          </ion-item>
-        </ion-col>
-        <ion-col size="12" size-md="6">
-          <ion-item class="mt-1">
-            <ion-label position="floating">{{'batches' | string}}</ion-label>
-            <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
-              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
-              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
-              <ng-template ionicSelectableTitleTemplate>
-                {{'choose' | string}} {{'admins' | string}}
-              </ng-template>
-              <ng-template ionicSelectableValueTemplate let-port="value">
-                {{port.admins.value ? port.admins.value.length : 0}} {{'selected' | string}}
-              </ng-template>
-            </ionic-selectable>
-          </ion-item>
-        </ion-col>
-        <ion-col size="12" size-md="6">
-          <ion-item class="mt-1">
-            <ion-label position="floating">{{'classes' | string}}</ion-label>
-            <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
-              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
-              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
-              <ng-template ionicSelectableTitleTemplate>
-                {{'choose' | string}} {{'admins' | string}}
-              </ng-template>
-              <ng-template ionicSelectableValueTemplate let-port="value">
-                {{port.admins.value ? port.admins.value.length : 0}} {{'selected' | string}}
-              </ng-template>
-            </ionic-selectable>
-          </ion-item>
-        </ion-col>
-        <ion-col size="12" size-md="6">
-          <ion-item class="mt-1">
-            <ion-label position="floating">{{'rooms' | string}}</ion-label>
-            <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
-              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
-              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
-              <ng-template ionicSelectableTitleTemplate>
-                {{'choose' | string}} {{'admins' | string}}
-              </ng-template>
-              <ng-template ionicSelectableValueTemplate let-port="value">
-                {{port.admins.value ? port.admins.value.length : 0}} {{'selected' | string}}
-              </ng-template>
-            </ionic-selectable>
-          </ion-item>
-        </ion-col>
-        <ion-col size="12" size-md="6">
-          <ion-item class="mt-1">
-            <ion-label position="floating">{{'custom' | string}} {{'users' | string}}</ion-label>
-            <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
-              itemTextField="userName" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
-              [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true">
-              <ng-template ionicSelectableTitleTemplate>
-                {{'choose' | string}} {{'admins' | string}}
-              </ng-template>
-              <ng-template ionicSelectableValueTemplate let-port="value">
-                {{port.admins.value ? port.admins.value.length : 0}} {{'selected' | string}}
-              </ng-template>
-            </ionic-selectable>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
+  <form [formGroup]="targetForm">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          {{'targets' | string}}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row>
+          <ion-col size="12">
+            <ion-item class="mt-1" button [detail]="false">
+              <ion-label (click)="sendToggle.checked = !sendToggle.checked">{{'target' | string}} {{'to' | string}}
+                {{'college' | string}}
+              </ion-label>
+              <ion-toggle #sendToggle slot="end" (ionChange)="onTargetCollege()" [(ngModel)]="sendToCollege" [ngModelOptions]="{standalone: true}">
+              </ion-toggle>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12" size-md="6" [hidden]="sendToCollege">
+            <ion-item class="mt-1" (click)="onChooseTarget(eSourceTargetType.department)">
+              <ion-label position="floating">{{'departments' | string}}</ion-label>
+              <ionic-selectable #dpts itemValueField="_id"
+                itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end" [canClear]="true"
+                [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true" formControlName="departments">
+                <ng-template ionicSelectableTitleTemplate>
+                  {{'choose' | string}} {{'departments' | string}}
+                </ng-template>
+                <ng-template ionicSelectableValueTemplate let-port="value">
+                  {{t.departments.value ? t.departments.value.length : 0}} {{'selected' | string}}
+                </ng-template>
+              </ionic-selectable>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12" size-md="6" [hidden]="sendToCollege">
+            <ion-item class="mt-1" (click)="onChooseTarget(eSourceTargetType.batch)">
+              <ion-label position="floating">{{'batches' | string}}</ion-label>
+              <ionic-selectable #batches itemValueField="_id"
+                itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end" [canClear]="true"
+                [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true" formControlName="batches">
+                <ng-template ionicSelectableTitleTemplate>
+                  {{'choose' | string}} {{'batches' | string}}
+                </ng-template>
+                <ng-template ionicSelectableValueTemplate let-port="value">
+                  {{t.batches.value ? t.batches.value.length : 0}} {{'selected' | string}}
+                </ng-template>
+              </ionic-selectable>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12" size-md="6" [hidden]="sendToCollege">
+            <ion-item class="mt-1" (click)="onChooseTarget(eSourceTargetType.class)">
+              <ion-label position="floating">{{'classes' | string}}</ion-label>
+              <ionic-selectable #classes itemValueField="_id"
+                itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end" [canClear]="true"
+                [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true" formControlName="classes">
+                <ng-template ionicSelectableTitleTemplate>
+                  {{'choose' | string}} {{'classes' | string}}
+                </ng-template>
+                <ng-template ionicSelectableValueTemplate let-port="value">
+                  {{t.classes.value ? t.classes.value.length : 0}} {{'selected' | string}}
+                </ng-template>
+              </ionic-selectable>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12" size-md="6" [hidden]="sendToCollege">
+            <ion-item class="mt-1" (click)="onChooseTarget(eSourceTargetType.room)">
+              <ion-label position="floating">{{'rooms' | string}}</ion-label>
+              <ionic-selectable #rooms itemValueField="_id"
+                itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end" [canClear]="true"
+                [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true" formControlName="rooms">
+                <ng-template ionicSelectableTitleTemplate>
+                  {{'choose' | string}} {{'rooms' | string}}
+                </ng-template>
+                <ng-template ionicSelectableValueTemplate let-port="value">
+                  {{t.rooms.value ? t.rooms.value.length : 0}} {{'selected' | string}}
+                </ng-template>
+              </ionic-selectable>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12" size-md="6" [hidden]="sendToCollege">
+            <ion-item class="mt-1" (click)="onChooseTarget('user')">
+              <ion-label position="floating">{{'custom' | string}} {{'users' | string}}</ion-label>
+              <ionic-selectable #users itemValueField="_id"
+                itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end" [canClear]="true"
+                [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true" formControlName="users">
+                <ng-template ionicSelectableTitleTemplate>
+                  {{'choose' | string}} {{'custom' | string}} {{'users' | string}}
+                </ng-template>
+                <ng-template ionicSelectableValueTemplate let-port="value">
+                  {{t.users.value ? t.users.value.length : 0}} {{'selected' | string}}
+                </ng-template>
+              </ionic-selectable>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </form>
   <ion-card>
     <ion-card-header>
       <ion-card-title>{{'schedule' | string}} {{'notification' | string}}</ion-card-title>

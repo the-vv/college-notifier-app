@@ -1,10 +1,10 @@
 import { EPrivacyType, ERequestStatus, ESourceTargetType, EUserRoles } from './common.enum';
 
 export interface ISource {
-    college?: string;
-    department?: string;
-    batch?: string;
-    class?: string;
+    college?: string | ICollege;
+    department?: string | IDepartment;
+    batch?: string | IBatch;
+    class?: string | IClass;
     source: ESourceTargetType;
 }
 

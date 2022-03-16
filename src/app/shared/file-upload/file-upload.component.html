@@ -2,7 +2,7 @@
   {{'chooseFile' | string}}
 </div>
 <div class="v-center image-preview" *ngIf="previewUrl">
-  <div>
+  <div *ngIf="fileData">
     <ion-row class="ion-align-items-center">
       <ion-col size="auto">
         <ion-icon name="document-outline" style="font-size: 40px;"></ion-icon>
@@ -12,6 +12,10 @@
         <p>{{fileData.size / 1024 | number:'1.2-2'}} KB, {{fileData.name?.split('.')?.slice(-1)?.toString() | uppercase}}</p>
       </ion-col>
     </ion-row>
+  </div>
+  <div *ngIf="!fileData"  class="v-center image-preview">
+    <ion-icon name="document-outline" style="font-size: 40px;"></ion-icon>
+    <a [href]="previewUrl" download>{{'tapToViewFile' | string}}</a>
   </div>
   <ion-icon name="trash" color="danger" class="floating-close" (click)="removeImage($event)" *ngIf="!disabled">
   </ion-icon>

@@ -22,10 +22,10 @@ export class BatchListPage implements OnInit {
   ) { }
 
   ionViewWillEnter() {
+    this.getBatches();
   }
 
   ngOnInit() {
-    this.getBatches();
   }
 
   async getBatches() {
