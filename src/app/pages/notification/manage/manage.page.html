@@ -11,44 +11,46 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>
-        {{'basic' | string}} {{'details' | string}}
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-row>
-        <ion-col size="12" class="mt-1">
-          <ion-item>
-            <ion-label>{{'title' | string}}: </ion-label>
-            <ion-input type="text"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col size="12" class="mt-1">
-          <ion-item button [detail]="false">
-            <app-file-upload class="v-100" [previewUrl]=""></app-file-upload>
-          </ion-item>
-        </ion-col>
-        <ion-col size="12">
-          <ion-item class="mt-1" button [detail]="false">
-            <ion-label (click)="modeToggle.checked = !modeToggle.checked">{{'thisIsAnEvent' | string}}: </ion-label>
-            <ion-toggle #modeToggle slot="end"></ion-toggle>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
-  <ion-card style="overflow: visible;">
-    <ion-card-header>
-      <ion-card-title>
-        {{'content' | string}}
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <quill-editor [modules]="quillModules" [styles]="{minHeight: '15vh'}"></quill-editor>
-    </ion-card-content>
-  </ion-card>
+  <form [formGroup]="notificationForm">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          {{'basic' | string}} {{'details' | string}}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row>
+          <ion-col size="12" class="mt-1">
+            <ion-item>
+              <ion-label>{{'title' | string}}: </ion-label>
+              <ion-input type="text" formControlName="title"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12" class="mt-1">
+            <ion-item button [detail]="false">
+              <app-file-upload class="v-100" formControlName="attatchement" [previewUrl]=""></app-file-upload>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item class="mt-1" button [detail]="false">
+              <ion-label (click)="modeToggle.checked = !modeToggle.checked">{{'thisIsAnEvent' | string}}: </ion-label>
+              <ion-toggle #modeToggle slot="end" (ionChange)="onChangeType($event)"></ion-toggle>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+    <ion-card style="overflow: visible;">
+      <ion-card-header>
+        <ion-card-title>
+          {{'content' | string}}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <quill-editor [modules]="quillModules" [styles]="{minHeight: '15vh'}" formControlName="content"></quill-editor>
+      </ion-card-content>
+    </ion-card>
+  </form>
   <ion-card>
     <ion-card-header>
       <ion-card-title>
@@ -62,10 +64,11 @@
             <ion-label (click)="sendToggle.checked = !sendToggle.checked">{{'target' | string}} {{'to' | string}}
               {{'college' | string}}
             </ion-label>
-            <ion-toggle #sendToggle slot="end"></ion-toggle>
+            <ion-toggle #sendToggle slot="end" [(ngModel)]="sendToCollege" [ngModelOptions]="{standalone: true}">
+            </ion-toggle>
           </ion-item>
         </ion-col>
-        <ion-col size="12" size-md="6" [hidden]="sendToggle.checked">
+        <ion-col size="12" size-md="6">
           <ion-item class="mt-1">
             <ion-label position="floating">{{'departments' | string}}</ion-label>
             <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
@@ -80,7 +83,7 @@
             </ionic-selectable>
           </ion-item>
         </ion-col>
-        <ion-col size="12" size-md="6" [hidden]="sendToggle.checked">
+        <ion-col size="12" size-md="6">
           <ion-item class="mt-1">
             <ion-label position="floating">{{'batches' | string}}</ion-label>
             <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
@@ -95,7 +98,7 @@
             </ionic-selectable>
           </ion-item>
         </ion-col>
-        <ion-col size="12" size-md="6" [hidden]="sendToggle.checked">
+        <ion-col size="12" size-md="6">
           <ion-item class="mt-1">
             <ion-label position="floating">{{'classes' | string}}</ion-label>
             <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
@@ -110,7 +113,7 @@
             </ionic-selectable>
           </ion-item>
         </ion-col>
-        <ion-col size="12" size-md="6" [hidden]="sendToggle.checked">
+        <ion-col size="12" size-md="6">
           <ion-item class="mt-1">
             <ion-label position="floating">{{'rooms' | string}}</ion-label>
             <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
@@ -125,7 +128,7 @@
             </ionic-selectable>
           </ion-item>
         </ion-col>
-        <ion-col size="12" size-md="6" [hidden]="sendToggle.checked">
+        <ion-col size="12" size-md="6">
           <ion-item class="mt-1">
             <ion-label position="floating">{{'custom' | string}} {{'users' | string}}</ion-label>
             <ionic-selectable #portComponent [items]="['availableFaculties']" itemValueField="_id"
@@ -150,13 +153,18 @@
     <ion-card-content>
       <ion-row>
         <ion-col size="12">
-          <ion-item class="" id="open-date-input-2">
-            <ion-label position="">{{'choose' | string}} {{'schedule' | string}}</ion-label>
-            <ion-input></ion-input>
-            <ion-button fill="clear" id="open-date-input-2">
-              <ion-icon icon="calendar"></ion-icon>
-            </ion-button>
+          <ion-item class="mt-1" button [detail]="false">
+            <ion-label (click)="scheduleToggle.checked = !scheduleToggle.checked">{{'publishInstantly' | string}}
+            </ion-label>
+            <ion-toggle #scheduleToggle slot="end" [(ngModel)]="sendInstantly" [ngModelOptions]="{standalone: true}">
+            </ion-toggle>
           </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-center" [hidden]="scheduleToggle.checked">
+        <ion-col size="12" size-lg="6">
+          <ion-label>{{'choose' | string}} {{'dateAndTime' | string}}</ion-label>
+          <ion-datetime [formControl]="sendSchedule" size="cover" [min]="currentTime" max="2999"></ion-datetime>
         </ion-col>
       </ion-row>
       <ion-row>
@@ -170,9 +178,3 @@
     </ion-card-content>
   </ion-card>
 </ion-content>
-<ion-popover trigger="open-date-input-2" show-backdrop="false" side="top" [alignment]="'top'"
-  style="--offset-y: -300px">
-  <ng-template>
-    <ion-datetime #popoverDatetime2 presentation="date-time"></ion-datetime>
-  </ng-template>
-</ion-popover>

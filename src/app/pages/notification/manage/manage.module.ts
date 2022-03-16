@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -22,7 +22,9 @@ import { IonicSelectableModule } from 'ionic-selectable';
     CommonExportsModule,
     SharedModule,
     QuillModule.forRoot(),
-    IonicSelectableModule
+    IonicSelectableModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [NotificationManagePage]
 })

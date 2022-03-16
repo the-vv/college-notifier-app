@@ -180,5 +180,8 @@ export enum EStrings {
     to = 'to',
     publish = 'Publish',
     schedule = 'Schedule',
+    dateAndTime = 'Date and Time',
+    sendInstantly = 'Send Instantly',
+    publishInstantly = 'Publish Instantly',
 
 }
