@@ -184,5 +184,7 @@ export enum EStrings {
     sendInstantly = 'Send Instantly',
     publishInstantly = 'Publish Instantly',
     tapToViewFile = 'Tap to view the file',
+    chooseFutureTime = 'Please Choose a future time',
+    chooseAtleastOneTarget = 'Please choose atleast one target',
 
 }

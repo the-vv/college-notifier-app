@@ -2,17 +2,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { IonicSelectableComponent } from 'ionic-selectable';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ENotificationType, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
-import { IBatch, IDepartment, ITarget, IUser } from 'src/app/interfaces/common.model';
+import { IBatch, IDepartment, INotification, ITarget } from 'src/app/interfaces/common.model';
+import { EStrings } from 'src/app/interfaces/strings.enum';
+import { AuthService } from 'src/app/services/auth.service';
 import { BatchService } from 'src/app/services/batch.service';
 import { ClassService } from 'src/app/services/class.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DepartmentService } from 'src/app/services/department.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { RoomService } from 'src/app/services/room.service';
 import { UserService } from 'src/app/services/user.service';
+import { FileUploadComponent } from 'src/app/shared/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-notification-manage',
@@ -26,6 +30,7 @@ export class NotificationManagePage implements OnInit {
   @ViewChild('classes', { static: true }) private classCtrl: IonicSelectableComponent;
   @ViewChild('rooms', { static: true }) private roomCtrl: IonicSelectableComponent;
   @ViewChild('users', { static: true }) private userCtrl: IonicSelectableComponent;
+  @ViewChild('uploader', { static: true }) private uploadCtrl: FileUploadComponent;
 
   public quillModules = {
     toolbar: [
@@ -44,14 +49,14 @@ export class NotificationManagePage implements OnInit {
   public showErrors = false;
   public eSourceTargetType = ESourceTargetType;
   public loading = false;
-  public currentTime = new Date().toISOString();
+  public currentTime = this.commonService.toLocaleIsoDateString(new Date());
   public sendInstantly = true;
   public sendToCollege = false;
-  public sendSchedule = new FormControl([new Date().toISOString()]);
+  public sendSchedule = new FormControl(this.commonService.toLocaleIsoDateString(new Date()));
   public notificationForm = this.fb.group({
     title: ['', Validators.required],
     content: [''],
-    attatchement: [''],
+    attachment: [''],
     type: [ENotificationType.notification, Validators.required],
   });
   public targetForm = this.fb.group({
@@ -71,7 +76,9 @@ export class NotificationManagePage implements OnInit {
     private classService: ClassService,
     private roomServce: RoomService,
     private userService: UserService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private authService: AuthService,
+    private notificationService: NotificationService
   ) { }
   public get b() {
     return this.notificationForm.controls;
@@ -86,9 +93,55 @@ export class NotificationManagePage implements OnInit {
   ionViewWillEnter() {
   }
 
-  onSubmit() {
-    console.log(this.notificationForm.value);
-    console.log(this.targetForm.value);
+  async onSubmit() {
+    this.showErrors = true;
+    if (!this.notificationForm.valid) {
+      return;
+    }
+    if (!this.sendInstantly) {
+      if (new Date(this.sendSchedule.value) < new Date()) {
+        this.commonService.showToast(EStrings.chooseFutureTime);
+        return;
+      }
+    }
+    this.targetForm.get('college').setValue(this.collegeService.currentCollege$.value?._id);
+    Object.keys(this.targetForm.value).forEach(key => {
+      if (!this.targetForm.value[key] || this.targetForm.value[key]?.length === 0) {
+        delete this.targetForm.value[key];
+      }
+    });
+    if (Object.keys(this.targetForm.value).length === 1 && (!this.sendToCollege && 'college' in this.targetForm.value)) {
+      this.commonService.showToast(EStrings.chooseAtleastOneTarget);
+      return;
+    }
+    try {
+      this.loading = true;
+      await this.uploadCtrl.uploadFile();
+    }
+    catch(e) {
+      console.log(e);
+      this.loading = false;
+      return;
+    }
+    const reqBody: INotification = {
+      ...this.notificationForm.value,
+      target: this.targetForm.value
+    };
+    reqBody.createdAt = this.sendInstantly ?
+      this.commonService.toLocaleIsoDateString(new Date()) :
+      this.sendSchedule.value;
+    reqBody.createdBy = this.authService.currentUser$.value._id;
+    reqBody.active = this.sendInstantly;
+    console.log(reqBody);
+    this.notificationService.postAsync(reqBody).subscribe((res) => {
+      console.log(res);
+      this.loading = false;
+      this.commonService.showToast('published');
+    }, (err) => {
+      this.loading = false;
+      console.log(err);
+      this.commonService.showToast(err.error.message);
+    });
   }
 
 
@@ -99,7 +152,6 @@ export class NotificationManagePage implements OnInit {
     } else {
       this.targetForm.enable();
     }
-    this.targetForm.get('college').setValue(this.sendToCollege ? this.collegeService.currentCollege$.value._id : null);
   }
 
   onChangeType(event: any) {
@@ -114,7 +166,7 @@ export class NotificationManagePage implements OnInit {
         this.departmentService.getByCollegeAsync(this.collegeService.currentCollege$.value._id).subscribe(res => {
           this.dptCtrl.items = res;
           this.dptCtrl.hideLoading();
-          this.dptCtrl.onClose.pipe(take(1)).subscribe(val => {
+          this.dptCtrl.onClose.pipe(take(1)).subscribe(() => {
             if (this.t.departments.value?.length) {
               this.t.batches.setValue([]);
               this.t.batches.disable();
@@ -127,7 +179,7 @@ export class NotificationManagePage implements OnInit {
           });
         }, err => {
           this.dptCtrl.hideLoading();
-          this.commonService.showToast(err.message);
+          this.commonService.showToast(err.error.message);
         });
         break;
       case ESourceTargetType.batch:
@@ -148,7 +200,7 @@ export class NotificationManagePage implements OnInit {
           });
         }, err => {
           this.batchCtrl.hideLoading();
-          this.commonService.showToast(err.message);
+          this.commonService.showToast(err.error.message);
         });
         break;
       case ESourceTargetType.class:
@@ -165,7 +217,7 @@ export class NotificationManagePage implements OnInit {
           this.classCtrl.hideLoading();
         }, err => {
           this.classCtrl.hideLoading();
-          this.commonService.showToast(err.message);
+          this.commonService.showToast(err.error.message);
         });
         break;
       case ESourceTargetType.room:
@@ -176,7 +228,7 @@ export class NotificationManagePage implements OnInit {
           this.roomCtrl.hideLoading();
         }, err => {
           this.roomCtrl.hideLoading();
-          this.commonService.showToast(err.message);
+          this.commonService.showToast(err.error.message);
         });
         break;
       case 'user':
@@ -190,7 +242,7 @@ export class NotificationManagePage implements OnInit {
           this.userCtrl.hideLoading();
         }, err => {
           this.userCtrl.hideLoading();
-          this.commonService.showToast(err.message);
+          this.commonService.showToast(err.error.message);
         });
         break;
     }

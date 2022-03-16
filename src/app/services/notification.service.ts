@@ -1,36 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IRoom } from '../interfaces/common.model';
+import { INotification } from '../interfaces/common.model';
 import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RoomService {
+export class NotificationService {
 
-  private roomUrl = 'api/room';
+  private roomUrl = 'api/notification';
 
   constructor(
     private http: HttpService
   ) { }
 
-  postAsync(data: IRoom): Observable<IRoom> {
+  postAsync(data: INotification): Observable<INotification> {
     return this.http.postAsync(data, this.roomUrl);
   }
 
-  putAsync(data: IRoom): Observable<IRoom> {
+  putAsync(data: INotification): Observable<INotification> {
     return this.http.putAsync(data, this.roomUrl);
   }
 
-  getByCollegeAsync(collegeId: string): Observable<IRoom[]> {
+  getByCollegeAsync(collegeId: string): Observable<INotification[]> {
     return this.http.getAsync(`${this.roomUrl}/getByCollege/${collegeId}`);
   }
 
-  getByIdAsync(id: string): Observable<IRoom> {
+  getByIdAsync(id: string): Observable<INotification> {
     return this.http.getAsync(`${this.roomUrl}/${id}`);
   }
 
-  getByAdminIdAsync(id: string): Observable<IRoom> {
+  getByAdminIdAsync(id: string): Observable<INotification> {
     return this.http.getAsync(`${this.roomUrl}/getByAdmin/${id}`);
   }
 

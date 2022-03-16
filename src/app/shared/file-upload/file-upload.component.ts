@@ -55,10 +55,10 @@ export class FileUploadComponent implements OnInit, ControlValueAccessor {
         return;
       }
       this.fileData = image.files[0];
-      this.previewUrl = `data:${this.fileData.mimeType}/${this.fileData.name.split('.').slice(-1)};base64,${this.fileData.data}`;
+      this.previewUrl = `data:${this.fileData.mimeType};base64,${this.fileData.data}`;
       const fileBlob = this.dataUriToBlob(this.previewUrl);
       const form: FormData = new FormData();
-      form.append('file', fileBlob, `picture.${this.fileData}`);
+      form.append('file', fileBlob, `cn_notification_attatchment.${this.fileData.name.split('.').slice(-1)[0]}`);
       this.toUpload = form;
     }).catch(e => { console.log(e); });
   }
@@ -93,10 +93,11 @@ export class FileUploadComponent implements OnInit, ControlValueAccessor {
     this.disabled = disabled;
   }
 
-  public uploadImage() {
+  public uploadFile() {
     return new Promise<void>((resolve, reject) => {
       if (this.toUpload) {
         this.loading = true;
+        console.log(this.toUpload);
         this.uploader = this.commonService.uploadFiles(this.toUpload).subscribe((res: any) => {
           this.loading = false;
           this.uploaded = true;

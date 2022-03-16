@@ -22,7 +22,7 @@
         <ion-row>
           <ion-col size="12" class="mt-1">
             <ion-item>
-              <ion-label>{{'title' | string}}: </ion-label>
+              <ion-label>{{'title' | string}} *: </ion-label>
               <ion-input type="text" formControlName="title"></ion-input>
             </ion-item>
             <small class="text-danger" *ngIf="b.title.errors?.required && (b.title.touched || showErrors)">{{'title' |
@@ -31,7 +31,7 @@
           </ion-col>
           <ion-col size="12" class="mt-1">
             <ion-item button [detail]="false">
-              <app-file-upload class="v-100" formControlName="attatchement" [previewUrl]=""></app-file-upload>
+              <app-file-upload class="v-100" formControlName="attachment" #uploader></app-file-upload>
             </ion-item>
           </ion-col>
           <ion-col size="12">
@@ -174,7 +174,7 @@
       </ion-row>
       <ion-row>
         <ion-col size="12" class="mt-1">
-          <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
+          <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()" [disabled]="!this.notificationForm.valid">
             <span *ngIf="!loading">{{'publish' | string}}</span>
             <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
           </ion-button>

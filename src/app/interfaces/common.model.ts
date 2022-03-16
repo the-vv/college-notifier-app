@@ -1,4 +1,4 @@
-import { EPrivacyType, ERequestStatus, ESourceTargetType, EUserRoles } from './common.enum';
+import { ENotificationType, EPrivacyType, ERequestStatus, ESourceTargetType, EUserRoles } from './common.enum';
 
 export interface ISource {
     college?: string | ICollege;
@@ -103,4 +103,16 @@ export interface ITarget {
     classes?: string[];
     rooms?: string[];
     users?: string[];
+}
+
+export interface INotification {
+    _id?: string;
+    title: string;
+    content: string;
+    attachment?: string;
+    createdBy: string;
+    createdAt: Date;
+    target: ITarget;
+    type: ENotificationType;
+    active: boolean;
 }
