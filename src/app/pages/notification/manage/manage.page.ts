@@ -166,17 +166,6 @@ export class NotificationManagePage implements OnInit {
         this.departmentService.getByCollegeAsync(this.collegeService.currentCollege$.value._id).subscribe(res => {
           this.dptCtrl.items = res;
           this.dptCtrl.hideLoading();
-          this.dptCtrl.onClose.pipe(take(1)).subscribe(() => {
-            if (this.t.departments.value?.length) {
-              this.t.batches.setValue([]);
-              this.t.batches.disable();
-              this.t.classes.setValue([]);
-              this.t.classes.disable();
-            } else {
-              this.t.batches.enable();
-              this.t.classes.enable();
-            }
-          });
         }, err => {
           this.dptCtrl.hideLoading();
           this.commonService.showToast(err.error.message);
@@ -190,14 +179,6 @@ export class NotificationManagePage implements OnInit {
             { ...item, name: `${item.startDate} - ${item.endDate} (${(item.source?.department as IDepartment)?.name})` }
           ));
           this.batchCtrl.hideLoading();
-          this.batchCtrl.onClose.pipe(take(1)).subscribe(() => {
-            if (this.t.batches.value?.length) {
-              this.t.classes.setValue([]);
-              this.t.classes.disable();
-            } else {
-              this.t.classes.enable();
-            }
-          });
         }, err => {
           this.batchCtrl.hideLoading();
           this.commonService.showToast(err.error.message);
