@@ -66,7 +66,7 @@ export class AuthService {
     this.currentUserRole = null;
     Storage.remove({ key: EStorageKeys.user });
     Storage.remove({ key: EStorageKeys.token });
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/auth'], { replaceUrl: true });
     this.httpService.getAsync([this.authAPiUrl, 'logout'].join('/'))
       .subscribe(_ => {
       }, _ => {

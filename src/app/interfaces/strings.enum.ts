@@ -186,5 +186,10 @@ export enum EStrings {
     tapToViewFile = 'Tap to view the file',
     chooseFutureTime = 'Please Choose a future time',
     chooseAtleastOneTarget = 'Please choose atleast one target',
+    notificationPublished = 'Notification Published',
+    notificationPublishedSuccessfully = 'Notification Published Successfully',
+    notificationPublishedFailed = 'Notification Published Failed',
+    notificationScheduled = 'Notification Scheduled',
+    notificationScheduledSuccessfully = 'Notification Scheduled Successfully',
 
 }

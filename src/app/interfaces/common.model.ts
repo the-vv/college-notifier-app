@@ -1,10 +1,11 @@
-import { ENotificationType, EPrivacyType, ERequestStatus, ESourceTargetType, EUserRoles } from './common.enum';
+import { ENotificationType, ERequestStatus, ESourceTargetType, EUserRoles } from './common.enum';
 
 export interface ISource {
     college?: string | ICollege;
     department?: string | IDepartment;
     batch?: string | IBatch;
     class?: string | IClass;
+    room?: string | IRoom;
     source: ESourceTargetType;
 }
 
@@ -98,11 +99,11 @@ export interface IUserMap {
 
 export interface ITarget {
     college?: string;
-    departments?: string[];
-    batches?: string[];
-    classes?: string[];
-    rooms?: string[];
-    users?: string[];
+    departments?: string[] | IDepartment[];
+    batches?: string[] | IBatch[];
+    classes?: string[] | IClass[];
+    rooms?: string[] | IRoom[];
+    users?: string[] | IUser[];
 }
 
 export interface INotification {
@@ -110,7 +111,7 @@ export interface INotification {
     title: string;
     content: string;
     attachment?: string;
-    createdBy: string;
+    createdBy: string | IUser;
     createdAt: Date;
     target: ITarget;
     type: ENotificationType;

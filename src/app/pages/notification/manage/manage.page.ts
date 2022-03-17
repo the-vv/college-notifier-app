@@ -1,11 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ENotificationType, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
-import { IBatch, IDepartment, INotification, ITarget } from 'src/app/interfaces/common.model';
+import { IBatch, IClass, IDepartment, INotification, IRoom, ITarget, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { BatchService } from 'src/app/services/batch.service';
@@ -53,6 +54,9 @@ export class NotificationManagePage implements OnInit {
   public sendInstantly = true;
   public sendToCollege = false;
   public sendSchedule = new FormControl(this.commonService.toLocaleIsoDateString(new Date()));
+  public isUpdate = false;
+  public notificationid: string;
+  public isEvent = false;
   public notificationForm = this.fb.group({
     title: ['', Validators.required],
     content: [''],
@@ -78,7 +82,9 @@ export class NotificationManagePage implements OnInit {
     private userService: UserService,
     private commonService: CommonService,
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) { }
   public get b() {
     return this.notificationForm.controls;
@@ -87,7 +93,35 @@ export class NotificationManagePage implements OnInit {
     return this.targetForm.controls;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.notificationid = this.activatedRoute.snapshot.paramMap.get('id');
+    if (this.notificationid) {
+      this.isUpdate = true;
+      const loading = await this.commonService.showLoading();
+      this.notificationService.getByIdAsync(this.notificationid).subscribe((notification: INotification) => {
+        loading.dismiss();
+        this.notificationForm.patchValue({
+          title: notification.title,
+          content: notification.content,
+          attachment: notification.attachment,
+          type: notification.type,
+        });
+        this.targetForm.patchValue({
+          college: notification.target.college,
+          departments: (notification.target.departments as IDepartment[])?.map((item) => item._id),
+          batches: (notification.target.batches as IBatch[])?.map((item) => item._id),
+          classes: (notification.target.classes as IClass[])?.map((item) => item._id),
+          rooms: (notification.target.rooms as IRoom[])?.map((item) => item._id),
+          users: (notification.target.users as IUser[])?.map((item) => item._id),
+        });
+        this.isEvent = notification.type === ENotificationType.event;
+        this.sendToCollege = Object.keys(notification.target).length === 1;
+        this.sendSchedule = new FormControl(this.commonService.toLocaleIsoDateString(notification.createdAt));
+      }, (err) => {
+        loading.dismiss();
+        this.commonService.showToast(err.error.message);
+      });
+    }
   }
 
   ionViewWillEnter() {
@@ -118,7 +152,7 @@ export class NotificationManagePage implements OnInit {
       this.loading = true;
       await this.uploadCtrl.uploadFile();
     }
-    catch(e) {
+    catch (e) {
       console.log(e);
       this.loading = false;
       return;
@@ -134,16 +168,20 @@ export class NotificationManagePage implements OnInit {
     reqBody.active = this.sendInstantly;
     console.log(reqBody);
     this.notificationService.postAsync(reqBody).subscribe((res) => {
-      console.log(res);
+      // console.log(res);
       this.loading = false;
-      this.commonService.showToast('published');
+      this.commonService.showToast(
+        this.sendInstantly ?
+          EStrings.notificationPublishedSuccessfully :
+          EStrings.notificationScheduledSuccessfully
+      );
+      this.router.navigate(['/', 'dashboard', 'notifications'], { replaceUrl: true });
     }, (err) => {
       this.loading = false;
       console.log(err);
       this.commonService.showToast(err.error.message);
     });
   }
-
 
   onTargetCollege() {
     if (this.sendToCollege) {

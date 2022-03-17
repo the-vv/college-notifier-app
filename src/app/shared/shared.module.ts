@@ -6,6 +6,8 @@ import { CommonExportsModule } from '../common-exports.module';
 import { IonicModule } from '@ionic/angular';
 import { UsersImportComponent } from './users-import/users-import.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { NotificationListComponent } from './notification-list/notification-list.component';
+import { QuillModule } from 'ngx-quill';
 
 
 @NgModule({
@@ -13,18 +15,21 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     SideMenuComponent,
     ImageUploadComponent,
     UsersImportComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    NotificationListComponent
   ],
   imports: [
     CommonModule,
     CommonExportsModule,
-    IonicModule
+    IonicModule,
+    QuillModule.forRoot()
   ],
   exports: [
     SideMenuComponent,
     ImageUploadComponent,
     UsersImportComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    NotificationListComponent
   ],
   providers: [
   ]

@@ -37,7 +37,7 @@
           <ion-col size="12">
             <ion-item class="mt-1" button [detail]="false">
               <ion-label (click)="modeToggle.checked = !modeToggle.checked">{{'thisIsAnEvent' | string}}: </ion-label>
-              <ion-toggle #modeToggle slot="end" (ionChange)="onChangeType($event)"></ion-toggle>
+              <ion-toggle #modeToggle slot="end" (ionChange)="onChangeType($event)" [(ngModel)]="isEvent" [ngModelOptions]="{standalone: true}"></ion-toggle>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -158,10 +158,10 @@
     <ion-card-content>
       <ion-row>
         <ion-col size="12">
-          <ion-item class="mt-1" button [detail]="false">
+          <ion-item class="mt-1" button [detail]="false" [disabled]="isUpdate">
             <ion-label (click)="scheduleToggle.checked = !scheduleToggle.checked">{{'publishInstantly' | string}}
             </ion-label>
-            <ion-toggle #scheduleToggle slot="end" [(ngModel)]="sendInstantly" [ngModelOptions]="{standalone: true}">
+            <ion-toggle #scheduleToggle slot="end" [(ngModel)]="sendInstantly"  [disabled]="isUpdate" [ngModelOptions]="{standalone: true}">
             </ion-toggle>
           </ion-item>
         </ion-col>
@@ -169,7 +169,7 @@
       <ion-row class="ion-justify-content-center" [hidden]="scheduleToggle.checked">
         <ion-col size="12" size-lg="6">
           <ion-label>{{'choose' | string}} {{'dateAndTime' | string}}</ion-label>
-          <ion-datetime [formControl]="sendSchedule" size="cover" [min]="currentTime" max="2999"></ion-datetime>
+          <ion-datetime  [disabled]="isUpdate" [formControl]="sendSchedule" size="cover" [min]="currentTime" max="2999"></ion-datetime>
         </ion-col>
       </ion-row>
       <ion-row>

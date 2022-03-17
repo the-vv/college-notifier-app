@@ -8,6 +8,7 @@ import { NotificationListPageRoutingModule } from './notification-list-routing.m
 
 import { NotificationListPage } from './notification-list.page';
 import {SpeedDialModule} from 'primeng/speeddial';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import {SpeedDialModule} from 'primeng/speeddial';
     FormsModule,
     IonicModule,
     NotificationListPageRoutingModule,
-    SpeedDialModule
+    SpeedDialModule,
+    SharedModule
   ],
   declarations: [NotificationListPage]
 })

@@ -1,0 +1,32 @@
+<ion-card *ngIf="!loading">
+    <ion-card-header>
+        <ion-card-title>
+            {{'notification' | string}} {{'list' | string}}
+        </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+        <ion-list>
+            <ion-item *ngFor="let notification of allNotifications">
+                <ion-icon [name]="notification.type === eNotificationType.notification ? 'notifications' : 'calendar'"
+                    slot="start"></ion-icon>
+                <ion-label>
+                    <h2>
+                        {{notification.title}}
+                        <ion-icon name="document" *ngIf="notification.attachment?.length" color="primary" class="mr-1">
+                        </ion-icon>
+                    </h2>
+                    <p>{{getStringFromHtml(notification.content)}}</p>
+                </ion-label>
+                <ion-note slot="end">
+                    <p class="ion-justify-content-end v-center">
+                        {{notification.createdAt | date: 'd/M/yyyy hh:mm a'}}
+                    </p>
+                    <p class="ion-justify-content-end v-center">
+                        <ion-icon name="person" class="mr-1"></ion-icon>
+                        {{getCreatedByUser(notification)}}
+                    </p>
+                </ion-note>
+            </ion-item>
+        </ion-list>
+    </ion-card-content>
+</ion-card>

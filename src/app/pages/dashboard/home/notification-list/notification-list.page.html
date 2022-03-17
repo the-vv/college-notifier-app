@@ -1,5 +1,5 @@
 <ion-content>
-  <ion-row *ngIf="loading">
+  <ion-row *ngIf="notifList.loading">
     <ion-col size="12" *ngFor="let _ of [1,2,3,4,5]">
       <div class="ion-padding custom-skeleton">
         <ion-skeleton-text animated style="width: 60%; height: 10px;"></ion-skeleton-text>
@@ -10,6 +10,7 @@
       </div>
     </ion-col>
   </ion-row>
+  <app-notification-list #notifList [source]="currentSource"></app-notification-list>
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">
     <ion-fab-button [routerLink]="['/', 'notification', 'manage']">
       <ion-icon name="add"></ion-icon>

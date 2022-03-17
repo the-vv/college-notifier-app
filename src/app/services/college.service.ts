@@ -30,10 +30,6 @@ export class CollegeService {
     });
   }
 
-  getCurrentCollege(): ICollege {
-    return this.currentCollege$.value;
-  }
-
   saveCollege(college: ICollege) {
     this.currentCollege$.next(college);
     Storage.set({
@@ -66,4 +62,7 @@ export class CollegeService {
     return this.http.getAsync(`${this.collegeUrl}/getByAdmin/${id}`);
   }
 
+  private getCurrentCollege(): ICollege {
+    return this.currentCollege$.value;
+  }
 }
