@@ -8,6 +8,7 @@ import { UsersImportComponent } from './users-import/users-import.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { NotificationListComponent } from './notification-list/notification-list.component';
 import { QuillModule } from 'ngx-quill';
+import { NotificationViewComponent } from './notification-view/notification-view.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { QuillModule } from 'ngx-quill';
     ImageUploadComponent,
     UsersImportComponent,
     FileUploadComponent,
-    NotificationListComponent
+    NotificationListComponent,
+    NotificationViewComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,8 @@ import { QuillModule } from 'ngx-quill';
     ImageUploadComponent,
     UsersImportComponent,
     FileUploadComponent,
-    NotificationListComponent
+    NotificationListComponent,
+    NotificationViewComponent
   ],
   providers: [
   ]

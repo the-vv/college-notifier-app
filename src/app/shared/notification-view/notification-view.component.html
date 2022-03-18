@@ -1,3 +1,45 @@
-<p>
-  notification-view works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{'view' | string}} {{'notification' | string}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button  (click)="dissmiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        {{notification?.title}}
+      </ion-card-title>
+      <ion-card-subtitle class="ion-align-items-center  flex-dir-row">
+        <span class="mr-1 v-center ion-align-items-center flex-dir-row">
+          <ion-icon name="person" class="mr-1"></ion-icon>
+          {{getCreatedByUser(notification)}}
+        </span>
+        <span class="v-center ion-align-items-center">
+          <ion-icon name="time" class="mr-1"></ion-icon>
+          {{notification?.createdAt | date: 'd/M/yyyy hh:mm a'}}
+        </span>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <quill-view [content]="notification.content"></quill-view>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
+
+<ion-footer *ngIf="notification?.attachment?.length">
+  <ion-grid>
+    <ion-row class="ion-justify-content-evenly">
+      <ion-col>
+        <ion-button expand="block" [href]="notification?.attachment" target="_blank" [download]="notification?.attachment">
+          <ion-icon name="arrow-down-outline" slot="start"></ion-icon>
+          {{'download' | string}} {{'attachment' | string}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

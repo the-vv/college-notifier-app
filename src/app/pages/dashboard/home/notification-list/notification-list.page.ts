@@ -29,7 +29,6 @@ export class NotificationListPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    console.log('evev');
     this.currentSource.college = this.collegeServoce.currentCollege$.value._id;
     this.subs.add(this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd && (event.url) === '/dashboard/notifications') {

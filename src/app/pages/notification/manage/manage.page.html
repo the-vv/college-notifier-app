@@ -175,7 +175,7 @@
       <ion-row>
         <ion-col size="12" class="mt-1">
           <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()" [disabled]="!this.notificationForm.valid">
-            <span *ngIf="!loading">{{'publish' | string}}</span>
+            <span *ngIf="!loading">{{isUpdate ? 'update' : 'publish' | string}}</span>
             <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
           </ion-button>
         </ion-col>

@@ -115,8 +115,13 @@ export class NotificationManagePage implements OnInit {
           users: (notification.target.users as IUser[])?.map((item) => item._id),
         });
         this.isEvent = notification.type === ENotificationType.event;
+        Object.keys(notification.target).forEach(key => {
+          if (!notification.target[key] || notification.target[key]?.length === 0) {
+            delete notification.target[key];
+          }
+        });
         this.sendToCollege = Object.keys(notification.target).length === 1;
-        this.sendSchedule = new FormControl(this.commonService.toLocaleIsoDateString(notification.createdAt));
+        this.sendSchedule = new FormControl(this.commonService.toLocaleIsoDateString(new Date(notification.createdAt)));
       }, (err) => {
         loading.dismiss();
         this.commonService.showToast(err.error.message);
@@ -161,26 +166,37 @@ export class NotificationManagePage implements OnInit {
       ...this.notificationForm.value,
       target: this.targetForm.value
     };
-    reqBody.createdAt = this.sendInstantly ?
-      this.commonService.toLocaleIsoDateString(new Date()) :
-      this.sendSchedule.value;
-    reqBody.createdBy = this.authService.currentUser$.value._id;
-    reqBody.active = this.sendInstantly;
-    console.log(reqBody);
-    this.notificationService.postAsync(reqBody).subscribe((res) => {
-      // console.log(res);
-      this.loading = false;
-      this.commonService.showToast(
-        this.sendInstantly ?
-          EStrings.notificationPublishedSuccessfully :
-          EStrings.notificationScheduledSuccessfully
-      );
-      this.router.navigate(['/', 'dashboard', 'notifications'], { replaceUrl: true });
-    }, (err) => {
-      this.loading = false;
-      console.log(err);
-      this.commonService.showToast(err.error.message);
-    });
+    if (!this.isUpdate) {
+      reqBody.createdAt = this.sendInstantly ?
+        this.commonService.toLocaleIsoDateString(new Date()) :
+        this.sendSchedule.value;
+      reqBody.createdBy = this.authService.currentUser$.value._id;
+      reqBody.active = this.sendInstantly;
+      this.notificationService.postAsync(reqBody).subscribe((res) => {
+        // console.log(res);
+        this.loading = false;
+        this.commonService.showToast(
+          this.sendInstantly ?
+            EStrings.notificationPublishedSuccessfully :
+            EStrings.notificationScheduledSuccessfully
+        );
+        this.router.navigate(['/', 'dashboard', 'notifications'], { replaceUrl: true });
+      }, (err) => {
+        this.loading = false;
+        console.log(err);
+        this.commonService.showToast(err.error.message);
+      });
+    } else {
+      reqBody._id = this.notificationid;
+      this.notificationService.putAsync(reqBody).subscribe((res) => {
+        this.loading = false;
+        this.commonService.showToast(EStrings.notificationUpdatedSuccessfully);
+        this.router.navigate(['/', 'dashboard', 'notifications'], { replaceUrl: true });
+      }, err => {
+        this.loading = false;
+        this.commonService.showToast(err.error.message);
+      });
+    }
   }
 
   onTargetCollege() {

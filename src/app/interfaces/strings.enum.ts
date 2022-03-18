@@ -191,5 +191,11 @@ export enum EStrings {
     notificationPublishedFailed = 'Notification Published Failed',
     notificationScheduled = 'Notification Scheduled',
     notificationScheduledSuccessfully = 'Notification Scheduled Successfully',
+    view = 'View',
+    attachment = 'Attachment',
+    download = 'Download',
+    swipeLeftToSeeMore = 'Swipe left to see more',
+    notificationUpdatedSuccessfully = 'Notification Updated Successfully',
+    areYouSureWantToDelete = 'Are you sure you want to delete',
 
 }

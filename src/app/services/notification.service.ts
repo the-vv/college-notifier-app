@@ -38,4 +38,8 @@ export class NotificationService {
     return this.http.postAsync(source, `${this.notificationUrl}/getBySourceAndUser`);
   }
 
+  deleeAsync(id: string): Observable<INotification> {
+    return this.http.deleteByIdAsync(this.notificationUrl, id);
+  }
+
 }
