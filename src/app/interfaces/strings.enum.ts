@@ -197,5 +197,6 @@ export enum EStrings {
     swipeLeftToSeeMore = 'Swipe left to see more',
     notificationUpdatedSuccessfully = 'Notification Updated Successfully',
     areYouSureWantToDelete = 'Are you sure you want to delete',
-
+    people = 'People',
+    peoples = 'Peoples',
 }

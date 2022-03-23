@@ -122,11 +122,16 @@ export class NotificationManagePage implements OnInit {
         });
         this.sendToCollege = Object.keys(notification.target).length === 1;
         this.sendSchedule = new FormControl(this.commonService.toLocaleIsoDateString(new Date(notification.createdAt)));
+        this.sendInstantly = !this.checkIsFutureTime(this.sendSchedule.value);
       }, (err) => {
         loading.dismiss();
         this.commonService.showToast(err.error.message);
       });
     }
+  }
+
+  public checkIsFutureTime(isoDate: string) {
+    return new Date(isoDate).getTime() > new Date().getTime();
   }
 
   ionViewWillEnter() {

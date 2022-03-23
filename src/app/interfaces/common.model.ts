@@ -112,7 +112,7 @@ export interface INotification {
     content: string;
     attachment?: string;
     createdBy: string | IUser;
-    createdAt: Date;
+    createdAt: string;
     target: ITarget;
     type: ENotificationType;
     active: boolean;

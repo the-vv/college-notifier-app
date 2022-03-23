@@ -3,10 +3,11 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { Router } from '@angular/router';
 import { AlertController, ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { EBreakPoints, ENotificationType, EUserRoles } from 'src/app/interfaces/common.enum';
-import { INotification, ISource, IUser } from 'src/app/interfaces/common.model';
+import { EBreakPoints, ENotificationType, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
+import { IBatch, IClass, ICollege, IDepartment, INotification, IRoom, ISource, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
+import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { NotificationViewComponent } from '../notification-view/notification-view.component';
@@ -19,6 +20,7 @@ import { NotificationViewComponent } from '../notification-view/notification-vie
 export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public source: ISource;
+  @Input() public compact = false;
   public allNotifications: INotification[] = [];
   public loading = true;
   public eNotificationType = ENotificationType;
@@ -31,7 +33,8 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
     private authService: AuthService,
     private modalCtrl: ModalController,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private collegeService: CollegeService
   ) {
   }
 
@@ -51,11 +54,21 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
 
   getNotifications() {
     return new Promise<void>((resolve, reject) => {
+      if(!this.source?.college) {
+        return;
+      }
+      const postSource: ISource = {
+        college: this.collegeService.currentCollege$.value._id,
+        department: (this.source.department as IDepartment)?._id,
+        batch: (this.source.batch as IBatch)?._id,
+        class: (this.source.class as IClass)?._id,
+        room: (this.source.room as IRoom)?._id,
+        source: this.source.source,
+      };
       this.loading = true;
-      this.notificationService.getBySourceAndUserAsync(this.source).subscribe(res => {
+      this.notificationService.getBySourceAndUserAsync(postSource).subscribe(res => {
         this.allNotifications = res;
         this.loading = false;
-        // this.openNotification(res[0]);
         resolve();
       }, err => {
         this.loading = false;
@@ -118,6 +131,10 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
       ]
     });
     await alert.present();
+  }
+
+  public checkIsFutureTime(isoDate: string) {
+    return new Date(isoDate).getTime() > new Date().getTime();
   }
 
 }

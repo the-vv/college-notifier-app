@@ -274,3 +274,8 @@ $val in $valueforhn {
 .position-relative {
     position: relative;
 }
+
+.compact-card {
+    max-height: 40vh;
+    overflow-y: auto;
+}

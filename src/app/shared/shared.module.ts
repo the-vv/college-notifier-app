@@ -9,6 +9,9 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
 import { NotificationListComponent } from './notification-list/notification-list.component';
 import { QuillModule } from 'ngx-quill';
 import { NotificationViewComponent } from './notification-view/notification-view.component';
+import { UserListComponent } from './user-list/user-list.component';
+import { ListboxModule } from 'primeng/listbox';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -18,13 +21,16 @@ import { NotificationViewComponent } from './notification-view/notification-view
     UsersImportComponent,
     FileUploadComponent,
     NotificationListComponent,
-    NotificationViewComponent
+    NotificationViewComponent,
+    UserListComponent
   ],
   imports: [
     CommonModule,
+    RouterModule,
     CommonExportsModule,
     IonicModule,
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
+    ListboxModule
   ],
   exports: [
     SideMenuComponent,
@@ -32,7 +38,8 @@ import { NotificationViewComponent } from './notification-view/notification-view
     UsersImportComponent,
     FileUploadComponent,
     NotificationListComponent,
-    NotificationViewComponent
+    NotificationViewComponent,
+    UserListComponent
   ],
   providers: [
   ]

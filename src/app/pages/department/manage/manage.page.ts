@@ -2,12 +2,11 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
-import { ActionSheetController, AlertController, IonAccordionGroup } from '@ionic/angular';
+import { IonAccordionGroup } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { EBreakPoints, ESegmentViews, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
-import { IDepartment, IUser, IUserMap } from 'src/app/interfaces/common.model';
+import { IDepartment, ISource, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -34,12 +33,8 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
   public dptForm: FormGroup;
   public loading = false;
   public segmentValue: ESegmentViews = ESegmentViews.home;
-  public allStudents: IUser[] = [];
-  public allFaculties: IUser[] = [];
-  public accordianLoading = false;
-  public selectedUsers: IUser[] = [];
-  public selectedModalUsers: string[] = [];
   public availableUsersToChoose: IUser[] = [];
+  public currentSource: ISource;
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -50,8 +45,6 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
     private departmentService: DepartmentService,
     private userService: UserService,
     private collegeService: CollegeService,
-    private actionSheetController: ActionSheetController,
-    public alertController: AlertController
   ) { }
 
   get f() { return this.dptForm.controls; }
@@ -80,7 +73,11 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
           image: res.image,
           admins: (res.admins as IUser[])?.map((val: IUser) => val._id)
         });
-        console.log(this.dptForm.value);
+        this.currentSource = {
+          college: this.collegeService.currentCollege$.value,
+          department: res,
+          source: ESourceTargetType.department
+        };
       }, (err) => {
         loading.dismiss();
         Toast.show({
@@ -88,7 +85,7 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
         });
       });
     }
-    this.userService.getUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id, EUserRoles.faculty)
+    this.userService.getBySourceAsync(ESourceTargetType.college, this.collegeService.currentCollege$.value._id, EUserRoles.faculty)
       .subscribe((res: IUser[]) => {
         this.availableFaculties = res?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
       }, err => {
@@ -144,171 +141,12 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
     }
   }
 
-  loadStudents() {
-    this.accordianLoading = true;
-    this.userService.getBySourceAsync(ESourceTargetType.department, this.dptId, EUserRoles.student)
-      .subscribe((res: IUser[]) => {
-        this.accordianLoading = false;
-        this.allStudents = res?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
-      }, err => {
-        console.log(err);
-        this.accordianLoading = false;
-        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
-      });
-  }
-
-  loadFaculties() {
-    this.accordianLoading = true;
-    this.userService.getBySourceAsync(ESourceTargetType.department, this.dptId, EUserRoles.faculty)
-      .subscribe((res: IUser[]) => {
-        this.accordianLoading = false;
-        this.allFaculties = res?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
-      }, err => {
-        this.accordianLoading = false;
-        console.log(err);
-        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
-      });
-  }
-
-
   onChangeSegment(event: any) {
     this.segmentValue = event.detail.value;
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
-  }
-
-  onUserOpen(event: any) {
-    const accrdian = event?.detail?.value;
-    if (accrdian === EUserRoles.student) {
-      this.loadStudents();
-    }
-    else if (accrdian === EUserRoles.faculty) {
-      this.loadFaculties();
-    }
-  }
-
-  onMapClick() {
-    this.actionSheetController.create({
-      header: `${EStrings.choose} ${EStrings.role}`,
-      buttons: [
-        {
-          text: EStrings.student,
-          handler: () => {
-            this.showUserModal(EUserRoles.student);
-          }
-        },
-        {
-          text: EStrings.faculty,
-          handler: () => {
-            this.showUserModal(EUserRoles.faculty);
-          }
-        },
-        {
-          text: EStrings.cancel,
-          role: 'cancel'
-        }
-      ]
-    }).then(actionSheet => {
-      actionSheet.present();
-    });
-  }
-
-  showUserModal(role: EUserRoles) {
-    this.userModal.items = [];
-    this.userModal.open();
-    this.userModal.showLoading();
-    this.userService.getBySourceAsync(ESourceTargetType.college, this.collegeService.currentCollege$.value._id, role)
-      .subscribe((res: IUser[]) => {
-        const allUsers = res?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
-        this.userService.getBySourceAsync(ESourceTargetType.department, this.dptId, role)
-          .subscribe((mapRes: IUser[]) => {
-            this.userModal.hideLoading();
-            const mapped = mapRes?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
-            this.userModal.items = allUsers?.filter((val: any) => !mapped.find(mapVal => mapVal._id === val._id));
-          }, err => {
-            console.log(err);
-            this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
-          });
-      }, err => {
-        this.userModal.hideLoading();
-        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
-      });
-    this.userModal.onClose.pipe(take(1)).subscribe(() => {
-      this.submitUserMaps(this.selectedModalUsers);
-    });
-  }
-
-  submitUserMaps(users: string[], unMap: boolean = false) {
-    if (!users || users.length === 0) {
-      return;
-    }
-    const postData: IUserMap[] = [];
-    users.forEach((val: string) => {
-      postData.push({
-        user: val,
-        source: {
-          college: this.collegeService.currentCollege$.value._id,
-          department: unMap ? undefined : this.dptId,
-          batch: undefined,
-          class: undefined,
-          source: unMap ? ESourceTargetType.college : ESourceTargetType.department,
-        }
-      });
-    });
-    this.loading = true;
-    this.userService.postUserMapsAsync(postData)
-      .subscribe((res: any) => {
-        this.accordionGroup.value = undefined;
-        this.selectedUsers = [];
-        this.loading = false;
-        Toast.show({
-          text: [EStrings.successfully, EStrings.mapped].join(' '),
-        });
-      }, (err: any) => {
-        this.loading = false;
-        Toast.show({
-          text: [EStrings.error + ':', err.error.message].join(' '),
-        });
-      });
-  }
-
-  onOptionsClick() {
-    this.actionSheetController.create({
-      header: `${EStrings.choose} ${EStrings.option}`,
-      buttons: [
-        {
-          text: EStrings.removeMap,
-          handler: async () => {
-            const alert = await this.alertController.create({
-              header: EStrings.areYouSure,
-              subHeader: `${EStrings.removingUserMap}...!`,
-              message: `${EStrings.thisActionWillRemove} 
-               ${this.selectedUsers.length} ${EStrings.users} ${EStrings.from} ${EStrings.department}`,
-              buttons: [{
-                text: EStrings.removeMap,
-                handler: () => {
-                  this.submitUserMaps(this.selectedUsers.map(el => el._id), true);
-                }
-              }]
-            });
-            await alert.present();
-          }
-        },
-        {
-          text: `${EStrings.assign} ${EStrings.custom} ${EStrings.role}`,
-          handler: () => {
-          }
-        },
-        {
-          text: EStrings.cancel,
-          role: 'cancel'
-        }
-      ]
-    }).then(actionSheet => {
-      actionSheet.present();
-    });
   }
 
 }
