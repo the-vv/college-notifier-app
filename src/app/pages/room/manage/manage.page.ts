@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
 import { Subscription } from 'rxjs';
-import { EBreakPoints, EPrivacyType, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
-import { IRoom, IUser } from 'src/app/interfaces/common.model';
+import { EBreakPoints, EPrivacyType, ESegmentViews, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
+import { IRoom, ISource, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
@@ -27,6 +27,8 @@ export class RoomManagePage implements OnInit, OnDestroy {
   public showErrors = false;
   public roomForm: FormGroup;
   public loading = false;
+  public currentSource: ISource;
+  public segmentValue: ESegmentViews = ESegmentViews.home;
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -56,8 +58,10 @@ export class RoomManagePage implements OnInit, OnDestroy {
 
   async ionViewWillEnter() {
     this.roomId = this.activatedRoute.snapshot.params.id;
+    this.segmentValue = ESegmentViews.edit;
     if (this.roomId) {
       this.isUpdate = true;
+      this.segmentValue = ESegmentViews.home;
       const loading = await this.commonService.showLoading();
       this.roomService.getByIdAsync(this.roomId).subscribe((res: IRoom) => {
         loading.dismiss();
@@ -68,7 +72,11 @@ export class RoomManagePage implements OnInit, OnDestroy {
           admins: (res.admins as IUser[])?.map((val: IUser) => val._id),
           private: res.private
         });
-        console.log(this.roomForm.value);
+        this.currentSource = {
+          college: this.collegeService.currentCollege$.value,
+          room: res,
+          source: ESourceTargetType.room
+        };
       }, (err) => {
         loading.dismiss();
         Toast.show({
@@ -125,6 +133,10 @@ export class RoomManagePage implements OnInit, OnDestroy {
         });
       });
     }
+  }
+
+  onChangeSegment(event: any) {
+    this.segmentValue = event.detail.value;
   }
 
   ionViewWillLeave(): void {

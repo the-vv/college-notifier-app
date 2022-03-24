@@ -22,6 +22,7 @@ export class UserListComponent implements OnInit {
 
   public sourceData: ISource;
   @Input() set source(value: ISource) {
+    console.log(this.sourceData);
     if (!value) { return; }
     this.sourceData = value;
     switch (value.source) {
@@ -94,6 +95,7 @@ export class UserListComponent implements OnInit {
   }
 
   onUserOpen(event: any) {
+    this.selectedUsers = [];
     const accordian = event?.detail?.value;
     if (accordian === EUserRoles.student) {
       this.loadStudents();

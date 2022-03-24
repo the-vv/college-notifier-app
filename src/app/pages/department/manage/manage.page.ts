@@ -62,8 +62,10 @@ export class DepartmentManagePage implements OnInit, OnDestroy {
 
   async ionViewWillEnter() {
     this.dptId = this.activatedRoute.snapshot.params.id;
+    this.segmentValue = ESegmentViews.edit;
     if (this.dptId) {
       this.isUpdate = true;
+      this.segmentValue = ESegmentViews.home;
       const loading = await this.commonService.showLoading();
       this.departmentService.getByIdAsync(this.dptId).subscribe((res: IDepartment) => {
         loading.dismiss();

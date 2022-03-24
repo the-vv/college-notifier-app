@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
 import { Subscription } from 'rxjs';
-import { EBreakPoints, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
-import { IBatch, IClass, IDepartment, IUser } from 'src/app/interfaces/common.model';
+import { EBreakPoints, ESegmentViews, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
+import { IBatch, IClass, IDepartment, ISource, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { BatchService } from 'src/app/services/batch.service';
 import { ClassService } from 'src/app/services/class.service';
@@ -32,6 +32,8 @@ export class ClassManagePage implements OnInit {
   public loading = false;
   public departmentControl = new FormControl(null, [Validators.required]);
   public batchControl = new FormControl(null, [Validators.required]);
+  public currentSource: ISource;
+  public segmentValue: ESegmentViews = ESegmentViews.home;
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -61,7 +63,9 @@ export class ClassManagePage implements OnInit {
 
   async ionViewWillEnter() {
     this.classId = this.activatedRoute.snapshot.params.id;
+    this.segmentValue = ESegmentViews.edit;
     if (this.classId) {
+      this.segmentValue = ESegmentViews.home;
       const loading = await this.commonService.showLoading();
       this.isUpdate = true;
       this.classService.getByIdAsync(this.classId).subscribe((res: IClass) => {
@@ -72,6 +76,13 @@ export class ClassManagePage implements OnInit {
           image: res.image,
           admins: (res.admins as IUser[])?.map((val: IUser) => val._id),
         });
+        this.currentSource = {
+          college: this.collegeService.currentCollege$.value,
+          department: res.source.department,
+          batch: res.source.batch,
+          class: res,
+          source: ESourceTargetType.class
+        };
       }, err => {
         loading.dismiss();
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
@@ -99,6 +110,10 @@ export class ClassManagePage implements OnInit {
         }
       })
     );
+  }
+
+  onChangeSegment(event: any) {
+    this.segmentValue = event.detail.value;
   }
 
   async getBatchesByDepartment(department: IDepartment) {

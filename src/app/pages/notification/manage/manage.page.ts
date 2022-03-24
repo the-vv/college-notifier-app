@@ -278,7 +278,7 @@ export class NotificationManagePage implements OnInit {
           this.userService.getUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id, EUserRoles.faculty),
           this.userService.getUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id, EUserRoles.student)
         ]).subscribe(res => {
-          this.userCtrl.items = [...res[0], ...res[1]];
+          this.userCtrl.items = [...res[0], ...res[1]].map(item => ({ ...item, name: `${item.name} (${item.email})` }));
           this.userCtrl.hideLoading();
         }, err => {
           this.userCtrl.hideLoading();

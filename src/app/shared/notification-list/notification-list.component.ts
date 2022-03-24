@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable no-underscore-dangle */
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
@@ -19,7 +20,25 @@ import { NotificationViewComponent } from '../notification-view/notification-vie
 })
 export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() public source: ISource;
+  public sourceData: ISource;
+  @Input() set source(val: ISource) {
+    this.sourceData = val;
+    if (!val || !val?.college) { return; }
+    switch (val.source) {
+      case ESourceTargetType.batch:
+        this.sourceData.department = undefined;
+        break;
+      case ESourceTargetType.class:
+        this.sourceData.department = undefined;
+        this.sourceData.batch = undefined;
+        break;
+      case ESourceTargetType.room:
+        this.sourceData.department = undefined;
+        this.sourceData.batch = undefined;
+        this.sourceData.class = undefined;
+        break;
+    }
+  }
   @Input() public compact = false;
   public allNotifications: INotification[] = [];
   public loading = true;
@@ -54,16 +73,17 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
 
   getNotifications() {
     return new Promise<void>((resolve, reject) => {
-      if(!this.source?.college) {
+      if (!this.sourceData?.college) {
         return;
       }
+      console.log(this.sourceData);
       const postSource: ISource = {
         college: this.collegeService.currentCollege$.value._id,
-        department: (this.source.department as IDepartment)?._id,
-        batch: (this.source.batch as IBatch)?._id,
-        class: (this.source.class as IClass)?._id,
-        room: (this.source.room as IRoom)?._id,
-        source: this.source.source,
+        department: (this.sourceData.department as IDepartment)?._id,
+        batch: (this.sourceData.batch as IBatch)?._id,
+        class: (this.sourceData.class as IClass)?._id,
+        room: (this.sourceData.room as IRoom)?._id,
+        source: this.sourceData.source,
       };
       this.loading = true;
       this.notificationService.getBySourceAndUserAsync(postSource).subscribe(res => {

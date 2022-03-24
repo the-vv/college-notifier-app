@@ -6,20 +6,30 @@
     <ion-buttons slot="end">
       <ion-menu-button slot="end"></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{'batch' | string}} {{'manage' | string}}</ion-title>
+    <ion-title><span *ngIf="isUpdate">{{f.startDate.value}} - {{f.endDate.value}}</span> {{'batch' | string}}</ion-title>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="currentBreakPoint !== 'medium' && isUpdate">
+    <ion-segment (ionChange)="onChangeSegment($event)" [swipeGesture]="true" [value]="segmentValue">
+      <ion-segment-button value="home">
+        <ion-label>{{'home' | string}}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="edit">
+        <ion-label>{{'edit' | string}}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-row class="h-100">
-    <ion-col size-md="8" *ngIf="currentBreakPoint === 'medium'">
-      <ion-row class="v-center">
-        <ion-col class="text-center">
-          <img src="assets/images/batch.webp" alt="" style="max-height: 70vh;">
-        </ion-col>
-      </ion-row>
+    <ion-col size-md="8" *ngIf="(currentBreakPoint === 'medium') || (segmentValue === 'home')">
+      <ng-container *ngIf="isUpdate; else createTemplate">        
+        <app-notification-list [source]="currentSource" [compact]="true"></app-notification-list>
+        <app-user-list [source]="currentSource"></app-user-list>
+      </ng-container>
     </ion-col>
-    <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''">
+    <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''"
+      *ngIf="(currentBreakPoint === 'medium') || (segmentValue === 'edit')">
       <div class="text-center mt-3">
         <h4>{{(isUpdate ? 'update' : 'create') | string}} {{'batch' | string}}</h4>
       </div>
@@ -124,9 +134,17 @@
   </ion-row>
 </ion-content>
 
-<ion-footer *ngIf="currentBreakPoint !== 'medium'">
+<ion-footer *ngIf="currentBreakPoint !== 'medium' && segmentValue === 'edit'">
   <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
     <span *ngIf="!loading">{{'submit' | string}}</span>
     <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
   </ion-button>
 </ion-footer>
+
+<ng-template #createTemplate>
+  <ion-row class="v-center">
+    <ion-col class="text-center">
+      <img src="assets/images/batch.webp" alt="" style="max-height: 70vh;">
+    </ion-col>
+  </ion-row>
+</ng-template>
