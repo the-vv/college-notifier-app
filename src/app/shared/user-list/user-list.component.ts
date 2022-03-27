@@ -160,6 +160,7 @@ export class UserListComponent implements OnInit {
     if (!users || users.length === 0) {
       return;
     }
+    console.log(this.sourceData);
     const postData: IUserMap[] = [];
     users.forEach((val: string) => {
       postData.push({

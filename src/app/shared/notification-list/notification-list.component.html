@@ -37,10 +37,6 @@
                             <ion-icon class="mr-1" color="primary" *ngIf="checkIsFutureTime(notification.createdAt)"
                                 name="timer-outline" style="font-size: 1.2em;"></ion-icon>
                             {{notification.createdAt | date: 'd/M/yy hh:mm a'}}
-                        </p>
-                        <p class="ion-justify-content-end v-center">
-                            <ion-icon name="person" class="ml-1"></ion-icon>
-                            {{getCreatedByUser(notification)}}
                             <span *ngIf="currentBreakPoint === 'medium'">
                                 <ion-button fill="clear" (click)="onEdit(notification, $event)">
                                     <ion-icon name="pencil" color="warning"></ion-icon>
@@ -49,6 +45,10 @@
                                     <ion-icon name="trash" color="danger"></ion-icon>
                                 </ion-button>
                             </span>
+                        </p>
+                        <p class="ion-justify-content-end v-center">
+                            <ion-icon name="person" class="ml-1"></ion-icon>
+                            {{getCreatedByUser(notification)}}
                         </p>
                     </ion-note>
                 </ion-item>

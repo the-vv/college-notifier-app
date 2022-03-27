@@ -10,7 +10,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'notifications',
+        redirectTo: 'forms',
       },
       {
         path: 'notifications',

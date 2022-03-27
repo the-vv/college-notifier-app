@@ -22,8 +22,8 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
 
   public sourceData: ISource;
   @Input() set source(val: ISource) {
-    this.sourceData = val;
     if (!val || !val?.college) { return; }
+    this.sourceData = JSON.parse(JSON.stringify(val));
     switch (val.source) {
       case ESourceTargetType.batch:
         this.sourceData.department = undefined;
@@ -76,7 +76,6 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
       if (!this.sourceData?.college) {
         return;
       }
-      console.log(this.sourceData);
       const postSource: ISource = {
         college: this.collegeService.currentCollege$.value._id,
         department: (this.sourceData.department as IDepartment)?._id,

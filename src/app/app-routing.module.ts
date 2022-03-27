@@ -61,6 +61,11 @@ const routes: Routes = [
     path: 'notification',
     loadChildren: () => import('src/app/pages/notification/notification.module').then(m => m.NotificationModule),
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'form',
+    loadChildren: () => import('src/app/pages/form/form.module').then(m => m.FormModule),
+    canActivate: [AuthGuard],
   }
 ];
 
