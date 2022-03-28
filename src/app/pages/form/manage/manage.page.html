@@ -6,12 +6,12 @@
     <ion-buttons slot="end">
       <ion-menu-button slot="end"></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{'notifications' | string}} {{'manage' | string}}</ion-title>
+    <ion-title>{{'form' | string}} {{'manage' | string}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="notificationForm">
+  <form [formGroup]="formForm">
     <ion-card>
       <ion-card-header>
         <ion-card-title>
@@ -29,28 +29,19 @@
               string}}
               {{'isRequired' | string}}</small>
           </ion-col>
-          <ion-col size="12" class="mt-1">
-            <ion-item button [detail]="false">
-              <app-file-upload class="v-100" formControlName="attachment" #uploader></app-file-upload>
-            </ion-item>
-          </ion-col>
-          <ion-col size="12">
-            <ion-item class="mt-1" button [detail]="false">
-              <ion-label (click)="modeToggle.checked = !modeToggle.checked">{{'thisIsAnEvent' | string}}: </ion-label>
-              <ion-toggle #modeToggle slot="end" (ionChange)="onChangeType($event)" [(ngModel)]="isEvent" [ngModelOptions]="{standalone: true}"></ion-toggle>
-            </ion-item>
-          </ion-col>
         </ion-row>
       </ion-card-content>
     </ion-card>
     <ion-card style="overflow: visible;">
       <ion-card-header>
         <ion-card-title>
-          {{'content' | string}}
+          {{'form' | string}} {{'contents' | string}}
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        Form Builder Here
+        <div id="form-builder">
+
+        </div>
       </ion-card-content>
     </ion-card>
   </form>
@@ -148,38 +139,15 @@
             </ion-item>
           </ion-col>
         </ion-row>
+        <ion-row>
+          <ion-col size="12" class="mt-1">
+            <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()" [disabled]="!this.formForm.valid">
+              <span *ngIf="!loading">{{isUpdate ? 'update' : 'publish' | string}}</span>
+              <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+            </ion-button>
+          </ion-col>
+        </ion-row>
       </ion-card-content>
     </ion-card>
   </form>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>{{'schedule' | string}} {{'notification' | string}}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-row>
-        <ion-col size="12">
-          <ion-item class="mt-1" button [detail]="false" [disabled]="isUpdate">
-            <ion-label (click)="scheduleToggle.checked = !scheduleToggle.checked">{{'publishInstantly' | string}}
-            </ion-label>
-            <ion-toggle #scheduleToggle slot="end" [(ngModel)]="sendInstantly"  [disabled]="isUpdate" [ngModelOptions]="{standalone: true}">
-            </ion-toggle>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row class="ion-justify-content-center" [hidden]="scheduleToggle.checked">
-        <ion-col size="12" size-lg="6">
-          <ion-label>{{'choose' | string}} {{'dateAndTime' | string}}</ion-label>
-          <ion-datetime  [disabled]="isUpdate" [formControl]="sendSchedule" size="cover" [min]="currentTime" max="2999"></ion-datetime>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="12" class="mt-1">
-          <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()" [disabled]="!this.notificationForm.valid">
-            <span *ngIf="!loading">{{isUpdate ? 'update' : 'publish' | string}}</span>
-            <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
 </ion-content>

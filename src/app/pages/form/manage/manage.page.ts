@@ -1,10 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { forkJoin } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { ENotificationType, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
 import { IBatch, IClass, IDepartment, INotification, IRoom, ITarget, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
@@ -17,51 +16,31 @@ import { DepartmentService } from 'src/app/services/department.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { RoomService } from 'src/app/services/room.service';
 import { UserService } from 'src/app/services/user.service';
-import { FileUploadComponent } from 'src/app/shared/file-upload/file-upload.component';
+
+declare const $: any; // for JQuery
 
 @Component({
   selector: 'app-notification-manage',
   templateUrl: './manage.page.html',
   styleUrls: ['./manage.page.scss'],
 })
-export class FormManagePage implements OnInit {
+export class FormManagePage implements OnInit, AfterViewInit {
 
   @ViewChild('dpts', { static: true }) private dptCtrl: IonicSelectableComponent;
   @ViewChild('batches', { static: true }) private batchCtrl: IonicSelectableComponent;
   @ViewChild('classes', { static: true }) private classCtrl: IonicSelectableComponent;
   @ViewChild('rooms', { static: true }) private roomCtrl: IonicSelectableComponent;
   @ViewChild('users', { static: true }) private userCtrl: IonicSelectableComponent;
-  @ViewChild('uploader', { static: true }) private uploadCtrl: FileUploadComponent;
 
-  public quillModules = {
-    toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],
-      ['blockquote', 'code-block'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      [{ script: 'sub' }, { script: 'super' }],
-      [{ size: ['small', false, 'large', 'huge'] }],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      [{ color: [] }, { background: [] }],
-      [{ font: [] }],
-      [{ align: [] }],
-      ['link']
-    ]
-  };
   public showErrors = false;
   public eSourceTargetType = ESourceTargetType;
   public loading = false;
-  public currentTime = this.commonService.toLocaleIsoDateString(new Date());
-  public sendInstantly = true;
   public sendToCollege = false;
-  public sendSchedule = new FormControl(this.commonService.toLocaleIsoDateString(new Date()));
   public isUpdate = false;
-  public notificationid: string;
-  public isEvent = false;
-  public notificationForm = this.fb.group({
+  public formId: string;
+  public formBuilder: any;
+  public formForm = this.fb.group({
     title: ['', Validators.required],
-    content: [''],
-    attachment: [''],
-    type: [ENotificationType.notification, Validators.required],
   });
   public targetForm = this.fb.group({
     college: '',
@@ -85,26 +64,37 @@ export class FormManagePage implements OnInit {
     private notificationService: NotificationService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-  ) { }
+  ) {
+  }
   public get b() {
-    return this.notificationForm.controls;
+    return this.formForm.controls;
   }
   public get t() {
     return this.targetForm.controls;
   }
 
+  ngAfterViewInit(): void {
+    const options = {
+      showActionButtons: false,
+      scrollToFieldOnAdd: false,
+    };
+    $('#form-builder').formBuilder(options).promise.then((builder: any) => {
+      this.formBuilder = builder;
+      $('li.formbuilder-icon-button').hide();
+      $('li.formbuilder-icon-hidden').hide();
+      $('li.formbuilder-icon-file').hide();
+    });
+  }
+
   async ngOnInit() {
-    this.notificationid = this.activatedRoute.snapshot.paramMap.get('id');
-    if (this.notificationid) {
+    this.formId = this.activatedRoute.snapshot.paramMap.get('id');
+    if (this.formId) {
       this.isUpdate = true;
       const loading = await this.commonService.showLoading();
-      this.notificationService.getByIdAsync(this.notificationid).subscribe((notification: INotification) => {
+      this.notificationService.getByIdAsync(this.formId).subscribe((notification: INotification) => {
         loading.dismiss();
-        this.notificationForm.patchValue({
+        this.formForm.patchValue({
           title: notification.title,
-          content: notification.content,
-          attachment: notification.attachment,
-          type: notification.type,
         });
         this.targetForm.patchValue({
           college: notification.target.college,
@@ -114,15 +104,12 @@ export class FormManagePage implements OnInit {
           rooms: (notification.target.rooms as IRoom[])?.map((item) => item._id),
           users: (notification.target.users as IUser[])?.map((item) => item._id),
         });
-        this.isEvent = notification.type === ENotificationType.event;
         Object.keys(notification.target).forEach(key => {
           if (!notification.target[key] || notification.target[key]?.length === 0) {
             delete notification.target[key];
           }
         });
         this.sendToCollege = Object.keys(notification.target).length === 1;
-        this.sendSchedule = new FormControl(this.commonService.toLocaleIsoDateString(new Date(notification.createdAt)));
-        this.sendInstantly = !this.checkIsFutureTime(this.sendSchedule.value);
       }, (err) => {
         loading.dismiss();
         this.commonService.showToast(err.error.message);
@@ -139,14 +126,8 @@ export class FormManagePage implements OnInit {
 
   async onSubmit() {
     this.showErrors = true;
-    if (!this.notificationForm.valid) {
+    if (!this.formForm.valid) {
       return;
-    }
-    if (!this.sendInstantly) {
-      if (new Date(this.sendSchedule.value) < new Date()) {
-        this.commonService.showToast(EStrings.chooseFutureTime);
-        return;
-      }
     }
     this.targetForm.get('college').setValue(this.collegeService.currentCollege$.value?._id);
     Object.keys(this.targetForm.value).forEach(key => {
@@ -158,45 +139,29 @@ export class FormManagePage implements OnInit {
       this.commonService.showToast(EStrings.chooseAtleastOneTarget);
       return;
     }
-    try {
-      this.loading = true;
-      await this.uploadCtrl.uploadFile();
-    }
-    catch (e) {
-      console.log(e);
-      this.loading = false;
-      return;
-    }
     const reqBody: INotification = {
-      ...this.notificationForm.value,
+      ...this.formForm.value,
       target: this.targetForm.value
     };
     if (!this.isUpdate) {
-      reqBody.createdAt = this.sendInstantly ?
-        this.commonService.toLocaleIsoDateString(new Date()) :
-        this.sendSchedule.value;
       reqBody.createdBy = this.authService.currentUser$.value._id;
-      reqBody.active = this.sendInstantly;
+      reqBody.active = true;
       this.notificationService.postAsync(reqBody).subscribe((res) => {
         // console.log(res);
         this.loading = false;
-        this.commonService.showToast(
-          this.sendInstantly ?
-            EStrings.notificationPublishedSuccessfully :
-            EStrings.notificationScheduledSuccessfully
-        );
-        this.router.navigate(['/', 'dashboard', 'notifications'], { replaceUrl: true });
+        this.commonService.showToast(EStrings.formPublishedSuccessFully);
+        this.router.navigate(['/', 'dashboard', 'forms'], { replaceUrl: true });
       }, (err) => {
         this.loading = false;
         console.log(err);
         this.commonService.showToast(err.error.message);
       });
     } else {
-      reqBody._id = this.notificationid;
+      reqBody._id = this.formId;
       this.notificationService.putAsync(reqBody).subscribe((res) => {
         this.loading = false;
         this.commonService.showToast(EStrings.notificationUpdatedSuccessfully);
-        this.router.navigate(['/', 'dashboard', 'notifications'], { replaceUrl: true });
+        this.router.navigate(['/', 'dashboard', 'forms'], { replaceUrl: true });
       }, err => {
         this.loading = false;
         this.commonService.showToast(err.error.message);
@@ -211,10 +176,6 @@ export class FormManagePage implements OnInit {
     } else {
       this.targetForm.enable();
     }
-  }
-
-  onChangeType(event: any) {
-    this.notificationForm.get('type').setValue(event.detail.checked ? ENotificationType.event : ENotificationType.notification);
   }
 
   onChooseTarget(targetType: ESourceTargetType | 'user') {

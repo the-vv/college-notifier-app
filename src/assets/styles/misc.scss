@@ -42,3 +42,58 @@ a {
 .ql-editor.ql-blank::before {
     color: cadetblue;
 }
+
+
+@media screen and (max-width: 481px) {
+
+    ul.frmb {
+        min-height: 500px !important;
+    }
+}
+
+@media screen and (min-width: 482px) {
+
+    ul.frmb {
+        min-height: 400px !important;
+    }
+}
+
+.frmb-control.ui-sortable li {
+    &:before {
+        color: black;
+    }
+
+    color: black;
+}
+
+.frmb.stage-wrap.pull-left.ui-sortable {
+
+    input[type=date],
+    input[type=number] {
+        width: 100% !important;
+    }
+
+    label, input, .form-control {
+        color: black !important;
+    }
+
+    .form-group.access-wrap {
+        display: none;
+    }
+}
+
+.form-builder {
+    .field-actions {
+        opacity: 1 !important;
+
+        * {
+            opacity: 1 !important;
+        }
+    }
+
+    &.form-wrap {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+}

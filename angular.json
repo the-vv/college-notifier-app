@@ -57,7 +57,12 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/primeng.min.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "src/assets/js/jquery.js",
+              "src/assets/js/jquery-ui.js",
+              "src/assets/js/form-builder.min.js",
+              "src/assets/js/form-render.min.js"
+            ],
             "aot": false,
             "vendorChunk": true,
             "extractLicenses": false,

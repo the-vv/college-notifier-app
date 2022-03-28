@@ -180,6 +180,7 @@ export class UserListComponent implements OnInit {
       .subscribe((res: any) => {
         this.accordionGroup.value = undefined;
         this.selectedUsers = [];
+        this.selectedModalUsers = [];
         // this.loading = false;
         Toast.show({
           text: [EStrings.successfully, EStrings.mapped].join(' '),

@@ -199,4 +199,9 @@ export enum EStrings {
     areYouSureWantToDelete = 'Are you sure you want to delete',
     people = 'People',
     peoples = 'Peoples',
+    form = 'Form',
+    contents = 'Contents',
+    formPublishedSuccessFully = 'Form Published Successfully',
+    formPublishedFailed = 'Form Published Failed',
+    formUpdatedSuccessFully = 'Form Updated Successfully',
 }
