@@ -1,0 +1,73 @@
+<ion-card *ngIf="!loading || compact" [ngClass]="compact ? 'compact-card' : '' ">
+  <ion-card-header>
+      <ion-card-title class="ion-align-items-center">
+          <ion-row class="ion-justify-content-between ion-align-items-center">
+              <ion-col size="auto">{{'forms' | string}} <span *ngIf="!loading">
+                      ({{allForms?.length}})</span></ion-col>
+              <ion-col size="auto" class="ion-text-end" *ngIf="compact">
+                  <ion-button color="primary" size="small" [routerLink]="['/', 'form', 'manage']">
+                      <ion-icon name="add"></ion-icon>
+                      {{'create' | string}}
+                  </ion-button>
+              </ion-col>
+          </ion-row>
+      </ion-card-title>
+      <ion-card-subtitle *ngIf="currentBreakPoint !== 'medium'">
+          {{'swipeLeftToSeeMore' | string}}
+      </ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content class="padd" *ngIf="!loading; else skelton">
+      <ion-list *ngIf="allForms?.length; else noRecords" >
+          <ion-item-sliding [disabled]="currentBreakPoint === 'medium'" *ngFor="let form of allForms">
+              <ion-item button (click)="openForm(form)">
+                <ion-icon name="document-text-outline" color="primary" slot="start"></ion-icon>
+                  <ion-label>
+                      <h2>
+                          {{form.title}}
+                      </h2>
+                  </ion-label>
+                  <ion-note slot="end">
+                      <p class="ion-justify-content-end v-center">
+                          {{form.createdAt | date: 'd/M/yy hh:mm a'}}
+                          <span *ngIf="currentBreakPoint === 'medium'">
+                              <ion-button fill="clear" (click)="onEdit(form, $event)">
+                                  <ion-icon name="pencil" color="warning"></ion-icon>
+                              </ion-button>
+                              <ion-button fill="clear" (click)="onDelete(form, $event)">
+                                  <ion-icon name="trash" color="danger"></ion-icon>
+                              </ion-button>
+                          </span>
+                      </p>
+                      <p class="ion-justify-content-end v-center">
+                          <ion-icon name="person" class="ml-1"></ion-icon>
+                          {{getCreatedByUser(form)}}
+                      </p>
+                  </ion-note>
+              </ion-item>
+              <ion-item-options side="end">
+                  <ion-item-option (click)="onEdit(form, $event)" color="warning">
+                      <ion-icon slot="top" name="pencil"></ion-icon>
+                  </ion-item-option>
+                  <ion-item-option color="danger" (click)="onDelete(form, $event)">
+                      <ion-icon slot="top" name="trash"></ion-icon>
+                  </ion-item-option>
+              </ion-item-options>
+          </ion-item-sliding>
+      </ion-list>
+  </ion-card-content>
+</ion-card>
+
+<ng-template #skelton>
+  <div class="ion-padding custom-skeleton">
+      <ion-skeleton-text animated style="width: 60%; height: 10px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 70%; height: 10px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 80%; height: 10px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 90%; height: 10px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%; height: 10px;"></ion-skeleton-text>
+  </div>
+</ng-template>
+
+<ng-template #noRecords>
+  <!-- no items to show template -->
+  <p class="text-center">{{'noItemsToShow' | string}}</p>
+</ng-template>

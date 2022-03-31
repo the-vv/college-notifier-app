@@ -12,6 +12,7 @@ import { NotificationViewComponent } from './notification-view/notification-view
 import { UserListComponent } from './user-list/user-list.component';
 import { ListboxModule } from 'primeng/listbox';
 import { RouterModule } from '@angular/router';
+import { FormListComponent } from './form-list/form-list.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { RouterModule } from '@angular/router';
     FileUploadComponent,
     NotificationListComponent,
     NotificationViewComponent,
-    UserListComponent
+    UserListComponent,
+    FormListComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +41,8 @@ import { RouterModule } from '@angular/router';
     FileUploadComponent,
     NotificationListComponent,
     NotificationViewComponent,
-    UserListComponent
+    UserListComponent,
+    FormListComponent
   ],
   providers: [
   ]

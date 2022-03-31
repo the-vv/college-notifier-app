@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { FormsListPageRoutingModule } from './forms-list-routing.module';
 
 import { FormsListPage } from './forms-list.page';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    FormsListPageRoutingModule
+    FormsListPageRoutingModule,
+    SharedModule
   ],
   declarations: [FormsListPage]
 })

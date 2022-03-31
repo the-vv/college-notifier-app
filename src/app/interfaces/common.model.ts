@@ -117,3 +117,14 @@ export interface INotification {
     type: ENotificationType;
     active: boolean;
 }
+
+export interface IForm {
+    _id?: string;
+    title: string;
+    createdBy: IUser | string;
+    createdAt: string | Date;
+    target: ITarget;
+    active: boolean;
+    formData: string;
+}
+

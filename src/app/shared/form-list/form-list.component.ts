@@ -1,24 +1,24 @@
-/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/member-ordering */
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { EBreakPoints, ENotificationType, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
-import { IBatch, IClass, IDepartment, INotification, IRoom, ISource, IUser } from 'src/app/interfaces/common.model';
+import { EBreakPoints, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
+import { IBatch, IClass, IDepartment, IForm, IRoom, ISource, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
-import { NotificationService } from 'src/app/services/notification.service';
-import { NotificationViewComponent } from '../notification-view/notification-view.component';
+import { FormService } from 'src/app/services/form.service';
+// import { FormViewComponent } from '../form-view/form-view.component';
 
 @Component({
-  selector: 'app-notification-list',
-  templateUrl: './notification-list.component.html',
-  styleUrls: ['./notification-list.component.scss'],
+  selector: 'app-form-list',
+  templateUrl: './form-list.component.html',
+  styleUrls: ['./form-list.component.scss'],
 })
-export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
+export class FormListComponent implements OnInit, OnInit, OnChanges, OnDestroy {
 
   public sourceData: ISource;
   @Input() set source(val: ISource) {
@@ -40,14 +40,13 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   @Input() public compact = false;
-  public allNotifications: INotification[] = [];
+  public allForms: IForm[] = [];
   public loading = true;
-  public eNotificationType = ENotificationType;
   public currentBreakPoint: EBreakPoints;
   private subs: Subscription = new Subscription();
 
   constructor(
-    private notificationService: NotificationService,
+    private formService: FormService,
     private commonService: CommonService,
     private authService: AuthService,
     private modalCtrl: ModalController,
@@ -62,7 +61,7 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.getNotifications();
+    this.getForms();
   }
 
   ngOnInit() {
@@ -71,7 +70,7 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
     ));
   }
 
-  getNotifications() {
+  getForms() {
     return new Promise<void>((resolve, reject) => {
       if (!this.sourceData?.college) {
         return;
@@ -85,8 +84,8 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
         source: this.sourceData.source,
       };
       this.loading = true;
-      this.notificationService.getBySourceAndUserAsync(postSource).subscribe(res => {
-        this.allNotifications = res;
+      this.formService.getBySourceAndUserAsync(postSource).subscribe(res => {
+        this.allForms = res;
         this.loading = false;
         resolve();
       }, err => {
@@ -101,36 +100,36 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
     return new DOMParser().parseFromString(html, 'text/html').documentElement.textContent;
   }
 
-  getCreatedByUser(notification: INotification) {
-    return `${(notification.createdBy as IUser).name} | ${EStrings[(notification.createdBy as IUser).role]}`;
+  getCreatedByUser(form: IForm) {
+    return `${(form.createdBy as IUser).name} | ${EStrings[(form.createdBy as IUser).role]}`;
   }
 
-  hasEditPermission(notification: INotification) {
+  hasEditPermission(form: IForm) {
     return this.authService.currentUser$.value.role === EUserRoles.admin
-      || this.authService.currentUser$.value._id === notification.createdBy;
+      || this.authService.currentUser$.value._id === form.createdBy;
   }
 
-  openNotification(notification: INotification) {
-    this.modalCtrl.create({
-      component: NotificationViewComponent,
-      componentProps: {
-        notification,
-      },
-    }).then(modal => {
-      modal.present();
-    });
+  openForm(form: IForm) {
+    // this.modalCtrl.create({
+    //   component: FormViewComponent,
+    //   componentProps: {
+    //     form,
+    //   },
+    // }).then(modal => {
+    //   modal.present();
+    // });
   }
 
-  onEdit(notification: INotification, ev: any) {
+  onEdit(form: IForm, ev: any) {
     ev.stopPropagation();
-    this.router.navigate(['/notification/manage', notification._id]);
+    this.router.navigate(['/form/manage', form._id]);
   }
 
-  async onDelete(notification: INotification, ev: any) {
+  async onDelete(form: IForm, ev: any) {
     ev.stopPropagation();
     const alert = await this.alertController.create({
       header: EStrings.confirmDelete,
-      message: `${EStrings.areYouSureWantToDelete} ${EStrings.notification.toLowerCase()} '${notification.title}'?`,
+      message: `${EStrings.areYouSureWantToDelete} ${EStrings.form.toLowerCase()} '${form.title}'?`,
       buttons: [
         {
           text: EStrings.cancel,
@@ -140,8 +139,8 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
           text: EStrings.delete,
           id: 'confirm-button',
           handler: () => {
-            this.notificationService.deleteAsync(notification._id).subscribe(() => {
-              this.getNotifications();
+            this.formService.deleteAsync(form._id).subscribe(() => {
+              this.getForms();
             }, err => {
               this.commonService.showToast(err.error.message);
             });
@@ -150,10 +149,6 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
       ]
     });
     await alert.present();
-  }
-
-  public checkIsFutureTime(isoDate: string) {
-    return new Date(isoDate).getTime() > new Date().getTime();
   }
 
 }

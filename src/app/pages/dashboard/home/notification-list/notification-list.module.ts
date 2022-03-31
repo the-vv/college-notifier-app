@@ -16,7 +16,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     FormsModule,
     IonicModule,
     NotificationListPageRoutingModule,
-    SpeedDialModule,
     SharedModule
   ],
   declarations: [NotificationListPage]

@@ -1,8 +1,19 @@
 <ion-content>
-    Forms List here
+    <ion-row *ngIf="notifList.loading">
+      <ion-col size="12" *ngFor="let _ of [1,2,3,4,5]">
+        <div class="ion-padding custom-skeleton">
+          <ion-skeleton-text animated style="width: 60%; height: 10px;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 70%; height: 10px;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 80%; height: 10px;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 90%; height: 10px;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 100%; height: 10px;"></ion-skeleton-text>
+        </div>
+      </ion-col>
+    </ion-row>
+    <app-form-list #notifList [source]="currentSource"></app-form-list>
     <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-        <ion-fab-button [routerLink]="['/', 'form', 'manage']">
-            <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
+      <ion-fab-button [routerLink]="['/', 'form', 'manage']">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
     </ion-fab>
-</ion-content>
+  </ion-content>

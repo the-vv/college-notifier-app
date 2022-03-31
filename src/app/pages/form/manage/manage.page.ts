@@ -1,11 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonicSelectableComponent } from 'ionic-selectable';
-import { forkJoin } from 'rxjs';
-import { ENotificationType, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
-import { IBatch, IClass, IDepartment, INotification, IRoom, ITarget, IUser } from 'src/app/interfaces/common.model';
+import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
+import { ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
+import { IBatch, IClass, IDepartment, IForm, IRoom, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { BatchService } from 'src/app/services/batch.service';
@@ -13,18 +13,18 @@ import { ClassService } from 'src/app/services/class.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DepartmentService } from 'src/app/services/department.service';
-import { NotificationService } from 'src/app/services/notification.service';
+import { FormService } from 'src/app/services/form.service';
 import { RoomService } from 'src/app/services/room.service';
 import { UserService } from 'src/app/services/user.service';
 
 declare const $: any; // for JQuery
 
 @Component({
-  selector: 'app-notification-manage',
+  selector: 'app-form-manage',
   templateUrl: './manage.page.html',
   styleUrls: ['./manage.page.scss'],
 })
-export class FormManagePage implements OnInit, AfterViewInit {
+export class FormManagePage implements OnInit {
 
   @ViewChild('dpts', { static: true }) private dptCtrl: IonicSelectableComponent;
   @ViewChild('batches', { static: true }) private batchCtrl: IonicSelectableComponent;
@@ -50,6 +50,8 @@ export class FormManagePage implements OnInit, AfterViewInit {
     rooms: [],
     users: [],
   });
+  private formDataValue: BehaviorSubject<string> = new BehaviorSubject(null);
+  private subs = new Subscription();
 
   constructor(
     private fb: FormBuilder,
@@ -61,7 +63,7 @@ export class FormManagePage implements OnInit, AfterViewInit {
     private userService: UserService,
     private commonService: CommonService,
     private authService: AuthService,
-    private notificationService: NotificationService,
+    private formService: FormService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {
@@ -73,11 +75,28 @@ export class FormManagePage implements OnInit, AfterViewInit {
     return this.targetForm.controls;
   }
 
-  ngAfterViewInit(): void {
-    const options = {
+  ionViewDidEnter(): void {
+    const options: any = {
       showActionButtons: false,
       scrollToFieldOnAdd: false,
     };
+    this.subs.add(this.formDataValue.subscribe((data) => {
+      if (!data) { return; }
+      let value = null;
+      try {
+        const obj = JSON.parse(data);
+        if (!obj || !obj.length) {
+          value = null;
+        } else {
+          value = obj;
+        }
+      } catch {
+        value = null;
+      } finally {
+        options.defaultFields = value;
+        this.formBuilder?.actions.setData(value);
+      }
+    }));
     $('#form-builder').formBuilder(options).promise.then((builder: any) => {
       this.formBuilder = builder;
       $('li.formbuilder-icon-button').hide();
@@ -91,25 +110,26 @@ export class FormManagePage implements OnInit, AfterViewInit {
     if (this.formId) {
       this.isUpdate = true;
       const loading = await this.commonService.showLoading();
-      this.notificationService.getByIdAsync(this.formId).subscribe((notification: INotification) => {
+      this.formService.getByIdAsync(this.formId).subscribe((form: IForm) => {
         loading.dismiss();
         this.formForm.patchValue({
-          title: notification.title,
+          title: form.title,
         });
         this.targetForm.patchValue({
-          college: notification.target.college,
-          departments: (notification.target.departments as IDepartment[])?.map((item) => item._id),
-          batches: (notification.target.batches as IBatch[])?.map((item) => item._id),
-          classes: (notification.target.classes as IClass[])?.map((item) => item._id),
-          rooms: (notification.target.rooms as IRoom[])?.map((item) => item._id),
-          users: (notification.target.users as IUser[])?.map((item) => item._id),
+          college: form.target.college,
+          departments: (form.target.departments as IDepartment[])?.map((item) => item._id),
+          batches: (form.target.batches as IBatch[])?.map((item) => item._id),
+          classes: (form.target.classes as IClass[])?.map((item) => item._id),
+          rooms: (form.target.rooms as IRoom[])?.map((item) => item._id),
+          users: (form.target.users as IUser[])?.map((item) => item._id),
         });
-        Object.keys(notification.target).forEach(key => {
-          if (!notification.target[key] || notification.target[key]?.length === 0) {
-            delete notification.target[key];
+        Object.keys(form.target).forEach(key => {
+          if (!form.target[key] || form.target[key]?.length === 0) {
+            delete form.target[key];
           }
         });
-        this.sendToCollege = Object.keys(notification.target).length === 1;
+        this.sendToCollege = Object.keys(form.target).length === 1;
+        this.formDataValue.next(form.formData);
       }, (err) => {
         loading.dismiss();
         this.commonService.showToast(err.error.message);
@@ -119,9 +139,6 @@ export class FormManagePage implements OnInit, AfterViewInit {
 
   public checkIsFutureTime(isoDate: string) {
     return new Date(isoDate).getTime() > new Date().getTime();
-  }
-
-  ionViewWillEnter() {
   }
 
   async onSubmit() {
@@ -139,14 +156,16 @@ export class FormManagePage implements OnInit, AfterViewInit {
       this.commonService.showToast(EStrings.chooseAtleastOneTarget);
       return;
     }
-    const reqBody: INotification = {
-      ...this.formForm.value,
-      target: this.targetForm.value
+    const reqBody: any = {
+      title: this.formForm.value.title,
+      formData: this.formBuilder.formData,
+      target: this.targetForm.value,
     };
     if (!this.isUpdate) {
       reqBody.createdBy = this.authService.currentUser$.value._id;
+      reqBody.createdAt = this.commonService.toLocaleIsoDateString(new Date());
       reqBody.active = true;
-      this.notificationService.postAsync(reqBody).subscribe((res) => {
+      this.formService.postAsync(reqBody).subscribe((res) => {
         // console.log(res);
         this.loading = false;
         this.commonService.showToast(EStrings.formPublishedSuccessFully);
@@ -158,9 +177,9 @@ export class FormManagePage implements OnInit, AfterViewInit {
       });
     } else {
       reqBody._id = this.formId;
-      this.notificationService.putAsync(reqBody).subscribe((res) => {
+      this.formService.putAsync(reqBody).subscribe((res) => {
         this.loading = false;
-        this.commonService.showToast(EStrings.notificationUpdatedSuccessfully);
+        this.commonService.showToast(EStrings.formUpdatedSuccessFully);
         this.router.navigate(['/', 'dashboard', 'forms'], { replaceUrl: true });
       }, err => {
         this.loading = false;
@@ -250,6 +269,7 @@ export class FormManagePage implements OnInit, AfterViewInit {
   }
 
   ionViewWillLeave() {
+    this.subs.unsubscribe();
   }
 
 }

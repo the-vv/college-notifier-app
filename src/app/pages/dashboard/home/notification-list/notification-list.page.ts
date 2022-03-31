@@ -14,7 +14,6 @@ import { NotificationListComponent } from 'src/app/shared/notification-list/noti
 })
 export class NotificationListPage implements OnInit, OnDestroy {
 
-
   @ViewChild('notifList') public notifLister: NotificationListComponent;
   public loading = true;
   public currentSource: ISource = {
