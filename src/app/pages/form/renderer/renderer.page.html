@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'view' | string}} {{'form' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="form">
+    <ion-card-header>
+      <ion-card-title>
+        {{form?.title}}
+      </ion-card-title>
+      <ion-card-subtitle class="ion-align-items-center  flex-dir-row">
+        <span class="mr-1 v-center ion-align-items-center flex-dir-row">
+          <ion-icon name="person" class="mr-1"></ion-icon>
+          {{getCreatedByUser(form)}}
+        </span>
+        <span class="v-center ion-align-items-center">
+          <ion-icon name="time" class="mr-1"></ion-icon>
+          {{form?.createdAt | date: 'd/M/yyyy hh:mm a'}}
+        </span>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <div id="form_wrap"></div>
+      <div class="mt-3 small text-danger" *ngIf="invalid && submitted">
+        * {{'invalidForm' | string}}
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+
+<ion-footer>
+  <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
+    <span *ngIf="!loading">{{'submit' | string}} {{'form' | string}}</span>
+    <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+  </ion-button>
+</ion-footer>

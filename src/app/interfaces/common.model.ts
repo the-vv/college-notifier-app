@@ -128,3 +128,10 @@ export interface IForm {
     formData: string;
 }
 
+export interface IFormSubmission {
+    _id?: string;
+    form: IForm | string;
+    user: string | IUser;
+    data: string;
+    createdAt: Date | string;
+}

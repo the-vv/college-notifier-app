@@ -110,14 +110,7 @@ export class FormListComponent implements OnInit, OnInit, OnChanges, OnDestroy {
   }
 
   openForm(form: IForm) {
-    // this.modalCtrl.create({
-    //   component: FormViewComponent,
-    //   componentProps: {
-    //     form,
-    //   },
-    // }).then(modal => {
-    //   modal.present();
-    // });
+    this.router.navigate(['/form/view', form._id]);
   }
 
   onEdit(form: IForm, ev: any) {

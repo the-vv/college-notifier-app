@@ -10,6 +10,10 @@ const routes: Routes = [
     path: 'manage/:id',
     loadChildren: () => import('./manage/manage.module').then(m => m.ManagePageModule)
   },
+  {
+    path: 'view/:id',
+    loadChildren: () => import('./renderer/renderer.module').then( m => m.RendererPageModule)
+  },
 ];
 
 @NgModule({
