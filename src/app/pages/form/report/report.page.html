@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'forms' | string}} {{'report' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-row class="v-center ion-justify-content-between">
+      <ion-col size="auto" class="ion-text-start">
+        <h6>{{'forms' | string}} {{'report' | string}}</h6>
+      </ion-col>
+      <ion-col size="auto" class="ion-text-end">
+        <!-- <ion-button color="primary" size="small" [routerLink]="['/', 'department', 'manage']">
+        <ion-icon name="add"></ion-icon>
+        {{'create' | string}}
+      </ion-button> -->
+      </ion-col>
+    </ion-row>
+    <p-table responsiveLayout="stack" [sortMode]="'multiple'" [value]="formsData">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="title">{{'title' | string}} <p-sortIcon field="title"></p-sortIcon>
+          </th>
+          <th>{{'submissions' | string}}
+          </th>
+          <th pSortableColumn="createdBy">{{'createdBy' | string}} <p-sortIcon field="createdBy"></p-sortIcon>
+          </th>
+          <th pSortableColumn="createdAt">{{'createdAt' | string}} <p-sortIcon field="createdAt"></p-sortIcon>
+          <th>{{'targets' | string}}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item let-columns="columns">
+        <tr>
+          <td><span class="p-column-title">{{'title' | string}}</span>{{item.title}}</td>
+          <td><span class="p-column-title">{{'submissions' | string}}</span><a [routerLink]="['/form/submissions/', item._id]">{{'view' | string}}</a>
+          </td>
+          <td><span class="p-column-title">{{'createdBy' | string}}</span>{{item.createdBy?.email}}</td>
+          <td><span class="p-column-title">{{'createdAt' | string}}</span>{{item.createdAt | date:
+            config.commonDateTimeFormat}}</td>
+          <td><span class="p-column-title">{{'targets' | string}}</span><a routerLink="">{{'view' | string}}</a></td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ion-card>
+</ion-content>

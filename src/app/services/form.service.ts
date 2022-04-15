@@ -38,6 +38,10 @@ export class FormService {
     return this.http.postAsync(source, `${this.notificationUrl}/getBySourceAndUser`);
   }
 
+  getByUserIdAsync(id: string): Observable<IForm[]> {
+    return this.http.getAsync(`${this.notificationUrl}/getByUser/${id}`);
+  }
+
   deleteAsync(id: string): Observable<IForm> {
     return this.http.deleteByIdAsync(this.notificationUrl, id);
   }

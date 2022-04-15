@@ -14,6 +14,18 @@ const routes: Routes = [
     path: 'view/:id',
     loadChildren: () => import('./renderer/renderer.module').then( m => m.RendererPageModule)
   },
+  {
+    path: 'submission/:id',
+    loadChildren: () => import('./renderer/renderer.module').then( m => m.RendererPageModule)
+  },
+  {
+    path: 'report',
+    loadChildren: () => import('./report/report.module').then( m => m.ReportPageModule)
+  },
+  {
+    path: 'submissions/:id',
+    loadChildren: () => import('./submissions-list/submissions-list.module').then( m => m.SubmissionsListPageModule)
+  },
 ];
 
 @NgModule({

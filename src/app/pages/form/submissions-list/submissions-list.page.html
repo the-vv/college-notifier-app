@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'form' | string}} {{'submissions' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-row class="v-center ion-justify-content-between">
+      <ion-col size="auto" class="ion-text-start">
+        <h6>{{formTitle}} {{'form' | string}} {{'submissions' | string}}</h6>
+      </ion-col>
+      <ion-col size="auto" class="ion-text-end">
+        <!-- <ion-button color="primary" size="small" [routerLink]="['/', 'department', 'manage']">
+        <ion-icon name="add"></ion-icon>
+        {{'create' | string}}
+      </ion-button> -->
+      </ion-col>
+    </ion-row>
+    <p-table responsiveLayout="stack" [sortMode]="'multiple'" [value]="submissionsData" selectionMode="single"
+      [dataKey]="'_id'">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="submittedBy">{{'submittedBy' | string}} <p-sortIcon field="submittedBy"></p-sortIcon>
+          </th>
+          <th pSortableColumn="submittedAt">{{'submittedAt' | string}} <p-sortIcon field="submittedAt"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item let-columns="columns">
+        <tr (click)="onRowClick(item)" class="clickable">
+          <td><span class="p-column-title">{{'submittedBy' | string}}</span>{{item.user?.name}} ({{item.user?.email}})
+          </td>
+          <td><span class="p-column-title">{{'submittedAt' | string}}</span>{{item.createdAt | date:
+            config.commonDateTimeFormat}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ion-card>
+</ion-content>

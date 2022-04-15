@@ -205,4 +205,6 @@ export enum EStrings {
     formPublishedFailed = 'Form Published Failed',
     formUpdatedSuccessFully = 'Form Updated Successfully',
     invalidForm = 'Please fill all the required fields to submit the form',
+    report = 'Report',
+    reports = 'Reports',
 }

@@ -30,11 +30,11 @@ export class FormSubmissionService {
     return this.http.getAsync(`${this.notificationUrl}/${id}`);
   }
 
-  getByUserIdAsync(id: string): Observable<IFormSubmission> {
+  getByUserIdAsync(id: string): Observable<IFormSubmission[]> {
     return this.http.getAsync(`${this.notificationUrl}/getByUser/${id}`);
   }
 
-  getByFormIdAsync(id: string): Observable<IFormSubmission> {
+  getByFormIdAsync(id: string): Observable<IFormSubmission[]> {
     return this.http.getAsync(`${this.notificationUrl}/getByForm/${id}`);
   }
 

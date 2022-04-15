@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'reports' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-align-items-center ion-justify-content-center">
+    <ion-row class="">
+      <ion-col size="12" size-md="12" size-xl="6">
+        <ion-card button class="v-center" [routerLink]="['/form/report']">
+            <ion-row class="v-center">
+              <ion-col size="5" class="v-center h-100">
+                <img src="/assets/images/form.png" alt="" class="card-image">
+              </ion-col>
+              <ion-col size="7" class="">
+                <h3><ion-text color="dark">{{'forms' | string}} {{'report' | string}}</ion-text></h3>
+                <p><ion-text>{{'formsReportDescription' | string}}</ion-text></p>
+              </ion-col>
+            </ion-row>
+        </ion-card>
+      </ion-col>      
+    </ion-row>
+  </ion-grid>
+</ion-content>

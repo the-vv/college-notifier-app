@@ -23,10 +23,10 @@
       </ion-button>
     </ion-col>
   </ion-row>
-  <p-table responsiveLayout="stack" [value]="departmentsData">
+  <p-table responsiveLayout="stack" [sortMode]="'multiple'" [value]="departmentsData">
     <ng-template pTemplate="header" let-columns>
         <tr>
-            <th>{{'name' | string}}</th>
+            <th pSortableColumn="name">{{'name' | string}}  <p-sortIcon field="name"></p-sortIcon></th>
             <th>{{'description' | string}}</th>
             <th>{{'admins' | string}}</th>
         </tr>

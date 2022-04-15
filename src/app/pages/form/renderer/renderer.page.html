@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngIf="form">
+  <ion-card *ngIf="form && !formSubmission; else submissionTemplate">
     <ion-card-header>
       <ion-card-title>
         {{form?.title}}
@@ -36,8 +36,31 @@
   </ion-card>
 </ion-content>
 
+<ng-template #submissionTemplate>
+  <ion-card *ngIf="formSubmission;">
+    <ion-card-header>
+      <ion-card-title>
+        {{form?.title}}
+      </ion-card-title>
+      <ion-card-subtitle class="ion-align-items-center  flex-dir-row">
+        <span class="mr-1 v-center ion-align-items-center flex-dir-row">
+          <ion-icon name="person" class="mr-1"></ion-icon>
+          {{getSubmissionCreatedByUser(formSubmission)}}
+        </span>
+        <span class="v-center ion-align-items-center">
+          <ion-icon name="time" class="mr-1"></ion-icon>
+          {{formSubmission?.createdAt | date: 'd/M/yyyy hh:mm a'}}
+        </span>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <div id="form_wrap"></div>
+    </ion-card-content>
+  </ion-card>
+</ng-template>
 
-<ion-footer>
+
+<ion-footer *ngIf="!isResultMode">
   <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
     <span *ngIf="!loading">{{'submit' | string}} {{'form' | string}}</span>
     <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
