@@ -135,3 +135,13 @@ export interface IFormSubmission {
     data: string;
     createdAt: Date | string;
 }
+
+export interface IResource {
+    _id?: string;
+    name: string;
+    description?: string;
+    image?: string;
+    colleg: string | ICollege;
+    active: boolean;
+}
+

@@ -207,4 +207,6 @@ export enum EStrings {
     invalidForm = 'Please fill all the required fields to submit the form',
     report = 'Report',
     reports = 'Reports',
+    submittedAt = 'Submitted At',
+    submittedBy = 'Submitted By',
 }
