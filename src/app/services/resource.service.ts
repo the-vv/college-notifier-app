@@ -34,4 +34,8 @@ export class ResourceService {
     return this.http.putAsync(data, this.resourceUrl);
   }
 
+  deleteAsync(id: string): Observable<IResource> {
+    return this.http.deleteByIdAsync(this.resourceUrl, id);
+  }
+
 }

@@ -209,4 +209,6 @@ export enum EStrings {
     reports = 'Reports',
     submittedAt = 'Submitted At',
     submittedBy = 'Submitted By',
+    image = 'Image',
+    resource = 'Resource',
 }

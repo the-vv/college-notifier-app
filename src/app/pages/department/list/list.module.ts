@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ListPageRoutingModule } from './list-routing.module';
 
-import { ListPage } from './list.page';
+import { DepartmentListPage } from './list.page';
 import { CommonExportsModule } from 'src/app/common-exports.module';
 import { TableModule } from 'primeng/table';
 
@@ -19,6 +19,6 @@ import { TableModule } from 'primeng/table';
     CommonExportsModule,
     TableModule
   ],
-  declarations: [ListPage]
+  declarations: [DepartmentListPage]
 })
 export class ListPageModule {}

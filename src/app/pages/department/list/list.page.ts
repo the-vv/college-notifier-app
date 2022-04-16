@@ -6,11 +6,11 @@ import { CommonService } from 'src/app/services/common.service';
 import { DepartmentService } from 'src/app/services/department.service';
 
 @Component({
-  selector: 'app-list',
+  selector: 'app-department-list',
   templateUrl: './list.page.html',
   styleUrls: ['./list.page.scss'],
 })
-export class ListPage implements OnInit {
+export class DepartmentListPage implements OnInit {
 
   departmentsData: IDepartment[] = [];
 

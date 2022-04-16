@@ -1,3 +1,44 @@
 <ion-content>
-Resources
+    <ion-grid *ngIf="resourcesData?.length; else noRecords" class="ion-align-items-center ion-justify-content-center overflow-y-auto ion-padding-bottom">
+        <ion-row class="">
+            <ion-col size="12" size-md="12" size-xl="6" *ngFor="let item of resourcesData">
+                <ion-card button class="v-center" [routerLink]="['/', 'resource', 'manage', item._id]">
+                    <ion-row class="v-center">
+                        <ion-col size="5" class="v-center h-100">
+                            <img [src]="item.image ? item.image : 'assets/images/resource.png'" alt="" class="card-image">
+                        </ion-col>
+                        <ion-col size="7" class="ion-justify-content-between ">
+                            <h3>
+                                <ion-text color="dark">{{item.name}}</ion-text>
+                            </h3>
+                            <p>
+                                <ion-text>{{item.description}}</ion-text>
+                            </p>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="6">
+                            <ion-button expand="block" color="warning" size="small" (click)="onEdit(item, $event)"> {{'edit' |
+                                string}}</ion-button>
+                        </ion-col>
+                        <ion-col size="6">
+                            <ion-button expand="block" color="danger" size="small" (click)="onDelete(item, $event)">
+                                {{'delete' | string}}</ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+        <ion-fab-button [routerLink]="['/', 'resource', 'manage']">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 </ion-content>
+
+
+<ng-template #noRecords>
+    <!-- no items to show template -->
+    <p class="text-center">{{'noItemsToShow' | string}}</p>
+</ng-template>

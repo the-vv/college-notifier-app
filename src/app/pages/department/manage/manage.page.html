@@ -6,7 +6,7 @@
     <ion-buttons slot="end">
       <ion-menu-button slot="end"></ion-menu-button>
     </ion-buttons>
-    <ion-title><span *ngOf="isUpdate">{{f.name.value}}</span> {{'department' | string}}</ion-title>
+    <ion-title><span *ngIf="isUpdate">{{f.name.value}}</span> {{'department' | string}}</ion-title>
   </ion-toolbar>
   <ion-toolbar *ngIf="currentBreakPoint !== 'medium' && isUpdate">
     <ion-segment (ionChange)="onChangeSegment($event)" [swipeGesture]="true" [value]="segmentValue">

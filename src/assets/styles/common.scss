@@ -282,10 +282,18 @@ $val in $valueforhn {
     overflow-y: auto;
 }
 
-.card-image {
-    max-height: 25vh;
-}
-
 .p-element.p-datatable-tbody tr.clickable {
     cursor: pointer !important;
+}
+
+.p-element.p-datatable-tbody td img {
+   height: 80px;
+}
+
+ion-card {
+    .card-image {
+        height: 20vh;
+        border-radius: 6px;
+        object-fit: contain;
+    }
 }

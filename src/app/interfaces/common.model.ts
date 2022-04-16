@@ -141,7 +141,7 @@ export interface IResource {
     name: string;
     description?: string;
     image?: string;
-    colleg: string | ICollege;
+    college: string | ICollege;
     active: boolean;
 }
 

@@ -1,9 +1,67 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>manage</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'resource' | string}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-row class="h-100 v-center">
+    <ion-col size-md="8" *ngIf="currentBreakPoint === 'medium'">
+      <ion-row class="v-center">
+        <ion-col class="text-center">
+          <img src="assets/images/resource.png" alt="" style="height: 70vh;">
+        </ion-col>
+      </ion-row>
+    </ion-col>
+    <ion-col size="12" size-md="4" class="border-rounded" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''">
+      <div class="text-center">
+        <p-avatar icon="pi pi-building" styleClass="" size="xlarge" shape="circle"></p-avatar>
+        <h5>{{'resource' | string}} {{'details' | string}}</h5>
+      </div>
+      <form [formGroup]="resourceForm">
+        <ion-row>
+          <ion-col size="12">
+            <ion-item class="mt-1">
+              <ion-label position="floating">{{'resource' | string}} {{'name' | string}}</ion-label>
+              <ion-input type="text" formControlName="name"></ion-input>
+            </ion-item>
+            <small class="text-danger" *ngIf="f.name.errors?.required && (f.name.touched || showErrors)">{{'name' |
+              string}} {{'isRequired' | string}}</small>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item class="mt-1">
+              <ion-label position="floating">{{'description' | string}}</ion-label>
+              <ion-textarea formControlName="description"></ion-textarea>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item class="mt-1" button>
+              <app-image-upload class="v-100" formControlName="image"></app-image-upload>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="currentBreakPoint === 'medium'">
+          <ion-col size="12">
+            <ion-button type="button" size="block" class="mt-1" (click)="onSubmit()">
+              <span *ngIf="!loading">{{isUpdate ? 'update' : 'create' | string}}</span>
+              <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </form>
+    </ion-col>
+  </ion-row>
 </ion-content>
+
+<ion-footer *ngIf="currentBreakPoint !== 'medium'">
+  <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
+    <span *ngIf="!loading">{{'submit' | string}}</span>
+    <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+  </ion-button>
+</ion-footer>

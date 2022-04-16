@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
@@ -9,6 +9,7 @@ import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ImageUploadComponent } from 'src/app/shared/image-upload/image-upload.component';
 
 @Component({
   selector: 'app-college-manage',
@@ -17,13 +18,14 @@ import { CommonService } from 'src/app/services/common.service';
 })
 export class CollegeManagePage implements OnInit, OnDestroy {
 
+  @ViewChild(ImageUploadComponent) imageUpload: ImageUploadComponent;
   public currentBreakPoint: EBreakPoints;
   public collegeForm: FormGroup;
   public showErrors = false;
   public loading = false;
-  private subs: Subscription = new Subscription();
+  public isUpdate = false;
   public collegeId: string;
-  public isUpdate: boolean = false;
+  private subs: Subscription = new Subscription();
 
   constructor(
     private commonService: CommonService,
@@ -60,7 +62,7 @@ export class CollegeManagePage implements OnInit, OnDestroy {
           Toast.show({
             text: [EStrings.error + ':', , err.error.message].join(' '),
           });
-        })
+        });
     }
   }
 
@@ -68,10 +70,18 @@ export class CollegeManagePage implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.showErrors = true;
     this.collegeForm.markAllAsTouched();
     if (this.collegeForm.invalid) {
+      return;
+    }
+    try {
+      this.loading = true;
+      await this.imageUpload.uploadImage();
+    }
+    catch (err) {
+      this.loading = false;
       return;
     }
     /* eslint no-underscore-dangle: 0 */

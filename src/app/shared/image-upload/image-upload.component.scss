@@ -16,14 +16,15 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     background: var(--ion-color-danger);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    padding: 3px;
 }
 .floating-loader {
     position: absolute;

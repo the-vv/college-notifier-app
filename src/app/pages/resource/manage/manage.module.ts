@@ -6,15 +6,21 @@ import { IonicModule } from '@ionic/angular';
 
 import { ManagePageRoutingModule } from './manage-routing.module';
 
-import { ManagePage } from './manage.page';
+import { ResourceManagePage } from './manage.page';
+import { CommonExportsModule } from 'src/app/common-exports.module';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { AvatarModule } from 'primeng/avatar';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ManagePageRoutingModule
+    ManagePageRoutingModule,
+    CommonExportsModule,
+    SharedModule,
+    AvatarModule
   ],
-  declarations: [ManagePage]
+  declarations: [ResourceManagePage]
 })
 export class ManagePageModule {}
