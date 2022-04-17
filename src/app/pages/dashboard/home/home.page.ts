@@ -36,7 +36,7 @@ export class HomePage implements OnInit {
         .pipe(take(1))
         .subscribe(res => {
           this.loading = false;
-          console.log(res);
+          // console.log(res);
           if (res) {
             if (res.status === ERequestStatus.pending) {
               this.commonService.showSuccessPage(`${EStrings.college} ${EStrings.requested}`, EStrings.collegeRequestedText);

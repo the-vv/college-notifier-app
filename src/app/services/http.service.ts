@@ -45,6 +45,13 @@ export class HttpService {
     });
   }
 
+  deleteMultipleAsync(endpoint: string, body: any): Observable<any> {
+    return this.http.delete<any>([this.baseUrl, endpoint].join('/'), {
+      withCredentials: true,
+      body
+    });
+  }
+
   getByIdAsync(endpoint: string, id: string): Observable<any> {
     return this.http.get<any>([this.baseUrl, endpoint, id].join('/'), {
       withCredentials: true

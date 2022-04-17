@@ -8,9 +8,9 @@ import { HttpService } from './http.service';
 })
 export class UserService {
 
-
   private userUrl = 'api/users';
   private userMapUrl = 'api/userMap';
+  private userRoomMapUrl = 'api/roomUserMap';
 
   constructor(
     private http: HttpService,
@@ -30,6 +30,18 @@ export class UserService {
 
   postUserMapsAsync(maps: IUserMap[]) {
     return this.http.postAsync(maps, `${this.userMapUrl}/multiple`);
+  }
+
+  postUserRoomMapsAsync(maps: IUserMap[]) {
+    return this.http.postAsync(maps, `${this.userRoomMapUrl}/multiple`);
+  }
+
+  getUsersByRoomIdAsync(roomId: string, role: EUserRoles) {
+    return this.http.getAsync(`${this.userRoomMapUrl}/${roomId}`, { role });
+  }
+
+  deleteMultipleRoomUsersMapAsync(roomId: string, userId: string[]) {
+    return this.http.deleteMultipleAsync(`${this.userRoomMapUrl}/multiple/${roomId}`, userId);
   }
 
 }

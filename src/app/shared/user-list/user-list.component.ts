@@ -22,7 +22,7 @@ export class UserListComponent implements OnInit {
 
   public sourceData: ISource;
   @Input() set source(value: ISource) {
-    console.log(this.sourceData);
+    console.log(value);
     if (!value) { return; }
     this.sourceData = value;
     switch (value.source) {
@@ -144,6 +144,7 @@ export class UserListComponent implements OnInit {
             const mapped = mapRes?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
             this.userModal.items = allUsers?.filter((val: any) => !mapped.find(mapVal => mapVal._id === val._id));
           }, err => {
+            this.userModal.hideLoading();
             console.log(err);
             this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
           });
@@ -161,36 +162,48 @@ export class UserListComponent implements OnInit {
       return;
     }
     console.log(this.sourceData);
-    const postData: IUserMap[] = [];
-    users.forEach((val: string) => {
-      postData.push({
-        user: val,
-        source: {
-          college: this.collegeService.currentCollege$.value._id,
-          department: unMap ? undefined : (this.sourceData.department as IDepartment)?._id,
-          batch: unMap ? undefined : (this.sourceData.batch as IBatch)?._id,
-          class: unMap ? undefined : (this.sourceData.class as IClass)?._id,
-          room: unMap ? undefined : (this.sourceData.room as IRoom)?._id,
-          source: unMap ? ESourceTargetType.college : this.sourceData.source,
-        }
-      });
-    });
-    // this.loading = true;
-    this.userService.postUserMapsAsync(postData)
-      .subscribe((res: any) => {
-        this.accordionGroup.value = undefined;
-        this.selectedUsers = [];
-        this.selectedModalUsers = [];
-        // this.loading = false;
-        Toast.show({
-          text: [EStrings.successfully, EStrings.mapped].join(' '),
+    if (this.sourceData.source === ESourceTargetType.room && unMap) {
+      this.userService.deleteMultipleRoomUsersMapAsync(this.sourceId, users)
+        .subscribe((res: any) => {
+          this.commonService.showToast(`${EStrings.success}: ${EStrings.mapped}`);
+          this.loadStudents();
+          this.loadFaculties();
+        }, err => {
+          console.log(err);
+          this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
         });
-      }, (err: any) => {
-        // this.loading = false;
-        Toast.show({
-          text: [EStrings.error + ':', err.error.message].join(' '),
+    } else {
+      const postData: IUserMap[] = [];
+      users.forEach((val: string) => {
+        postData.push({
+          user: val,
+          source: {
+            college: this.collegeService.currentCollege$.value._id,
+            department: unMap ? undefined : (this.sourceData.department as IDepartment)?._id,
+            batch: unMap ? undefined : (this.sourceData.batch as IBatch)?._id,
+            class: unMap ? undefined : (this.sourceData.class as IClass)?._id,
+            room: unMap ? undefined : (this.sourceData.room as IRoom)?._id,
+            source: unMap ? ESourceTargetType.college : this.sourceData.source,
+          }
         });
       });
+      // this.loading = true;
+      this.userService.postUserMapsAsync(postData)
+        .subscribe((res: any) => {
+          this.accordionGroup.value = undefined;
+          this.selectedUsers = [];
+          this.selectedModalUsers = [];
+          // this.loading = false;
+          Toast.show({
+            text: [EStrings.successfully, EStrings.mapped].join(' '),
+          });
+        }, (err: any) => {
+          // this.loading = false;
+          Toast.show({
+            text: [EStrings.error + ':', err.error.message].join(' '),
+          });
+        });
+    }
   }
 
   onOptionsClick() {
@@ -209,7 +222,7 @@ export class UserListComponent implements OnInit {
                 text: EStrings.cancel,
                 role: 'cancel',
                 id: 'cancel-button',
-              },{
+              }, {
                 text: EStrings.removeMap,
                 handler: () => {
                   this.submitUserMaps(this.selectedUsers.map(el => el._id), true);

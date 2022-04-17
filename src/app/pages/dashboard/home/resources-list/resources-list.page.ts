@@ -17,6 +17,7 @@ export class ResourcesListPage implements OnInit, OnDestroy {
 
   resourcesData: IResource[] = [];
   public loading = false;
+  public loaded = false;
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -30,13 +31,16 @@ export class ResourcesListPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.add(this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd && (event.url) === '/dashboard/resources') {
+        this.loaded = true;
         this.getResources();
       }
     }));
   }
 
   ionViewWillEnter() {
-    this.getResources();
+    if (!this.loaded) {
+      this.getResources();
+    }
   }
 
   ngOnDestroy() {

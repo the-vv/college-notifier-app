@@ -31,7 +31,7 @@
     <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''"
       *ngIf="(currentBreakPoint === 'medium') || (segmentValue === 'edit')">
       <div class="text-center mt-3">
-        <h4>{{(isUpdate ? 'update' : 'create') | string}} {{'batch' | string}}</h4>
+        <h4>{{(isUpdate ? 'update' : 'create') | string}} {{'room' | string}}</h4>
       </div>
       <form [formGroup]="roomForm">
         <ion-col size="12">
