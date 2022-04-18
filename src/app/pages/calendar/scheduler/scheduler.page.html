@@ -12,6 +12,14 @@
     <option [value]="7">One week</option>
   </select>
 
+  <select #houeSegmentSelect class="form-control" [ngModel]="hourSegments"
+  (change)="hourSegmentChanged(houeSegmentSelect.value)">
+    <option [value]="1">1 Hour</option>
+    <option [value]="2">Half Hour</option>
+    <option [value]="4">Quarters</option>
+    <option [value]="6">10 Minutes</option>
+  </select>
+
   <calendar-scheduler-view [viewDays]="viewDays" [viewDate]="viewDate"
     [events]="events" [locale]="locale" [responsive]="true" [weekStartsOn]="weekStartsOn" [excludeDays]="excludeDays"
     [startsWithToday]="startsWithToday" [hourSegments]="hourSegments" [dayStartHour]="dayStartHour"

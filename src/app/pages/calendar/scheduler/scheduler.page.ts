@@ -34,7 +34,7 @@ export class SchedulerPage implements OnInit {
   viewDays: number = DAYS_IN_WEEK;
   refresh: Subject<any> = new Subject();
   locale = 'en';
-  hourSegments: 1 | 2 | 4 | 6 = 1;
+  hourSegments: 1 | 2 | 4 | 6 = 4;
   weekStartsOn = 1;
   startsWithToday = true;
   activeDayIsOpen = true;
@@ -56,15 +56,9 @@ export class SchedulerPage implements OnInit {
       actions: [
         {
           when: 'enabled',
-          label: '<span class=\'valign-center\'><i class=\'material-icons md-18 md-red-500\'>cancel</i></span>',
+          label: 'Delete',
           title: 'Delete',
-          onClick: () => { }
-        },
-        {
-          when: 'cancelled',
-          label: '<span class=\'valign-center\'><i class=\'material-icons md-18 md-red-500\'>autorenew</i></span>',
-          title: 'Restore',
-          onClick: () => { }
+          onClick: () => { console.log('calcelled'); }
         }
       ],
       status: 'ok',
@@ -91,14 +85,6 @@ export class SchedulerPage implements OnInit {
       title: 'Delete',
       onClick: (event: CalendarSchedulerEvent): void => {
         console.log('Pressed action \'Delete\' on event ' + event.id);
-      }
-    },
-    {
-      when: 'disabled',
-      label: '<span class="valign-center"><i class="material-icons md-18 md-red-500">autorenew</i></span>',
-      title: 'Restore',
-      onClick: (event: CalendarSchedulerEvent): void => {
-        console.log('Pressed action \'Restore\' on event ' + event.id);
       }
     }
   ];
@@ -139,6 +125,11 @@ export class SchedulerPage implements OnInit {
   viewDaysOptionChanged(viewDays: string): void {
     console.log('viewDaysOptionChanged', viewDays);
     this.calendarScheduler.setViewDays(Number(viewDays));
+  }
+
+  hourSegmentChanged(val: string): void {
+    this.calendarScheduler.hourSegments = Number(val) as 1 | 2 | 4 | 6;
+    this.refresh.next();
   }
 
   changeDate(date: Date): void {
