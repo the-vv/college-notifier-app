@@ -2,7 +2,7 @@
     <ion-grid *ngIf="resourcesData?.length; else noRecords" class="ion-align-items-center ion-justify-content-center overflow-y-auto ion-padding-bottom">
         <ion-row class="">
             <ion-col size="12" size-md="12" size-xl="6" *ngFor="let item of resourcesData">
-                <ion-card button class="v-center" [routerLink]="['/', 'resource', 'manage', item._id]">
+                <ion-card button class="v-center" [routerLink]="['/', 'calendar']">
                     <ion-row class="v-center">
                         <ion-col size="5" class="v-center h-100">
                             <img [src]="item.image ? item.image : 'assets/images/resource.png'" alt="" class="card-image">
