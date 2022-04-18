@@ -161,13 +161,15 @@ export class UserListComponent implements OnInit {
     if (!users || users.length === 0) {
       return;
     }
-    console.log(this.sourceData);
     if (this.sourceData.source === ESourceTargetType.room && unMap) {
       this.userService.deleteMultipleRoomUsersMapAsync(this.sourceId, users)
         .subscribe((res: any) => {
-          this.commonService.showToast(`${EStrings.success}: ${EStrings.mapped}`);
-          this.loadStudents();
-          this.loadFaculties();
+          this.accordionGroup.value = undefined;
+          this.selectedUsers = [];
+          this.selectedModalUsers = [];
+          Toast.show({
+            text: [EStrings.successfully, EStrings.mapped].join(' '),
+          });
         }, err => {
           console.log(err);
           this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
