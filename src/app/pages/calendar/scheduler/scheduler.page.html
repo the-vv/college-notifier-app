@@ -13,21 +13,42 @@
   </select>
 
   <select #houeSegmentSelect class="form-control" [ngModel]="hourSegments"
-  (change)="hourSegmentChanged(houeSegmentSelect.value)">
+    (change)="hourSegmentChanged(houeSegmentSelect.value)">
     <option [value]="1">1 Hour</option>
     <option [value]="2">Half Hour</option>
     <option [value]="4">Quarters</option>
     <option [value]="6">10 Minutes</option>
   </select>
+  
+  <ion-button type="button" class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+    [daysInWeek]="viewDays" [excludeDays]="excludeDays" [disabled]="prevBtnDisabled"
+    (viewDateChange)="dateOrViewChanged()">
+    <span class="valign-center">
+      <i title="Precedente" class="material-icons md-18">Prev</i>
+    </span>
+  </ion-button>
+  <ion-button type="button" class="btn btn-light" mwlCalendarToday [(viewDate)]="viewDate"
+    (viewDateChange)="dateOrViewChanged()">
+    <span class="valign-center">
+      <i title="Oggi" class="material-icons md-18">today</i>
+    </span>
+  </ion-button>
+  <ion-button type="button" class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+    [daysInWeek]="viewDays" [excludeDays]="excludeDays" [disabled]="nextBtnDisabled"
+    (viewDateChange)="dateOrViewChanged()">
+    <span class="valign-center">
+      <i title="Successivo" class="material-icons md-18">Next</i>
+    </span>
+  </ion-button>
 
-  <calendar-scheduler-view [viewDays]="viewDays" [viewDate]="viewDate"
-    [events]="events" [locale]="locale" [responsive]="true" [weekStartsOn]="weekStartsOn" [excludeDays]="excludeDays"
-    [startsWithToday]="startsWithToday" [hourSegments]="hourSegments" [dayStartHour]="dayStartHour"
-    [dayEndHour]="dayEndHour" [dayModifier]="dayModifier" [hourModifier]="hourModifier"
-    [segmentModifier]="segmentModifier" [eventModifier]="eventModifier" [showEventActions]="true"
-    [showSegmentHour]="true" [zoomEventOnHover]="true" (viewDaysChanged)="viewDaysChanged($event)"
-    (dayHeaderClicked)="dayHeaderClicked($event.day)" (hourClicked)="hourClicked($event.hour)"
-    (segmentClicked)="segmentClicked('Clicked', $event.segment)" (eventClicked)="eventClicked('Clicked', $event.event)"
-    (eventTimesChanged)="eventTimesChanged($event)" [refresh]="refresh">
+  <calendar-scheduler-view [viewDays]="viewDays" [viewDate]="viewDate" [events]="events" [locale]="locale"
+    [responsive]="true" [weekStartsOn]="weekStartsOn" [excludeDays]="excludeDays" [startsWithToday]="startsWithToday"
+    [hourSegments]="hourSegments" [dayStartHour]="dayStartHour" [dayEndHour]="dayEndHour" [dayModifier]="dayModifier"
+    [hourModifier]="hourModifier" [segmentModifier]="segmentModifier" [eventModifier]="eventModifier"
+    [showEventActions]="true" [showSegmentHour]="true" [zoomEventOnHover]="true"
+    (viewDaysChanged)="viewDaysChanged($event)" (dayHeaderClicked)="dayHeaderClicked($event.day)"
+    (hourClicked)="hourClicked($event.hour)" (segmentClicked)="segmentClicked('Clicked', $event.segment)"
+    (eventClicked)="eventClicked('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)"
+    [refresh]="refresh">
   </calendar-scheduler-view>
 </ion-content>

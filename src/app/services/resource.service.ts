@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IResource } from '../interfaces/common.model';
+import { IResource, IResourceSchedule } from '../interfaces/common.model';
 import { HttpService } from './http.service';
 
 @Injectable({
@@ -9,6 +9,7 @@ import { HttpService } from './http.service';
 export class ResourceService {
 
   private resourceUrl = 'api/resource';
+  private scheduleUrl = 'api/resourceSchedule';
 
   constructor(
     private http: HttpService,
@@ -36,6 +37,37 @@ export class ResourceService {
 
   deleteAsync(id: string): Observable<IResource> {
     return this.http.deleteByIdAsync(this.resourceUrl, id);
+  }
+
+  getScheduleAsync(id: string): Observable<IResource> {
+    return this.http.getAsync(`${this.scheduleUrl}/${id}`);
+  }
+
+  postScheduleAsync(data: IResource): Observable<IResource> {
+    return this.http.postAsync(data, this.scheduleUrl);
+  }
+
+  putScheduleAsync(data: IResource): Observable<IResource> {
+    return this.http.putAsync(data, this.scheduleUrl);
+  }
+
+  deleteScheduleAsync(id: string): Observable<IResource> {
+    return this.http.deleteByIdAsync(this.scheduleUrl, id);
+  }
+
+  getScheduleByResourceAsync(id: string): Observable<IResource> {
+    return this.http.getAsync(`${this.scheduleUrl}/getByResource/${id}`);
+  }
+
+  getScheduleByDateRangeAsync(collegeId: string, start: string | Date, end: string | Date): Observable<IResource> {
+    return this.http.postAsync({college: collegeId, start, end}, `${this.scheduleUrl}/getByDateRange`);
+  }
+
+  checkResourceyAvailabilityAsync(resourceId: string, start: string, end: string): Observable<{
+    available: boolean;
+    schedules?: IResourceSchedule[];
+  }> {
+    return this.http.postAsync({ start, end }, `${this.scheduleUrl}/availability/${resourceId}`);
   }
 
 }

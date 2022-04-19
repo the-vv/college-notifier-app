@@ -145,3 +145,12 @@ export interface IResource {
     active: boolean;
 }
 
+export interface IResourceSchedule {
+    _id?: string;
+    createdBy: string | IUser;
+    createdAt: Date;
+    description: string;
+    college: string | ICollege;
+    resource: string | IResource;
+    schedule: ISchedule;
+}

@@ -1,4 +1,6 @@
-import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
+/* eslint-disable no-underscore-dangle */
+import { ChangeDetectorRef, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import {
   CalendarView,
   CalendarDateFormatter,
@@ -9,8 +11,12 @@ import {
   DAYS_IN_WEEK, endOfPeriod, SchedulerDateFormatter, SchedulerEventTimesChangedEvent, SchedulerViewDay,
   SchedulerViewHour, SchedulerViewHourSegment, startOfPeriod, subPeriod
 } from 'angular-calendar-scheduler';
-import { addHours, addMonths, endOfDay } from 'date-fns';
+import { addDays, addHours, addMonths, endOfDay, isSameDay, startOfDay } from 'date-fns';
 import { Subject } from 'rxjs';
+import { EStrings } from 'src/app/interfaces/strings.enum';
+import { CollegeService } from 'src/app/services/college.service';
+import { CommonService } from 'src/app/services/common.service';
+import { ResourceService } from 'src/app/services/resource.service';
 
 @Component({
   selector: 'app-scheduler',
@@ -28,12 +34,13 @@ export class SchedulerPage implements OnInit {
   calendarView = CalendarView;
 
   listMode = false;
+  resourceId: string;
   view: CalendarView = CalendarView.Week;
   viewDate: Date = new Date();
   viewDays: number = DAYS_IN_WEEK;
   refresh: Subject<any> = new Subject();
   locale = 'en';
-  hourSegments: 1 | 2 | 4 | 6 = 4;
+  hourSegments: 1 | 2 | 4 | 6 = 1;
   weekStartsOn = 1;
   startsWithToday = true;
   activeDayIsOpen = true;
@@ -88,7 +95,15 @@ export class SchedulerPage implements OnInit {
     }
   ];
 
-  constructor(@Inject(LOCALE_ID) locale: string, private dateAdapter: DateAdapter) {
+  constructor(
+    @Inject(LOCALE_ID) locale: string,
+    private dateAdapter: DateAdapter,
+    private route: ActivatedRoute,
+    private resourceScrvice: ResourceService,
+    private collegeService: CollegeService,
+    private commonService: CommonService
+  ) {
+
     this.locale = locale;
 
     this.dayModifier = ((day: SchedulerViewDay): void => {
@@ -110,7 +125,7 @@ export class SchedulerPage implements OnInit {
     }).bind(this);
 
     this.eventModifier = ((event: CalendarSchedulerEvent): void => {
-      if(event.end < new Date()) {
+      if (event.end < new Date()) {
         event.isDisabled = true;
       }
       // event.isDisabled = !this.isDateValid(event.start);
@@ -119,9 +134,26 @@ export class SchedulerPage implements OnInit {
     this.dateOrViewChanged();
   }
 
-  ngOnInit(): void {
-    // this.appService.getEvents(this.actions)
-    //   .then((events: CalendarSchedulerEvent[]) => this.events = events);
+  ngOnInit(): void { }
+
+  async getResourceByDateRange(startDate: Date) {
+    const start = this.commonService.toLocaleIsoDateString(startOfDay(startDate));
+    const end = this.commonService.toLocaleIsoDateString(endOfDay(addDays(startDate, this.viewDays - 1)));
+    this.events = [];
+    const loading = await this.commonService.showLoading();
+    this.resourceScrvice.getScheduleByDateRangeAsync(this.collegeService.currentCollege$.value._id, start, end)
+      .subscribe(res => {
+        loading.dismiss();
+        console.log(res);
+      }, err => {
+        console.log(err);
+        loading.dismiss();
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+      });
+  }
+
+  checkAvailability(start: Date, end: Date): void {
+    console.log('checkAvailability', start, end);
   }
 
   viewDaysOptionChanged(viewDays: string): void {
@@ -158,10 +190,12 @@ export class SchedulerPage implements OnInit {
     }
 
     if (this.viewDate < this.minDate) {
-      this.changeDate(this.minDate);
+      return this.changeDate(this.minDate);
     } else if (this.viewDate > this.maxDate) {
-      this.changeDate(this.maxDate);
+      return this.changeDate(this.maxDate);
     }
+
+    this.getResourceByDateRange(this.viewDate);
   }
 
 
