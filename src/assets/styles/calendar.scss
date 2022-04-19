@@ -12,6 +12,10 @@
     .cal-scheduler-headers {
         background-color: var(--ion-color-primary) !important;
 
+        .cal-header:hover {
+            background-color: var(--ion-color-secondary) !important;
+        }
+
         .cal-today {
             background-color: var(--ion-color-secondary) !important;
             color: var(--ion-color-step-100);

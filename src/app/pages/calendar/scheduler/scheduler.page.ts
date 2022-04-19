@@ -23,12 +23,11 @@ import { Subject } from 'rxjs';
 })
 export class SchedulerPage implements OnInit {
 
-
   @ViewChild(CalendarSchedulerViewComponent) calendarScheduler: CalendarSchedulerViewComponent;
 
-  title = 'Angular Calendar Scheduler Demo';
   calendarView = CalendarView;
 
+  listMode = false;
   view: CalendarView = CalendarView.Week;
   viewDate: Date = new Date();
   viewDays: number = DAYS_IN_WEEK;
@@ -46,7 +45,7 @@ export class SchedulerPage implements OnInit {
     {
       id: '8',
       start: new Date(),
-      end: addHours(new Date(), 3),
+      end: addHours(new Date(), 1),
       title: 'Event 8',
       content: 'CONCURRENT EVENT',
       color: {
@@ -111,7 +110,10 @@ export class SchedulerPage implements OnInit {
     }).bind(this);
 
     this.eventModifier = ((event: CalendarSchedulerEvent): void => {
-      event.isDisabled = !this.isDateValid(event.start);
+      if(event.end < new Date()) {
+        event.isDisabled = true;
+      }
+      // event.isDisabled = !this.isDateValid(event.start);
     }).bind(this);
 
     this.dateOrViewChanged();

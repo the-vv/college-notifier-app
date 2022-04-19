@@ -21,9 +21,6 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
     SchedulerModule.forRoot({ locale: 'en', headerDateFormat: 'daysRange' }),
   ],
-  declarations: [SchedulerPage],
-  schemas:[
-    // CUSTOM_ELEMENTS_SCHEMA
-  ]
+  declarations: [SchedulerPage]
 })
 export class SchedulerPageModule { }
