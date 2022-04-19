@@ -211,4 +211,5 @@ export enum EStrings {
     submittedBy = 'Submitted By',
     image = 'Image',
     resource = 'Resource',
+    scheduler = 'Scheduler',
 }

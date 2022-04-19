@@ -11,7 +11,7 @@ import {
   DAYS_IN_WEEK, endOfPeriod, SchedulerDateFormatter, SchedulerEventTimesChangedEvent, SchedulerViewDay,
   SchedulerViewHour, SchedulerViewHourSegment, startOfPeriod, subPeriod
 } from 'angular-calendar-scheduler';
-import { addDays, addHours, addMonths, endOfDay, isSameDay, startOfDay } from 'date-fns';
+import { addDays, addHours, addMinutes, addMonths, endOfDay, format, isSameDay, startOfDay, subMinutes } from 'date-fns';
 import { Subject } from 'rxjs';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
@@ -159,6 +159,7 @@ export class SchedulerPage implements OnInit {
   viewDaysOptionChanged(viewDays: string): void {
     console.log('viewDaysOptionChanged', viewDays);
     this.calendarScheduler.setViewDays(Number(viewDays));
+    this.getResourceByDateRange(this.viewDate);
   }
 
   hourSegmentChanged(val: string): void {
@@ -213,8 +214,9 @@ export class SchedulerPage implements OnInit {
   }
 
   segmentClicked(action: string, segment: SchedulerViewHourSegment): void {
-    console.log('segmentClicked Action', action);
-    console.log('segmentClicked Segment', segment);
+    console.log(segment);
+    const startDate = this.commonService.toLocaleIsoDateString(subMinutes(segment.date, segment.date.getTimezoneOffset()));
+    console.log();
   }
 
   eventClicked(action: string, event: CalendarSchedulerEvent): void {
