@@ -19,26 +19,20 @@
     <option [value]="4">Quarters</option>
     <option [value]="6">10 Minutes</option>
   </select>
-  
+
   <ion-button type="button" class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
     [daysInWeek]="viewDays" [excludeDays]="excludeDays" [disabled]="prevBtnDisabled"
     (viewDateChange)="dateOrViewChanged()">
-    <span class="valign-center">
-      <i title="Precedente" class="material-icons md-18">Prev</i>
-    </span>
+    Prev
   </ion-button>
   <ion-button type="button" class="btn btn-light" mwlCalendarToday [(viewDate)]="viewDate"
     (viewDateChange)="dateOrViewChanged()">
-    <span class="valign-center">
-      <i title="Oggi" class="material-icons md-18">today</i>
-    </span>
+    today
   </ion-button>
   <ion-button type="button" class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
     [daysInWeek]="viewDays" [excludeDays]="excludeDays" [disabled]="nextBtnDisabled"
     (viewDateChange)="dateOrViewChanged()">
-    <span class="valign-center">
-      <i title="Successivo" class="material-icons md-18">Next</i>
-    </span>
+    Next
   </ion-button>
 
   <calendar-scheduler-view [viewDays]="viewDays" [viewDate]="viewDate" [events]="events" [locale]="locale"

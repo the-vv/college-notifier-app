@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
-import { ChangeDetectorRef, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import {
   CalendarView,
   CalendarDateFormatter,
@@ -11,12 +12,13 @@ import {
   DAYS_IN_WEEK, endOfPeriod, SchedulerDateFormatter, SchedulerEventTimesChangedEvent, SchedulerViewDay,
   SchedulerViewHour, SchedulerViewHourSegment, startOfPeriod, subPeriod
 } from 'angular-calendar-scheduler';
-import { addDays, addHours, addMinutes, addMonths, endOfDay, format, isSameDay, startOfDay, subMinutes } from 'date-fns';
+import { addDays, addHours, addMonths, endOfDay, startOfDay, subMinutes } from 'date-fns';
 import { Subject } from 'rxjs';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ResourceService } from 'src/app/services/resource.service';
+import { ScheduleResourceComponent } from 'src/app/shared/schedule-resource/schedule-resource.component';
 
 @Component({
   selector: 'app-scheduler',
@@ -101,7 +103,8 @@ export class SchedulerPage implements OnInit {
     private route: ActivatedRoute,
     private resourceScrvice: ResourceService,
     private collegeService: CollegeService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private modalCtrl: ModalController
   ) {
 
     this.locale = locale;
@@ -135,6 +138,10 @@ export class SchedulerPage implements OnInit {
   }
 
   ngOnInit(): void { }
+
+  ionViewWillEnter() {
+    this.resourceId = this.route.snapshot.paramMap.get('id');
+  }
 
   async getResourceByDateRange(startDate: Date) {
     const start = this.commonService.toLocaleIsoDateString(startOfDay(startDate));
@@ -203,6 +210,7 @@ export class SchedulerPage implements OnInit {
   viewDaysChanged(viewDays: number): void {
     console.log('viewDaysChanged', viewDays);
     this.viewDays = viewDays;
+    this.getResourceByDateRange(this.viewDate);
   }
 
   dayHeaderClicked(day: SchedulerViewDay): void {
@@ -214,9 +222,19 @@ export class SchedulerPage implements OnInit {
   }
 
   segmentClicked(action: string, segment: SchedulerViewHourSegment): void {
-    console.log(segment);
-    const startDate = this.commonService.toLocaleIsoDateString(subMinutes(segment.date, segment.date.getTimezoneOffset()));
-    console.log();
+    // console.log(segment);
+    const startTime = this.commonService.toLocaleIsoDateString(subMinutes(segment.date, segment.date.getTimezoneOffset()));
+    // console.log();
+    this.modalCtrl.create({
+      component: ScheduleResourceComponent,
+      componentProps: {
+        startTime,
+        resourceId: this.resourceId
+      },
+      backdropDismiss: false
+    }).then(modal => {
+      modal.present();
+    });
   }
 
   eventClicked(action: string, event: CalendarSchedulerEvent): void {

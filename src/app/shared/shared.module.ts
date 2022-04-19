@@ -13,6 +13,7 @@ import { UserListComponent } from './user-list/user-list.component';
 import { ListboxModule } from 'primeng/listbox';
 import { RouterModule } from '@angular/router';
 import { FormListComponent } from './form-list/form-list.component';
+import { ScheduleResourceComponent } from './schedule-resource/schedule-resource.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { FormListComponent } from './form-list/form-list.component';
     NotificationListComponent,
     NotificationViewComponent,
     UserListComponent,
-    FormListComponent
+    FormListComponent,
+    ScheduleResourceComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +44,8 @@ import { FormListComponent } from './form-list/form-list.component';
     NotificationListComponent,
     NotificationViewComponent,
     UserListComponent,
-    FormListComponent
+    FormListComponent,
+    ScheduleResourceComponent
   ],
   providers: [
   ]

@@ -20,8 +20,8 @@
 @import '~quill/dist/quill.core.css';
 @import '~quill/dist/quill.snow.css';
 
-@import "../node_modules/angular-calendar/css/angular-calendar.css";
-@import "../node_modules/angular-calendar-scheduler/css/angular-calendar-scheduler.css";
+@import "~angular-calendar/css/angular-calendar.css";
+@import "~angular-calendar-scheduler/css/angular-calendar-scheduler.css";
 
 // custom styles
 @import "./assets/styles/common.scss";
