@@ -23,6 +23,16 @@
         <p>
           <ion-text>{{currentResource?.description}}</ion-text>
         </p>
+        <div class="ion-justify-content-start flex-dir-column" *ngIf="currentSchedule">
+          <span class="mr-1 ion-align-items-start">
+            <ion-icon name="person" class="mr-1"></ion-icon>
+            {{getCreatedByUser(currentSchedule)}}
+          </span>
+          <span class="ion-align-items-start">
+            <ion-icon name="time" class="mr-1"></ion-icon>
+            {{currentSchedule?.createdAt | date: 'd/M/yyyy hh:mm a'}}
+          </span>
+        </div>
       </ion-col>
     </ion-row>
     <form [formGroup]="scheduleForm">
@@ -74,7 +84,7 @@
 
 <ion-footer>
   <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
-    <span *ngIf="!loading">{{'submit' | string}}</span>
+    <span *ngIf="!loading">{{currentSchedule ? 'update' : 'submit' | string}}</span>
     <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
   </ion-button>
 </ion-footer>

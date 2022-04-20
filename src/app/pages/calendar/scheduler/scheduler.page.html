@@ -62,7 +62,7 @@
     </ion-card-content>
   </ion-card>
 
-  <calendar-scheduler-view [viewDays]="viewDays" [viewDate]="viewDate" [events]="events" [locale]="locale"
+  <calendar-scheduler-view *ngIf="!loading; else noRecords" [viewDays]="viewDays" [viewDate]="viewDate" [events]="events" [locale]="locale"
     [responsive]="true" [weekStartsOn]="weekStartsOn" [excludeDays]="excludeDays" [startsWithToday]="startsWithToday"
     [hourSegments]="hourSegments" [dayStartHour]="dayStartHour" [dayEndHour]="dayEndHour" [dayModifier]="dayModifier"
     [hourModifier]="hourModifier" [segmentModifier]="segmentModifier" [eventModifier]="eventModifier"
@@ -72,3 +72,10 @@
     (eventClicked)="eventClicked($event.event)" (eventTimesChanged)="eventTimesChanged($event)" [refresh]="refresh">
   </calendar-scheduler-view>
 </ion-content>
+
+
+<ng-template #noRecords>
+  <!-- no items to show template -->
+  <p class="text-center v-center">{{'loading' | string}} <ion-spinner class="ml-2"></ion-spinner>
+  </p>
+</ng-template>

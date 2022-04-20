@@ -159,7 +159,7 @@ export class SchedulerPage implements OnInit {
             actions: [
               {
                 when: 'enabled',
-                label: '<i class="bi bi-trash" class="eventt-delete" style="color: red"></i>',
+                label: '<i class="bi bi-trash"></i>',
                 title: 'Delete',
                 onClick: (event) => this.deleteSchedule(event)
               }
@@ -235,7 +235,6 @@ export class SchedulerPage implements OnInit {
   viewDaysChanged(viewDays: number): void {
     console.log('viewDaysChanged', viewDays);
     this.viewDays = viewDays;
-    // this.getResourceByDateRange(this.viewDate);
   }
 
   dayHeaderClicked(day: SchedulerViewDay): void {
@@ -260,7 +259,7 @@ export class SchedulerPage implements OnInit {
     }).then(modal => {
       modal.present();
       modal.onDidDismiss().then((needReload: any) => {
-        if (needReload?.data) {
+        if (needReload?.data === true) {
           console.log(needReload);
           this.getResourceByDateRange(this.viewDate);
         }
@@ -277,15 +276,27 @@ export class SchedulerPage implements OnInit {
         startTime: this.commonService.toLocaleIsoDateString(new Date(choosenEvent.schedule.start)),
         endTime: this.commonService.toLocaleIsoDateString(new Date(choosenEvent.schedule.end)),
         resourceId: (choosenEvent.resource as IResource)?._id,
+        scheduleId: choosenEvent._id
       }
     }).then(modal => {
       modal.present();
+      modal.onDidDismiss().then((needReload: any) => {
+        if (needReload?.data) {
+          const schedule = this.events.find(el => el.id === needReload.data?._id);
+          if (schedule) {
+            schedule.start = new Date(needReload.data.schedule.start);
+            schedule.end = new Date(needReload.data.schedule.end);
+            schedule.title = needReload.data.title;
+            schedule.content = needReload.data.description ? needReload.data.description : '<i>No Description</i>';
+            this.changeView(this.view);
+            this.refresh.next();
+          }
+        }
+      });
     });
   }
 
   async eventTimesChanged({ event, newStart, newEnd }: SchedulerEventTimesChangedEvent) {
-    // console.log('eventTimesChanged Event', event);
-    // console.log('eventTimesChanged New Times', newStart, newEnd);
     if (newStart < new Date()) { return; }
     const ev = this.events.find(e => e.id === event.id);
     const oldSchedule = { start: ev.start, end: ev.end };

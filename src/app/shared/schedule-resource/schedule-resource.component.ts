@@ -4,7 +4,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { addHours } from 'date-fns';
-import { IResource, IResourceSchedule } from 'src/app/interfaces/common.model';
+import { EUserRoles } from 'src/app/interfaces/common.enum';
+import { IResource, IResourceSchedule, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
@@ -22,6 +23,7 @@ export class ScheduleResourceComponent implements OnInit {
   @Input() public resourceId: string;
   @Input() public startTime: string;
   @Input() public endTime: string;
+  @Input() public scheduleId: string;
 
   scheduleForm: FormGroup;
   submitted = false;
@@ -30,6 +32,7 @@ export class ScheduleResourceComponent implements OnInit {
   isUpdate = false;
   currentResource: IResource;
   minTime = this.commonService.toLocaleIsoDateString(new Date());
+  currentSchedule: IResourceSchedule;
 
   constructor(
     private modalCtrl: ModalController,
@@ -46,8 +49,8 @@ export class ScheduleResourceComponent implements OnInit {
     this.scheduleForm = new FormGroup({
       description: new FormControl(''),
     });
-    console.log(this.startTime);
-    console.log(this.endTime);
+    // console.log(this.startTime);
+    // console.log(this.endTime);
     if (this.resourceId) {
       const loading = await this.commonService.showLoading();
       this.resourceServoce.getByIdAsync(this.resourceId).subscribe(res => {
@@ -58,9 +61,24 @@ export class ScheduleResourceComponent implements OnInit {
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
       });
     }
+    if (this.scheduleId) {
+      const loading = await this.commonService.showLoading();
+      this.resourceServoce.getScheduleAsync(this.scheduleId).subscribe(res => {
+        loading.dismiss();
+        this.currentSchedule = res;
+        console.log(this.currentSchedule);
+        this.scheduleForm.patchValue({
+          description: this.currentSchedule.description,
+        });
+        this.isUpdate = true;
+      }, err => {
+        loading.dismiss();
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+      });
+    }
   }
 
-  dismiss(val?: boolean) {
+  dismiss(val?: any) {
     this.modalCtrl.dismiss(val);
   }
 
@@ -71,7 +89,7 @@ export class ScheduleResourceComponent implements OnInit {
   }
 
   async onSubmit() {
-    if(new Date(this.startTime).getTime() > new Date(this.endTime).getTime()) {
+    if (new Date(this.startTime).getTime() > new Date(this.endTime).getTime()) {
       this.commonService.showToast(`${EStrings.error}: ${EStrings.startTimeGreaterThanEndTime}`);
       return;
     }
@@ -79,38 +97,80 @@ export class ScheduleResourceComponent implements OnInit {
       this.showErrors = true;
       return;
     }
-    const loading = await this.commonService.showLoading(EStrings.checkingAvailability);
-    this.resourceServoce.checkResourceyAvailabilityAsync(this.resourceId, this.startTime, this.endTime)
-      .subscribe(res => {
-        loading.dismiss();
-        if (res.available) {
-          this.submitted = true;
-          this.loading = true;
-          const data: IResourceSchedule = {
-            resource: this.resourceId,
-            schedule: {
-              start: new Date(this.startTime),
-              end:new Date(this.endTime),
-            },
-            description: this.scheduleForm.value.description,
-            college: this.collegeService.currentCollege$.value._id,
-            createdAt: new Date(),
-            createdBy: this.authService.currentUser$.value._id,
-          };
-          this.resourceServoce.postScheduleAsync(data).subscribe(schRes => {
-            this.loading = false;
-            this.dismiss(true);
-          }, err => {
-            this.loading = false;
-            this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
-          });
-        } else {
-          this.commonService.showToast(`${EStrings.timeSlotNotAvailable}`);
-        }
-      }, err => {
-        loading.dismiss();
-        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
-      });
+    if (!this.scheduleId) {
+      const loading = await this.commonService.showLoading(EStrings.checkingAvailability);
+      this.resourceServoce.checkResourceyAvailabilityAsync(this.resourceId, this.startTime, this.endTime)
+        .subscribe(res => {
+          loading.dismiss();
+          if (res.available) {
+            this.submitted = true;
+            this.loading = true;
+            const data: IResourceSchedule = {
+              resource: this.resourceId,
+              schedule: {
+                start: new Date(this.startTime),
+                end: new Date(this.endTime),
+              },
+              description: this.scheduleForm.value.description,
+              college: this.collegeService.currentCollege$.value._id,
+              createdAt: new Date(),
+              createdBy: this.authService.currentUser$.value._id,
+            };
+            this.resourceServoce.postScheduleAsync(data).subscribe(schRes => {
+              this.loading = false;
+              this.dismiss(true);
+            }, err => {
+              this.loading = false;
+              this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+            });
+          } else {
+            this.commonService.showToast(`${EStrings.timeSlotNotAvailable}`);
+          }
+        }, err => {
+          loading.dismiss();
+          this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+        });
+    } else {
+      const loading = await this.commonService.showLoading(EStrings.checkingAvailability);
+      this.resourceServoce.checkResourceyAvailabilityAsync(this.resourceId, this.startTime, this.endTime, this.scheduleId)
+        .subscribe(res => {
+          loading.dismiss();
+          if (res.available) {
+            this.submitted = true;
+            this.loading = true;
+            const data: any = {
+              schedule: {
+                start: new Date(this.startTime),
+                end: new Date(this.endTime),
+              },
+              description: this.scheduleForm.value.description,
+              createdAt: new Date(),
+              _id: this.currentSchedule._id
+            };
+            this.resourceServoce.putScheduleAsync(data).subscribe(schRes => {
+              this.loading = false;
+              this.dismiss({...data, title: (this.currentSchedule.resource as IResource)?.name});
+            }, err => {
+              this.loading = false;
+              this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+            });
+          } else {
+            this.commonService.showToast(`${EStrings.timeSlotNotAvailable}`);
+          }
+        }, err => {
+          loading.dismiss();
+          this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+        });
+    }
+  }
+
+  getCreatedByUser(notification: IResourceSchedule) {
+    return `${(notification.createdBy as IUser).name} | ${EStrings[(notification.createdBy as IUser).role]}`;
+  }
+
+  hasEditPermission(notification: IResourceSchedule) {
+    return this.authService.currentUser$.value.role === EUserRoles.admin
+      || this.authService.currentUser$.value._id === notification.createdBy;
   }
 
 }
