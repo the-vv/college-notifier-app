@@ -5,35 +5,62 @@
 </ion-header>
 
 <ion-content>
-  <select #viewDayOptionSelect class="form-control" [ngModel]="viewDays"
-    (change)="viewDaysOptionChanged(viewDayOptionSelect.value)">
-    <option [value]="1">One day</option>
-    <option [value]="3">Three days</option>
-    <option [value]="7">One week</option>
-  </select>
-
-  <select #houeSegmentSelect class="form-control" [ngModel]="hourSegments"
-    (change)="hourSegmentChanged(houeSegmentSelect.value)">
-    <option [value]="1">1 Hour</option>
-    <option [value]="2">Half Hour</option>
-    <option [value]="4">Quarters</option>
-    <option [value]="6">10 Minutes</option>
-  </select>
-
-  <ion-button type="button" class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
-    [daysInWeek]="viewDays" [excludeDays]="excludeDays" [disabled]="prevBtnDisabled"
-    (viewDateChange)="dateOrViewChanged()">
-    Prev
-  </ion-button>
-  <ion-button type="button" class="btn btn-light" mwlCalendarToday [(viewDate)]="viewDate"
-    (viewDateChange)="dateOrViewChanged()">
-    today
-  </ion-button>
-  <ion-button type="button" class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
-    [daysInWeek]="viewDays" [excludeDays]="excludeDays" [disabled]="nextBtnDisabled"
-    (viewDateChange)="dateOrViewChanged()">
-    Next
-  </ion-button>
+  <ion-card>
+    <ion-card-header *ngIf="resourceId">
+      <ion-card-title>
+        <ion-label>{{currentResource?.name}}</ion-label>
+      </ion-card-title>
+      <ion-card-subtitle>
+        <ion-label>{{'calendarShowingOnlyForSelectedResource' | string}}, {{'clickOnSlotToSchedule' | string}}
+        </ion-label>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-md="4" size="12">
+            <ion-item>
+              <ion-label>{{'view' | string}}</ion-label>
+              <ion-select interface="popover" [ngModel]="viewDays" #viewDayOptionSelect
+                (ionChange)="viewDaysOptionChanged(viewDayOptionSelect.value)">
+                <ion-select-option [value]="1">{{'day' | string}}</ion-select-option>
+                <ion-select-option [value]="3">{{'threeDays' | string}}</ion-select-option>
+                <ion-select-option [value]="7">{{'week' | string}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size-md="5" size="12">
+            <ion-item>
+              <ion-label>{{'hourInterval' | string}}</ion-label>
+              <ion-select interface="popover" [ngModel]="hourSegments" #houeSegmentSelect1
+                (ionChange)="hourSegmentChanged(houeSegmentSelect1.value)">
+                <ion-select-option [value]="1">{{'oneHour' | string}}</ion-select-option>
+                <ion-select-option [value]="2">{{'halfHour' | string}}</ion-select-option>
+                <ion-select-option [value]="4">{{'quarters' | string}}</ion-select-option>
+                <ion-select-option [value]="6">{{'tenMinutes' | string}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size-md="3" size="12" class="text-center">
+            <ion-button type="button" class="btn btn-primary" mwlCalendarPreviousView [view]="view"
+              [(viewDate)]="viewDate" [daysInWeek]="viewDays" [excludeDays]="excludeDays" [disabled]="prevBtnDisabled"
+              (viewDateChange)="dateOrViewChanged()">
+              <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+            </ion-button>
+            <ion-button type="button" class="btn btn-light" mwlCalendarToday [(viewDate)]="viewDate"
+              (viewDateChange)="dateOrViewChanged()">
+              <ion-icon slot="icon-only" name="today" size="small"></ion-icon>
+            </ion-button>
+            <ion-button type="button" class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+              [daysInWeek]="viewDays" [excludeDays]="excludeDays" [disabled]="nextBtnDisabled"
+              (viewDateChange)="dateOrViewChanged()">
+              <ion-icon slot="icon-only" name="chevron-forward"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
 
   <calendar-scheduler-view [viewDays]="viewDays" [viewDate]="viewDate" [events]="events" [locale]="locale"
     [responsive]="true" [weekStartsOn]="weekStartsOn" [excludeDays]="excludeDays" [startsWithToday]="startsWithToday"
@@ -42,7 +69,6 @@
     [showEventActions]="true" [showSegmentHour]="true" [zoomEventOnHover]="true"
     (viewDaysChanged)="viewDaysChanged($event)" (dayHeaderClicked)="dayHeaderClicked($event.day)"
     (hourClicked)="hourClicked($event.hour)" (segmentClicked)="segmentClicked($event.segment)"
-    (eventClicked)="eventClicked($event.event)" (eventTimesChanged)="eventTimesChanged($event)"
-    [refresh]="refresh">
+    (eventClicked)="eventClicked($event.event)" (eventTimesChanged)="eventTimesChanged($event)" [refresh]="refresh">
   </calendar-scheduler-view>
 </ion-content>

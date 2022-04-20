@@ -54,6 +54,7 @@ export class SchedulerPage implements OnInit {
   events: CalendarSchedulerEvent[] = [];
   allSchedules: IResourceSchedule[] = [];
   currentResource: IResource;
+  loading = true;
 
   minDate: Date = new Date();
   maxDate: Date = endOfDay(addMonths(new Date(), 1));
@@ -118,11 +119,19 @@ export class SchedulerPage implements OnInit {
     this.dateOrViewChanged();
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.resourceId = this.route.snapshot.paramMap.get('id');
-  }
-
-  ionViewWillEnter() {    
+    if (this.resourceId) {
+      this.resourceScrvice.getByIdAsync(this.resourceId).subscribe(async (res) => {
+        this.currentResource = res;
+        const alert = await this.alertController.create({
+          header: EStrings.scheduleMode,
+          message: `${EStrings.clickOnSlotToSchedule} ${res?.name}`,
+          buttons: ['OK']
+        });
+        await alert.present();
+      });
+    }
   }
 
   async getResourceByDateRange(startDate: Date) {
@@ -131,6 +140,7 @@ export class SchedulerPage implements OnInit {
     const loading = await this.commonService.showLoading();
     this.resourceScrvice.getScheduleByDateRangeAsync(this.collegeService.currentCollege$.value._id, start, end, this.resourceId)
       .subscribe(res => {
+        this.loading = false;
         loading.dismiss();
         console.log(res);
         this.allSchedules = res;
@@ -237,6 +247,7 @@ export class SchedulerPage implements OnInit {
   }
 
   segmentClicked(segment: SchedulerViewHourSegment): void {
+    if (!this.resourceId) { return; }
     const startTime = this.commonService.toLocaleIsoDateString(segment.date);
     const minutesToAdd = 60 / this.calendarScheduler.hourSegments;
     this.modalCtrl.create({
@@ -281,9 +292,10 @@ export class SchedulerPage implements OnInit {
     ev.start = newStart;
     ev.end = newEnd;
     this.refresh.next();
+    const resource = this.allSchedules.find(el => el._id === event.id)?.resource as IResource;
     const loading = await this.commonService.showLoading(EStrings.checkingAvailability);
     this.resourceScrvice.checkResourceyAvailabilityAsync(
-      this.resourceId, this.commonService.toLocaleIsoDateString(newStart),
+      resource?._id, this.commonService.toLocaleIsoDateString(newStart),
       this.commonService.toLocaleIsoDateString(newEnd),
       event.id
     )

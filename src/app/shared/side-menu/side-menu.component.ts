@@ -43,4 +43,11 @@ export class SideMenuComponent implements OnInit {
     this.router.navigate(['/', 'settings']);
   }
 
+  goToCalendar() {
+    if(this.router.url.endsWith('/calendar')) {
+      return;
+    }
+    this.router.navigate(['/', 'calendar']);
+  }
+
 }

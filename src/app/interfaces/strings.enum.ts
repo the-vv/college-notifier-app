@@ -219,4 +219,22 @@ export enum EStrings {
     startTimeGreaterThanEndTime = 'Start Time should be greater than End Time',
     checkingAvailability = 'Checking Availability',
     scheduleUpdatedSuccessfully = 'Schedule Updated Successfully',
+    calendarShowingOnlyForSelectedResource = 'Calendar showing only selected resource schedules',
+    clickOnSlotToSchedule = 'Click on a time slot to schedule',
+    selectedResource = 'Selected Resource',
+    week = 'Week',
+    month = 'Month',
+    year = 'Year',
+    day = 'Day',
+    today = 'Today',
+    threeDays = '3 Days',
+    oneHour = '1 Hour',
+    halfHour = 'Half Hour',
+    quarters = 'Quarters',
+    tenMinutes = '10 Minutes',
+    hourInterval = 'Hour Interval',
+    calendar = 'Calendar',
+    scheduleMode = 'Schedul Mode',
+
+
 }

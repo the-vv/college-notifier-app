@@ -15,6 +15,11 @@
       <ion-label>{{'home' | string}}</ion-label>
     </ion-item>
     <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" button
+      (click)="goToCalendar()">
+      <ion-icon slot="start" [ios]="'today-outline'" [md]="'today-outline'"></ion-icon>
+      <ion-label>{{'calendar' | string}}</ion-label>
+    </ion-item>
+    <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" button
       (click)="goToReports()">
       <ion-icon slot="start" [ios]="'pie-chart-outline'" [md]="'pie-chart-outline'"></ion-icon>
       <ion-label>{{'reports' | string}}</ion-label>
