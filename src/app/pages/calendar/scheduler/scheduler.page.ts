@@ -12,9 +12,9 @@ import {
   DAYS_IN_WEEK, endOfPeriod, SchedulerDateFormatter, SchedulerEventTimesChangedEvent, SchedulerViewDay,
   SchedulerViewHour, SchedulerViewHourSegment, startOfPeriod, subPeriod
 } from 'angular-calendar-scheduler';
-import { addDays, addHours, addMinutes, addMonths, endOfDay, startOfDay, subMinutes } from 'date-fns';
+import { addDays, addMinutes, addMonths, endOfDay, startOfDay } from 'date-fns';
 import { Subject } from 'rxjs';
-import { IResource, IResourceSchedule, ISchedule } from 'src/app/interfaces/common.model';
+import { IResource, IResourceSchedule } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';

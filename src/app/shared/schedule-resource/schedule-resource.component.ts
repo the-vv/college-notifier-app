@@ -33,6 +33,7 @@ export class ScheduleResourceComponent implements OnInit {
   currentResource: IResource;
   minTime = this.commonService.toLocaleIsoDateString(new Date());
   currentSchedule: IResourceSchedule;
+  editable = false;
 
   constructor(
     private modalCtrl: ModalController,
@@ -46,6 +47,9 @@ export class ScheduleResourceComponent implements OnInit {
   get f() { return this.scheduleForm.controls; }
 
   async ngOnInit() {
+    if(this.startTime) {
+      this.editable = new Date(this.startTime).getTime() > new Date().getTime();
+    }
     this.scheduleForm = new FormGroup({
       description: new FormControl(''),
     });
@@ -66,7 +70,6 @@ export class ScheduleResourceComponent implements OnInit {
       this.resourceServoce.getScheduleAsync(this.scheduleId).subscribe(res => {
         loading.dismiss();
         this.currentSchedule = res;
-        console.log(this.currentSchedule);
         this.scheduleForm.patchValue({
           description: this.currentSchedule.description,
         });
