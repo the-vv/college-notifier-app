@@ -41,8 +41,8 @@
     [hourModifier]="hourModifier" [segmentModifier]="segmentModifier" [eventModifier]="eventModifier"
     [showEventActions]="true" [showSegmentHour]="true" [zoomEventOnHover]="true"
     (viewDaysChanged)="viewDaysChanged($event)" (dayHeaderClicked)="dayHeaderClicked($event.day)"
-    (hourClicked)="hourClicked($event.hour)" (segmentClicked)="segmentClicked('Clicked', $event.segment)"
-    (eventClicked)="eventClicked('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)"
+    (hourClicked)="hourClicked($event.hour)" (segmentClicked)="segmentClicked($event.segment)"
+    (eventClicked)="eventClicked($event.event)" (eventTimesChanged)="eventTimesChanged($event)"
     [refresh]="refresh">
   </calendar-scheduler-view>
 </ion-content>

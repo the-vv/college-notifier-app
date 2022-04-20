@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import {
   CalendarView,
   CalendarDateFormatter,
@@ -14,7 +14,7 @@ import {
 } from 'angular-calendar-scheduler';
 import { addDays, addHours, addMinutes, addMonths, endOfDay, startOfDay, subMinutes } from 'date-fns';
 import { Subject } from 'rxjs';
-import { IResource } from 'src/app/interfaces/common.model';
+import { IResource, IResourceSchedule, ISchedule } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -40,10 +40,10 @@ export class SchedulerPage implements OnInit {
   resourceId: string;
   view: CalendarView = CalendarView.Week;
   viewDate: Date = new Date();
-  viewDays: number = DAYS_IN_WEEK;
+  viewDays = DAYS_IN_WEEK;
   refresh: Subject<any> = new Subject();
   locale = 'en';
-  hourSegments: 1 | 2 | 4 | 6 = 1;
+  hourSegments: 1 | 2 | 4 | 6 = 2;
   weekStartsOn = 1;
   startsWithToday = true;
   activeDayIsOpen = true;
@@ -52,6 +52,8 @@ export class SchedulerPage implements OnInit {
   dayStartHour = 0;
   dayEndHour = 24;
   events: CalendarSchedulerEvent[] = [];
+  allSchedules: IResourceSchedule[] = [];
+  currentResource: IResource;
 
   minDate: Date = new Date();
   maxDate: Date = endOfDay(addMonths(new Date(), 1));
@@ -82,7 +84,8 @@ export class SchedulerPage implements OnInit {
     private resourceScrvice: ResourceService,
     private collegeService: CollegeService,
     private commonService: CommonService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private alertController: AlertController
   ) {
 
     this.locale = locale;
@@ -115,20 +118,22 @@ export class SchedulerPage implements OnInit {
     this.dateOrViewChanged();
   }
 
-  ngOnInit(): void { }
-
-  ionViewWillEnter() {
+  ngOnInit(): void {
     this.resourceId = this.route.snapshot.paramMap.get('id');
+  }
+
+  ionViewWillEnter() {    
   }
 
   async getResourceByDateRange(startDate: Date) {
     const start = this.commonService.toLocaleIsoDateString(startOfDay(startDate));
     const end = this.commonService.toLocaleIsoDateString(endOfDay(addDays(startDate, this.viewDays - 1)));
     const loading = await this.commonService.showLoading();
-    this.resourceScrvice.getScheduleByDateRangeAsync(this.collegeService.currentCollege$.value._id, start, end)
+    this.resourceScrvice.getScheduleByDateRangeAsync(this.collegeService.currentCollege$.value._id, start, end, this.resourceId)
       .subscribe(res => {
         loading.dismiss();
         console.log(res);
+        this.allSchedules = res;
         this.events = [];
         res?.forEach(el => {
           this.events.push({
@@ -144,14 +149,19 @@ export class SchedulerPage implements OnInit {
             actions: [
               {
                 when: 'enabled',
-                label: 'Delete',
+                label: '<i class="bi bi-trash" class="eventt-delete" style="color: red"></i>',
                 title: 'Delete',
-                onClick: (event) => { console.log('item  deleted', event.title); }
+                onClick: (event) => this.deleteSchedule(event)
               }
             ],
-            status: 'ok',
+            // status: 'ok',
             isClickable: true,
-            isDisabled: false
+            isDisabled: false,
+            draggable: true,
+            resizable: {
+              beforeStart: true,
+              afterEnd: true
+            },
           });
         });
         this.refresh.next();
@@ -173,12 +183,14 @@ export class SchedulerPage implements OnInit {
   }
 
   hourSegmentChanged(val: string): void {
+    this.hourSegments = Number(val) as 1 | 2 | 4 | 6;
     this.calendarScheduler.hourSegments = Number(val) as 1 | 2 | 4 | 6;
+    this.changeView(this.view);
     this.refresh.next();
   }
 
   changeDate(date: Date): void {
-    console.log('changeDate', date);
+    // console.log('changeDate', date);
     this.viewDate = date;
     this.dateOrViewChanged();
   }
@@ -213,7 +225,7 @@ export class SchedulerPage implements OnInit {
   viewDaysChanged(viewDays: number): void {
     console.log('viewDaysChanged', viewDays);
     this.viewDays = viewDays;
-    this.getResourceByDateRange(this.viewDate);
+    // this.getResourceByDateRange(this.viewDate);
   }
 
   dayHeaderClicked(day: SchedulerViewDay): void {
@@ -224,10 +236,8 @@ export class SchedulerPage implements OnInit {
     console.log('hourClicked Hour', hour);
   }
 
-  segmentClicked(action: string, segment: SchedulerViewHourSegment): void {
-    // console.log(segment.date);
+  segmentClicked(segment: SchedulerViewHourSegment): void {
     const startTime = this.commonService.toLocaleIsoDateString(segment.date);
-    // console.log(startTime);
     const minutesToAdd = 60 / this.calendarScheduler.hourSegments;
     this.modalCtrl.create({
       component: ScheduleResourceComponent,
@@ -235,8 +245,7 @@ export class SchedulerPage implements OnInit {
         startTime,
         endTime: this.commonService.toLocaleIsoDateString(addMinutes(new Date(startTime), minutesToAdd)),
         resourceId: this.resourceId
-      },
-      backdropDismiss: false
+      }
     }).then(modal => {
       modal.present();
       modal.onDidDismiss().then((needReload: any) => {
@@ -248,18 +257,100 @@ export class SchedulerPage implements OnInit {
     });
   }
 
-  eventClicked(action: string, event: CalendarSchedulerEvent): void {
-    console.log('eventClicked Action', action);
-    console.log('eventClicked Event', event);
+  eventClicked(event: CalendarSchedulerEvent): void {
+    // console.log('eventClicked Event', event);
+    const choosenEvent = this.allSchedules.find(el => el._id === event.id);
+    this.modalCtrl.create({
+      component: ScheduleResourceComponent,
+      componentProps: {
+        startTime: this.commonService.toLocaleIsoDateString(new Date(choosenEvent.schedule.start)),
+        endTime: this.commonService.toLocaleIsoDateString(new Date(choosenEvent.schedule.end)),
+        resourceId: (choosenEvent.resource as IResource)?._id,
+      }
+    }).then(modal => {
+      modal.present();
+    });
   }
 
-  eventTimesChanged({ event, newStart, newEnd }: SchedulerEventTimesChangedEvent): void {
-    console.log('eventTimesChanged Event', event);
-    console.log('eventTimesChanged New Times', newStart, newEnd);
+  async eventTimesChanged({ event, newStart, newEnd }: SchedulerEventTimesChangedEvent) {
+    // console.log('eventTimesChanged Event', event);
+    // console.log('eventTimesChanged New Times', newStart, newEnd);
+    if (newStart < new Date()) { return; }
     const ev = this.events.find(e => e.id === event.id);
+    const oldSchedule = { start: ev.start, end: ev.end };
     ev.start = newStart;
     ev.end = newEnd;
     this.refresh.next();
+    const loading = await this.commonService.showLoading(EStrings.checkingAvailability);
+    this.resourceScrvice.checkResourceyAvailabilityAsync(
+      this.resourceId, this.commonService.toLocaleIsoDateString(newStart),
+      this.commonService.toLocaleIsoDateString(newEnd),
+      event.id
+    )
+      .subscribe(res => {
+        loading.dismiss();
+        if (res.available) {
+          this.refresh.next();
+          const itemToUpdate = this.allSchedules.find(el => el._id === event.id);
+          itemToUpdate.schedule.start = this.commonService.toLocaleIsoDateString(newStart);
+          itemToUpdate.schedule.end = this.commonService.toLocaleIsoDateString(newEnd);
+          this.updateSchedule(itemToUpdate);
+        } else {
+          ev.start = oldSchedule.start;
+          ev.end = oldSchedule.end;
+          this.refresh.next();
+          this.commonService.showToast(`${EStrings.timeSlotNotAvailable}`);
+        }
+      }, err => {
+        console.log(err);
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+      });
+  }
+
+  async deleteSchedule(event: CalendarSchedulerEvent) {
+    const alert = await this.alertController.create({
+      header: EStrings.confirmDelete,
+      message: `${EStrings.areYouSureWantToDelete} ${EStrings.schedule.toLowerCase()} '${event.title}'?`,
+      buttons: [
+        {
+          text: EStrings.cancel,
+          role: 'cancel',
+          id: 'cancel-button',
+        }, {
+          text: EStrings.delete,
+          id: 'confirm-button',
+          handler: () => {
+            this.resourceScrvice.deleteScheduleAsync(event.id).subscribe(() => {
+              this.getResourceByDateRange(this.viewDate);
+            }, err => {
+              this.commonService.showToast(err.error.message);
+            });
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+
+  updateSchedule(schedule: IResourceSchedule): void {
+    const updateBody = {
+      schedule: {
+        start: schedule.schedule.start,
+        end: schedule.schedule.end
+      },
+      createdAt: schedule.createdAt,
+      _id: schedule._id
+    };
+    this.resourceScrvice.putScheduleAsync(updateBody as IResourceSchedule)
+      .subscribe(res => {
+        this.commonService.showToast(`${EStrings.scheduleUpdatedSuccessfully}`);
+        this.getResourceByDateRange(this.viewDate);
+        this.refresh.next();
+      }, err => {
+        console.log(err);
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+      });
   }
 
   private isDateValid(date: Date): boolean {

@@ -59,15 +59,17 @@ export class ResourceService {
     return this.http.getAsync(`${this.scheduleUrl}/getByResource/${id}`);
   }
 
-  getScheduleByDateRangeAsync(collegeId: string, start: string | Date, end: string | Date): Observable<IResourceSchedule[]> {
-    return this.http.postAsync({college: collegeId, start, end}, `${this.scheduleUrl}/getByDateRange`);
+  getScheduleByDateRangeAsync(
+    collegeId: string, start: string | Date, end: string | Date, resourceId?: string
+  ): Observable<IResourceSchedule[]> {
+    return this.http.postAsync({ college: collegeId, start, end, resourceId }, `${this.scheduleUrl}/getByDateRange`);
   }
 
-  checkResourceyAvailabilityAsync(resourceId: string, start: string, end: string): Observable<{
+  checkResourceyAvailabilityAsync(resourceId: string, start: string, end: string, scheduleId?: string): Observable<{
     available: boolean;
     schedules?: IResourceSchedule[];
   }> {
-    return this.http.postAsync({ start, end }, `${this.scheduleUrl}/availability/${resourceId}`);
+    return this.http.postAsync({ start, end, scheduleId }, `${this.scheduleUrl}/availability/${resourceId}`);
   }
 
 }

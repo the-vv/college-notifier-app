@@ -218,4 +218,5 @@ export enum EStrings {
     timeSlotNotAvailable = 'Time Slot Not Available',
     startTimeGreaterThanEndTime = 'Start Time should be greater than End Time',
     checkingAvailability = 'Checking Availability',
+    scheduleUpdatedSuccessfully = 'Schedule Updated Successfully',
 }
