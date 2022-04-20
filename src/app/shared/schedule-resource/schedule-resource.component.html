@@ -11,19 +11,61 @@
 
 <ion-content>
   <ion-card>
-    <ion-card-header>
-      <ion-card-title>{{currentResource?.name}}</ion-card-title>
-    </ion-card-header>
+    <ion-row class="v-center">
+      <ion-col size="5" class="v-center h-100">
+        <img [src]="currentResource?.image ? currentResource?.image : 'assets/images/resource.png'" alt=""
+          class="card-image">
+      </ion-col>
+      <ion-col size="7" class="ion-justify-content-between ">
+        <h3>
+          <ion-text color="dark">{{currentResource?.name}}</ion-text>
+        </h3>
+        <p>
+          <ion-text>{{currentResource?.description}}</ion-text>
+        </p>
+      </ion-col>
+    </ion-row>
     <form [formGroup]="scheduleForm">
       <ion-row>
         <ion-col size="12">
           <ion-item class="mt-1">
-            <ion-label position="floating">{{'description' | string}}</ion-label>
+            <ion-label position="floating">{{'usage' | string}} {{'description' | string}}</ion-label>
             <ion-input type="text" formControlName="description"></ion-input>
           </ion-item>
           <small class="text-danger"
             *ngIf="f.description.errors?.required && (f.description.touched || showErrors)">{{'description' |
             string}} {{'isRequired' | string}}</small>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="fixed">{{'startTime' | string}}</ion-label>
+            <ion-input id="open-date-input-1" [value]="startTime | date: config.commonLongDateTimeFormat" readonly>
+            </ion-input>
+            <ion-popover trigger="open-date-input-1" show-backdrop="false" [alignment]="'center'" side="top"
+              style="--offset-y: -150px">
+              <ng-template>
+                <ion-datetime #popoverDatetime1 [value]="startTime" presentation="time-date" [min]="minTime"
+                  (ionChange)="startTime = getIsoDate(popoverDatetime1.value)"></ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item id="open-date-input-2">
+            <ion-label position="fixed">{{'endTime' | string}}</ion-label>
+            <ion-input [value]="endTime | date: config.commonLongDateTimeFormat" readonly></ion-input>
+            <ion-popover trigger="open-date-input-2" show-backdrop="false" [alignment]="'center'" side="top"
+              style="--offset-y: -150px">
+              <ng-template>
+                <ion-datetime #popoverDatetime2 [value]="endTime" presentation="time-date" [min]="minTime"
+                  (ionChange)="endTime = getIsoDate(popoverDatetime2.value)"></ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
         </ion-col>
       </ion-row>
     </form>

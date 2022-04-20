@@ -71,28 +71,24 @@ export class FormListComponent implements OnInit, OnInit, OnChanges, OnDestroy {
   }
 
   getForms() {
-    return new Promise<void>((resolve, reject) => {
-      if (!this.sourceData?.college) {
-        return;
-      }
-      const postSource: ISource = {
-        college: this.collegeService.currentCollege$.value._id,
-        department: (this.sourceData.department as IDepartment)?._id,
-        batch: (this.sourceData.batch as IBatch)?._id,
-        class: (this.sourceData.class as IClass)?._id,
-        room: (this.sourceData.room as IRoom)?._id,
-        source: this.sourceData.source,
-      };
-      this.loading = true;
-      this.formService.getBySourceAndUserAsync(postSource).subscribe(res => {
-        this.allForms = res;
-        this.loading = false;
-        resolve();
-      }, err => {
-        this.loading = false;
-        this.commonService.showToast(err.error.message);
-        reject();
-      });
+    if (!this.sourceData?.college) {
+      return;
+    }
+    const postSource: ISource = {
+      college: this.collegeService.currentCollege$.value._id,
+      department: (this.sourceData.department as IDepartment)?._id,
+      batch: (this.sourceData.batch as IBatch)?._id,
+      class: (this.sourceData.class as IClass)?._id,
+      room: (this.sourceData.room as IRoom)?._id,
+      source: this.sourceData.source,
+    };
+    this.loading = true;
+    this.formService.getBySourceAndUserAsync(postSource).subscribe(res => {
+      this.allForms = res;
+      this.loading = false;
+    }, err => {
+      this.loading = false;
+      this.commonService.showToast(err.error.message);
     });
   }
 

@@ -212,4 +212,10 @@ export enum EStrings {
     image = 'Image',
     resource = 'Resource',
     scheduler = 'Scheduler',
+    startTime = 'Start Time',
+    endTime = 'End Time',
+    usage = 'Usage',
+    timeSlotNotAvailable = 'Time Slot Not Available',
+    startTimeGreaterThanEndTime = 'Start Time should be greater than End Time',
+    checkingAvailability = 'Checking Availability',
 }

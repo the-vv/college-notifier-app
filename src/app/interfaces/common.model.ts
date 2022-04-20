@@ -18,8 +18,8 @@ export interface ITarget {
 }
 
 export interface ISchedule {
-    start: Date;
-    end?: Date;
+    start: Date | string;
+    end?: Date | string;
 }
 
 export interface IUser {
@@ -148,7 +148,7 @@ export interface IResource {
 export interface IResourceSchedule {
     _id?: string;
     createdBy: string | IUser;
-    createdAt: Date;
+    createdAt: Date | string;
     description: string;
     college: string | ICollege;
     resource: string | IResource;

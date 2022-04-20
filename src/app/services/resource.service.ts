@@ -39,27 +39,27 @@ export class ResourceService {
     return this.http.deleteByIdAsync(this.resourceUrl, id);
   }
 
-  getScheduleAsync(id: string): Observable<IResource> {
+  getScheduleAsync(id: string): Observable<IResourceSchedule> {
     return this.http.getAsync(`${this.scheduleUrl}/${id}`);
   }
 
-  postScheduleAsync(data: IResource): Observable<IResource> {
+  postScheduleAsync(data: IResourceSchedule): Observable<IResourceSchedule> {
     return this.http.postAsync(data, this.scheduleUrl);
   }
 
-  putScheduleAsync(data: IResource): Observable<IResource> {
+  putScheduleAsync(data: IResourceSchedule): Observable<IResourceSchedule> {
     return this.http.putAsync(data, this.scheduleUrl);
   }
 
-  deleteScheduleAsync(id: string): Observable<IResource> {
+  deleteScheduleAsync(id: string): Observable<IResourceSchedule> {
     return this.http.deleteByIdAsync(this.scheduleUrl, id);
   }
 
-  getScheduleByResourceAsync(id: string): Observable<IResource> {
+  getScheduleByResourceAsync(id: string): Observable<IResourceSchedule> {
     return this.http.getAsync(`${this.scheduleUrl}/getByResource/${id}`);
   }
 
-  getScheduleByDateRangeAsync(collegeId: string, start: string | Date, end: string | Date): Observable<IResource> {
+  getScheduleByDateRangeAsync(collegeId: string, start: string | Date, end: string | Date): Observable<IResourceSchedule[]> {
     return this.http.postAsync({college: collegeId, start, end}, `${this.scheduleUrl}/getByDateRange`);
   }
 

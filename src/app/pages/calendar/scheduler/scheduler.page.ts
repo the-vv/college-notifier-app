@@ -12,8 +12,9 @@ import {
   DAYS_IN_WEEK, endOfPeriod, SchedulerDateFormatter, SchedulerEventTimesChangedEvent, SchedulerViewDay,
   SchedulerViewHour, SchedulerViewHourSegment, startOfPeriod, subPeriod
 } from 'angular-calendar-scheduler';
-import { addDays, addHours, addMonths, endOfDay, startOfDay, subMinutes } from 'date-fns';
+import { addDays, addHours, addMinutes, addMonths, endOfDay, startOfDay, subMinutes } from 'date-fns';
 import { Subject } from 'rxjs';
+import { IResource } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -50,30 +51,7 @@ export class SchedulerPage implements OnInit {
   weekendDays: number[] = [0, 6];
   dayStartHour = 0;
   dayEndHour = 24;
-  events: CalendarSchedulerEvent[] = [
-    {
-      id: '8',
-      start: new Date(),
-      end: addHours(new Date(), 1),
-      title: 'Event 8',
-      content: 'CONCURRENT EVENT',
-      color: {
-        primary: '#E0E0E0',
-        secondary: '#EEEEEE'
-      },
-      actions: [
-        {
-          when: 'enabled',
-          label: 'Delete',
-          title: 'Delete',
-          onClick: () => { console.log('calcelled'); }
-        }
-      ],
-      status: 'ok',
-      isClickable: true,
-      isDisabled: false
-    }
-  ];
+  events: CalendarSchedulerEvent[] = [];
 
   minDate: Date = new Date();
   maxDate: Date = endOfDay(addMonths(new Date(), 1));
@@ -146,12 +124,37 @@ export class SchedulerPage implements OnInit {
   async getResourceByDateRange(startDate: Date) {
     const start = this.commonService.toLocaleIsoDateString(startOfDay(startDate));
     const end = this.commonService.toLocaleIsoDateString(endOfDay(addDays(startDate, this.viewDays - 1)));
-    this.events = [];
     const loading = await this.commonService.showLoading();
     this.resourceScrvice.getScheduleByDateRangeAsync(this.collegeService.currentCollege$.value._id, start, end)
       .subscribe(res => {
         loading.dismiss();
         console.log(res);
+        this.events = [];
+        res?.forEach(el => {
+          this.events.push({
+            id: el._id,
+            start: new Date(el.schedule.start),
+            end: new Date(el.schedule.end),
+            title: (el.resource as IResource)?.name,
+            content: el.description ? el.description : '<i>No Description</i>',
+            color: {
+              primary: '#78d2ff',
+              secondary: '#91f4ff'
+            },
+            actions: [
+              {
+                when: 'enabled',
+                label: 'Delete',
+                title: 'Delete',
+                onClick: (event) => { console.log('item  deleted', event.title); }
+              }
+            ],
+            status: 'ok',
+            isClickable: true,
+            isDisabled: false
+          });
+        });
+        this.refresh.next();
       }, err => {
         console.log(err);
         loading.dismiss();
@@ -222,18 +225,26 @@ export class SchedulerPage implements OnInit {
   }
 
   segmentClicked(action: string, segment: SchedulerViewHourSegment): void {
-    // console.log(segment);
-    const startTime = this.commonService.toLocaleIsoDateString(subMinutes(segment.date, segment.date.getTimezoneOffset()));
-    // console.log();
+    // console.log(segment.date);
+    const startTime = this.commonService.toLocaleIsoDateString(segment.date);
+    // console.log(startTime);
+    const minutesToAdd = 60 / this.calendarScheduler.hourSegments;
     this.modalCtrl.create({
       component: ScheduleResourceComponent,
       componentProps: {
         startTime,
+        endTime: this.commonService.toLocaleIsoDateString(addMinutes(new Date(startTime), minutesToAdd)),
         resourceId: this.resourceId
       },
       backdropDismiss: false
     }).then(modal => {
       modal.present();
+      modal.onDidDismiss().then((needReload: any) => {
+        if (needReload?.data) {
+          console.log(needReload);
+          this.getResourceByDateRange(this.viewDate);
+        }
+      });
     });
   }
 

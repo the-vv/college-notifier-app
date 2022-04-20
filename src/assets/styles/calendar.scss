@@ -7,6 +7,11 @@
         .cal-scheduler-hour.align-center.horizontal:hover {
             background-color: var(--ion-color-secondary) !important;
         }
+
+        .cal-scheduler-event-action:hover {
+            text-decoration: underline !important;
+            color: blue !important;
+        }
     }
 
     .cal-scheduler-headers {
