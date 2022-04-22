@@ -235,6 +235,8 @@ export enum EStrings {
     hourInterval = 'Hour Interval',
     calendar = 'Calendar',
     scheduleMode = 'Schedul Mode',
+    ok = 'Ok',
+    notAvailable = 'Not Available',
 
 
 }

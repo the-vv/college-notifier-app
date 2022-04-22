@@ -49,8 +49,8 @@ export class SchedulerPage implements OnInit {
   activeDayIsOpen = true;
   excludeDays: number[] = []; // [0];
   weekendDays: number[] = [0, 6];
-  dayStartHour = 0;
-  dayEndHour = 24;
+  dayStartHour = 8;
+  dayEndHour = 16;
   events: CalendarSchedulerEvent[] = [];
   allSchedules: IResourceSchedule[] = [];
   currentResource: IResource;
@@ -322,7 +322,7 @@ export class SchedulerPage implements OnInit {
           ev.start = oldSchedule.start;
           ev.end = oldSchedule.end;
           this.refresh.next();
-          this.commonService.showToast(`${EStrings.timeSlotNotAvailable}`);
+          this.commonService.showAlert(EStrings.notAvailable, EStrings.timeSlotNotAvailable);
         }
       }, err => {
         console.log(err);

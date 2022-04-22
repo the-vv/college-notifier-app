@@ -23,11 +23,12 @@ export interface ISchedule {
 }
 
 export interface IUser {
-    _id?: string;
+    _id: string;
     name: string;
     email: string;
     password?: string;
     role: EUserRoles;
+    customRole?: string;
     active: boolean;
     image?: string;
 }

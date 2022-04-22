@@ -67,3 +67,12 @@ export enum ESegmentViews {
     edit = 'edit',
     home = 'home',
 }
+
+
+export enum ECustomUserRoles {
+    hod = 'hod',
+    classLeader = 'class-leader',
+    assistProf = 'assist-professor',
+    teachingStaff = 'teaching-staff',
+    nonTeachingStaff = 'non-teaching-staff',
+}

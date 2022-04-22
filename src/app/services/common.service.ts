@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { EBreakPoints, EUserRoles } from '../interfaces/common.enum';
 import { EStrings } from '../interfaces/strings.enum';
 import { HttpService } from './http.service';
-import { LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { Toast } from '@capacitor/toast';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
@@ -28,7 +28,8 @@ export class CommonService {
     private http: HttpService,
     public loadingController: LoadingController,
     private router: Router,
-    private authServce: AuthService
+    private authServce: AuthService,
+    private alertCtrl: AlertController
   ) {
     initBreakpoints({
       medium: '(min-width: 768px)',
@@ -67,6 +68,14 @@ export class CommonService {
       text: message,
       duration: 'long',
     });
+  }
+
+  showAlert(title: string, message: string, buttons: any[] = [{ text: EStrings.ok }]) {
+    this.alertCtrl.create({
+      header: title,
+      message,
+      buttons
+    }).then(alert => alert.present());
   }
 
   uploadFiles(files: any) {
