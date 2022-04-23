@@ -1,4 +1,4 @@
-import { ENotificationType, ERequestStatus, ESourceTargetType, EUserRoles } from './common.enum';
+import { ECustomUserRoles, ENotificationType, ERequestStatus, ESourceTargetType, EUserRoles } from './common.enum';
 
 export interface ISource {
     college?: string | ICollege;
@@ -28,7 +28,7 @@ export interface IUser {
     email: string;
     password?: string;
     role: EUserRoles;
-    customRole?: string;
+    customRoles?: ECustomUserRoles[];
     active: boolean;
     image?: string;
 }

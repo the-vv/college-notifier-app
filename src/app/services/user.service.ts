@@ -20,6 +20,10 @@ export class UserService {
     return this.http.postAsync(data, `${this.userUrl}/multiple`);
   }
 
+  postUserAsync(data: any) {
+    return this.http.postAsync(data, this.userUrl);
+  }
+
   getUserByCollegeIdAsync(collegeId: string, role: EUserRoles) {
     return this.http.getAsync(`${this.userMapUrl}/getByCollege/${collegeId}`, { role });
   }

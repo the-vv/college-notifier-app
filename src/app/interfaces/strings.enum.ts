@@ -237,6 +237,14 @@ export enum EStrings {
     scheduleMode = 'Schedul Mode',
     ok = 'Ok',
     notAvailable = 'Not Available',
+    customRole = 'Custom Role',
+    hod = 'Head of Department',
+    classLeader = 'Class Leader',
+    assistProf = 'Assistant Professor',
+    professor = 'Professor',
+    teachingStaff = 'Teaching Staff',
+    nonTeachingStaff = 'Non-Teaching Staff',
+    userAlreadyExists = 'User Already Exists',
 
 
 }

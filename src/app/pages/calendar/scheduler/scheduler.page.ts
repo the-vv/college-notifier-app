@@ -142,7 +142,7 @@ export class SchedulerPage implements OnInit {
       .subscribe(res => {
         this.loading = false;
         loading.dismiss();
-        console.log(res);
+        // console.log(res);
         this.allSchedules = res;
         this.events = [];
         res?.forEach(el => {

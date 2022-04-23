@@ -23,7 +23,7 @@
           <ion-icon name="add"></ion-icon>
           {{'import' | string}}
         </ion-button>
-        <ion-button color="primary" size="small" [routerLink]="['/', 'settings', 'user', 'manage']">
+        <ion-button color="primary" size="small" (click)="openStudentCreateModal()">
           <ion-icon name="add"></ion-icon>
           {{'add' | string}}
         </ion-button>

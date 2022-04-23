@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
@@ -8,6 +8,7 @@ import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ImageUploadComponent } from 'src/app/shared/image-upload/image-upload.component';
 
 @Component({
   selector: 'app-user-details',
@@ -16,6 +17,7 @@ import { CommonService } from 'src/app/services/common.service';
 })
 export class UserDetailsComponent implements OnInit, OnDestroy {
 
+  @ViewChild(ImageUploadComponent) imageUploader: ImageUploadComponent;
   public currentBreakPoint: EBreakPoints;
   public userForm: FormGroup;
   public showErrors = false;
@@ -81,13 +83,21 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.showErrors = true;
     this.userForm.markAllAsTouched();
     if (this.userForm.invalid) {
       return;
     }
     this.loading = true;
+    try {
+      this.loading = true;
+      await this.imageUploader.uploadImage();
+    }
+    catch (err) {
+      this.loading = false;
+      return;
+    }
     this.authService.signupAsync({ ...this.userForm.value, cPassword: undefined })
       .subscribe((user) => {
         if (user) {

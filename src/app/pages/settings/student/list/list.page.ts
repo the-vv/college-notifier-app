@@ -5,6 +5,7 @@ import { IUser } from 'src/app/interfaces/common.model';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
 import { UserService } from 'src/app/services/user.service';
+import { UserManageComponent } from 'src/app/shared/user-manage/user-manage.component';
 import { UsersImportComponent } from 'src/app/shared/users-import/users-import.component';
 
 @Component({
@@ -46,6 +47,21 @@ export class StudentListPage implements OnInit {
   async showImportFacultyModal() {
     const modal = await this.modalController.create({
       component: UsersImportComponent,
+      backdropDismiss: false,
+      componentProps: {
+        role: EUserRoles.student,
+        collegeId: this.collegeService.currentCollege$.value._id
+      }
+    });
+    modal.onWillDismiss().then(() => {
+      this.getStudents();
+    });
+    modal.present();
+  }
+
+  async openStudentCreateModal() {
+    const modal = await this.modalController.create({
+      component: UserManageComponent,
       backdropDismiss: false,
       componentProps: {
         role: EUserRoles.student,

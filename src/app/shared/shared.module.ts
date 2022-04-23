@@ -14,6 +14,8 @@ import { ListboxModule } from 'primeng/listbox';
 import { RouterModule } from '@angular/router';
 import { FormListComponent } from './form-list/form-list.component';
 import { ScheduleResourceComponent } from './schedule-resource/schedule-resource.component';
+import { UserManageComponent } from './user-manage/user-manage.component';
+import { AvatarModule } from 'primeng/avatar';
 
 
 @NgModule({
@@ -26,7 +28,8 @@ import { ScheduleResourceComponent } from './schedule-resource/schedule-resource
     NotificationViewComponent,
     UserListComponent,
     FormListComponent,
-    ScheduleResourceComponent
+    ScheduleResourceComponent,
+    UserManageComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +37,8 @@ import { ScheduleResourceComponent } from './schedule-resource/schedule-resource
     CommonExportsModule,
     IonicModule,
     QuillModule.forRoot(),
-    ListboxModule
+    ListboxModule,
+    AvatarModule
   ],
   exports: [
     SideMenuComponent,
@@ -45,7 +49,8 @@ import { ScheduleResourceComponent } from './schedule-resource/schedule-resource
     NotificationViewComponent,
     UserListComponent,
     FormListComponent,
-    ScheduleResourceComponent
+    ScheduleResourceComponent,
+    UserManageComponent
   ],
   providers: [
   ]

@@ -73,6 +73,7 @@ export class ImageUploadComponent implements OnInit, ControlValueAccessor {
       this.toDelete = this.previewImage;
     }
     this.previewImage = null;
+    this.toUpload = null;
   }
 
   writeValue(url: string) {
@@ -100,6 +101,7 @@ export class ImageUploadComponent implements OnInit, ControlValueAccessor {
           this.uploaded = true;
           if (res.length) {
             this.onChange(`${res[0].url}?fid=${res[0].fileId}`);
+            this.previewImage = `${res[0].url}?fid=${res[0].fileId}`;
             resolve();
           }
         }, (err: any) => {
@@ -111,7 +113,7 @@ export class ImageUploadComponent implements OnInit, ControlValueAccessor {
         resolve();
       }
       if (this.toDelete) {
-        this.commonService.deleteFiles([this.toDelete]).subscribe(() => { }, err => { });
+        this.commonService.deleteFiles([this.toDelete]).subscribe(_ => undefined, _ => undefined);
       }
     });
   }

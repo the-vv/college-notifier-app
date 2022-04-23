@@ -1,0 +1,71 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>{{'create' | string}} {{'user' | string}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button  (click)="dismissModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>        
+    <div class="text-center">
+      <p-avatar icon="pi pi-user" styleClass="" size="xlarge" shape="circle"></p-avatar>
+      <!-- <h5>{{currentRole | string}} {{'signUp' | string}}</h5> -->
+    </div>    
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <ion-row class="text-left">
+          <ion-col size="12">
+            <ion-item class="mt-1">
+              <ion-label position="floating">{{'fullName' | string}}</ion-label>
+              <ion-input type="text" formControlName="name"></ion-input>
+            </ion-item>
+            <small class="text-danger" *ngIf="f.name.errors?.required && (f.name.touched || showErrors)">{{'name' | string}}
+              {{'isRequired' | string}}</small>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item class="mt-1">
+              <ion-label position="floating">{{'email' | string}}</ion-label>
+              <ion-input type="email" formControlName="email"></ion-input>
+            </ion-item>
+            <small class="text-danger" *ngIf="f.email.errors?.required && (f.email.touched || showErrors)">{{'email' | string}}
+              {{'isRequired' | string}}</small>
+            <small class="text-danger" *ngIf="f.email.errors?.email && (f.email.touched || showErrors)">{{'email' | string}}
+              {{'isInvalid' | string}}</small>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item class="mt-1">
+              <ion-label position="floating">{{'password' | string}}</ion-label>
+              <ion-input type="password" formControlName="password"></ion-input>
+            </ion-item>
+            <small class="text-danger" *ngIf="f.password.errors?.required && (f.password.touched || showErrors)">{{'password' | string}}
+              {{'isRequired' | string}}</small>
+            <small class="text-danger" *ngIf="f.password.errors?.minlength && (f.password.touched || showErrors)">{{'password' | string}}
+              {{'tooShort' | string}}</small>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item class="mt-1">
+              <ion-label>{{'customRole' | string}}</ion-label>
+              <ion-select interface="popover" formControlName="customRole" [multiple]="true">
+                <ion-select-option *ngFor="let crole of customRoles" [value]="crole.value">{{crole.name | string}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item class="mt-1" button>
+              <app-image-upload class="v-100" formControlName="image"></app-image-upload>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer>  
+  <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
+    <span *ngIf="!loading">{{'signUp' | string}}</span>
+    <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+  </ion-button>
+</ion-footer>
