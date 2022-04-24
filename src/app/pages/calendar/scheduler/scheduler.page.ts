@@ -12,7 +12,7 @@ import {
   DAYS_IN_WEEK, endOfPeriod, SchedulerDateFormatter, SchedulerEventTimesChangedEvent, SchedulerViewDay,
   SchedulerViewHour, SchedulerViewHourSegment, startOfPeriod, subPeriod
 } from 'angular-calendar-scheduler';
-import { addDays, addMinutes, addMonths, endOfDay, startOfDay } from 'date-fns';
+import { addDays, addMinutes, addMonths, endOfDay, startOfDay, subMonths } from 'date-fns';
 import { Subject } from 'rxjs';
 import { IResource, IResourceSchedule } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
@@ -56,7 +56,7 @@ export class SchedulerPage implements OnInit {
   currentResource: IResource;
   loading = true;
 
-  minDate: Date = new Date();
+  minDate: Date = subMonths(new Date(), 1);
   maxDate: Date = endOfDay(addMonths(new Date(), 1));
 
   dayModifier: () => void;
@@ -182,10 +182,6 @@ export class SchedulerPage implements OnInit {
       });
   }
 
-  checkAvailability(start: Date, end: Date): void {
-    console.log('checkAvailability', start, end);
-  }
-
   viewDaysOptionChanged(viewDays: string): void {
     console.log('viewDaysOptionChanged', viewDays);
     this.calendarScheduler.setViewDays(Number(viewDays));
@@ -246,7 +242,7 @@ export class SchedulerPage implements OnInit {
   }
 
   segmentClicked(segment: SchedulerViewHourSegment): void {
-    if (!this.resourceId) { return; }
+    if (!this.resourceId || segment.date < new Date()) { return; }
     const startTime = this.commonService.toLocaleIsoDateString(segment.date);
     const minutesToAdd = 60 / this.calendarScheduler.hourSegments;
     this.modalCtrl.create({
