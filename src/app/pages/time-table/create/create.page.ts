@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { endOfDay, startOfDay } from 'date-fns';
 import { Subscription } from 'rxjs';
+import { ECustomUserRoles } from 'src/app/interfaces/common.enum';
 import { IBatch, IClass, IDepartment, ISchedule } from 'src/app/interfaces/common.model';
 import { ClassService } from 'src/app/services/class.service';
 import { CollegeService } from 'src/app/services/college.service';
@@ -27,7 +28,11 @@ export class CreatePage implements OnInit {
   availableClasses: IClass[] = [];
   classesControl = new FormControl([]);
   hoursCtrl = new FormControl(6);
-  hoursCount = 6;
+  rolesCtrl = new FormControl([ECustomUserRoles.teachingStaff, ECustomUserRoles.assistProf]);
+  hoursCount: string | number = 6;
+  minDate = this.commonService.toLocaleIsoDateString(startOfDay(new Date()));
+  customRoles = Object.keys(ECustomUserRoles).map(key => ({ name: key, value: ECustomUserRoles[key] }));
+  eCustomUserRoles = ECustomUserRoles;
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -43,8 +48,15 @@ export class CreatePage implements OnInit {
 
   setStartDate(date: string) {
     this.dateRange.start = date;
-    if(this.dateRange.end < date) {
+    if(new Date(this.dateRange.end) < new Date(date)) {
       this.dateRange.end = date;
+    }
+  }
+
+  setEndDate(date: string) {
+    this.dateRange.end = date;
+    if(new Date(this.dateRange.start) > new Date(date)) {
+      this.dateRange.start = date;
     }
   }
 

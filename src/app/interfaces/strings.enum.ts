@@ -254,6 +254,8 @@ export enum EStrings {
     editorSizeLimitExceeded = 'Editor Size Limit Exceeded',
     hoursCount = 'Hours Count',
     hours = 'Hours',
+    active  = 'Active',
+    creating = 'Creating',
 
 
 }
