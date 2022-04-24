@@ -252,6 +252,8 @@ export enum EStrings {
     'non-teaching-staff' =   'Non-Teaching Staff',
     customRoles = 'Custom Roles',
     editorSizeLimitExceeded = 'Editor Size Limit Exceeded',
+    hoursCount = 'Hours Count',
+    hours = 'Hours',
 
 
 }

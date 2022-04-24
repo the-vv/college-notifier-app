@@ -42,4 +42,8 @@ export class ClassService {
     return this.http.getAsync(`${this.classUrl}/getByAdmin/${id}`);
   }
 
+  getActiveClassesByDepartmentAsync(collegeId: string, departmentId: string): Observable<IClass[]> {
+    return this.http.getAsync(`${this.classUrl}/getActiveByDepartment/${collegeId}/${departmentId}`);
+  }
+
 }
