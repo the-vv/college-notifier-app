@@ -156,11 +156,11 @@ export interface IResourceSchedule {
     schedule: ISchedule;
 }
 
-interface ITimeTable {
+export interface ITimeTable {
     _id?: string;
-    class: string;
-    college: string;
-    department: string;
+    class: string | IClass;
+    college: string | ICollege;
+    department: string | IDepartment;
     hoursCount: number;
     schedule: ISchedule;
     allocation?: {

@@ -1,0 +1,27 @@
+.drop-column {
+    background: repeating-linear-gradient(-55deg,
+            #222,
+            #222 10px,
+            #333 10px,
+            #333 20px);
+    border-radius: 5px;
+    border: 1px solid #333;
+    text-align: center !important;
+    color: #8c8c8c;
+    font-weight: 700;
+    position: absolute;
+    top: 3px;
+    left: 03px;
+    bottom: 3px;
+    right: 3px;
+
+    .valign {
+        position: relative;
+        top: 25%;
+    }
+
+}
+
+.droppers {
+    position: relative;
+}

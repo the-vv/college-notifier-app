@@ -10,6 +10,7 @@ import { CreatePage } from './create.page';
 import { CommonExportsModule } from 'src/app/common-exports.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { IonicSelectableModule } from 'ionic-selectable';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { IonicSelectableModule } from 'ionic-selectable';
     CommonExportsModule,
     SharedModule,
     IonicSelectableModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TableModule
   ],
   declarations: [CreatePage]
 })

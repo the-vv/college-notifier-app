@@ -1,10 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Capacitor } from '@capacitor/core';
 import { endOfDay, startOfDay } from 'date-fns';
 import { Subscription } from 'rxjs';
 import { ECustomUserRoles } from 'src/app/interfaces/common.enum';
-import { IBatch, IClass, IDepartment, ISchedule } from 'src/app/interfaces/common.model';
+import { IBatch, IClass, ICollege, IDepartment, ISchedule, ITimeTable } from 'src/app/interfaces/common.model';
 import { ClassService } from 'src/app/services/class.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -33,6 +34,7 @@ export class CreatePage implements OnInit {
   minDate = this.commonService.toLocaleIsoDateString(startOfDay(new Date()));
   customRoles = Object.keys(ECustomUserRoles).map(key => ({ name: key, value: ECustomUserRoles[key] }));
   eCustomUserRoles = ECustomUserRoles;
+  allocationData: ITimeTable[] = [];
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -48,14 +50,14 @@ export class CreatePage implements OnInit {
 
   setStartDate(date: string) {
     this.dateRange.start = date;
-    if(new Date(this.dateRange.end) < new Date(date)) {
+    if (new Date(this.dateRange.end) < new Date(date)) {
       this.dateRange.end = date;
     }
   }
 
   setEndDate(date: string) {
     this.dateRange.end = date;
-    if(new Date(this.dateRange.start) > new Date(date)) {
+    if (new Date(this.dateRange.start) > new Date(date)) {
       this.dateRange.start = date;
     }
   }
@@ -71,10 +73,10 @@ export class CreatePage implements OnInit {
               this.availableClasses = res?.map(item => (
                 {
                   ...item,
-                  name: `${item.name} (${(item.source.batch as IBatch).startDate} - ${(item.source.batch as IBatch).endDate})`
+                  nameLong: `${item.name} (${(item.source.batch as IBatch).startDate} - ${(item.source.batch as IBatch).endDate})`
                 }
               ));
-              this.classesControl.setValue(res);
+              this.classesControl.setValue(this.availableClasses);
               loader.dismiss();
             }, err => {
               loader.dismiss();
@@ -105,5 +107,26 @@ export class CreatePage implements OnInit {
     });
   }
 
+  onStart() {
+    this.allocationData = [];
+    for (let i = 0; i < this.classesControl.value?.length; i++) {
+      this.allocationData.push({
+        class: this.classesControl.value[i] as IClass,
+        college: this.collegeService.currentCollege$.value as ICollege,
+        department: this.departmentControl.value as IDepartment,
+        hoursCount: this.hoursCtrl.value,
+        schedule: {
+          start: this.dateRange.start,
+          end: this.dateRange.end,
+        },
+        allocation: []
+      });
+    }
+    console.log(this.allocationData);
+  }
+
+  getRangeArray(n: number) {
+    return Array(n).fill(0).map((x, i) => i);
+  }
 
 }

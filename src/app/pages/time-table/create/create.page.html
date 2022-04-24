@@ -26,8 +26,9 @@
                   <ion-input [value]="dateRange.start | date"></ion-input>
                   <ion-popover trigger="open-date-input-1" show-backdrop="false" [alignment]="'center'" side="top">
                     <ng-template>
-                      <ion-datetime [min]="minDate"[showDefaultButtons]="true" #popoverDatetime1 [value]="dateRange.start"
-                        presentation="date" (ionChange)="setStartDate(popoverDatetime1.value)"></ion-datetime>
+                      <ion-datetime [min]="minDate" [showDefaultButtons]="true" #popoverDatetime1
+                        [value]="dateRange.start" presentation="date"
+                        (ionChange)="setStartDate(popoverDatetime1.value)"></ion-datetime>
                     </ng-template>
                   </ion-popover>
                 </ion-item>
@@ -38,11 +39,12 @@
                   <ion-input [value]="dateRange.end | date"></ion-input>
                   <ion-popover trigger="open-date-input-2" show-backdrop="false" [alignment]="'center'" side="top">
                     <ng-template>
-                      <ion-datetime [min]="minDate"[showDefaultButtons]="true" #popoverDatetime2 [value]="dateRange.end"
-                        presentation="date" (ionChange)="setEndDate(popoverDatetime2.value)"></ion-datetime>
+                      <ion-datetime [min]="minDate" [showDefaultButtons]="true" #popoverDatetime2
+                        [value]="dateRange.end" presentation="date" (ionChange)="setEndDate(popoverDatetime2.value)">
+                      </ion-datetime>
                     </ng-template>
                   </ion-popover>
-                </ion-item> 
+                </ion-item>
               </ion-col>
             </ion-row>
             <ion-row>
@@ -65,7 +67,7 @@
                 <ion-item>
                   <ion-label position="floating">{{'active' | string}} {{'classes' | string}}</ion-label>
                   <ionic-selectable #portComponent [formControl]="classesControl" [items]="availableClasses"
-                    itemValueField="_id" itemTextField="name" [isMultiple]="true" [canSearch]="true"
+                    itemValueField="_id" itemTextField="nameLong" [isMultiple]="true" [canSearch]="true"
                     closeButtonSlot="end" [shouldFocusSearchbar]="true" [shouldStoreItemValue]="false">
                     <ng-template ionicSelectableTitleTemplate>
                       {{'choose' | string}} {{'classes' | string}}
@@ -84,24 +86,45 @@
                   <ion-input type="number" [formControl]="hoursCtrl"></ion-input>
                 </ion-item>
               </ion-col>
-              <ion-col size="12"  size-md="8">
-                <ion-item >
+              <ion-col size="12" size-md="8">
+                <ion-item>
                   <ion-label position="floating">{{'customRole' | string}}</ion-label>
                   <ion-select #cRolesSelect interface="popover" [multiple]="true" [formControl]="rolesCtrl">
-                    <ion-select-option *ngFor="let crole of customRoles" [value]="crole.value">{{crole.name | string}}</ion-select-option>
+                    <ion-select-option *ngFor="let crole of customRoles" [value]="crole.value">{{crole.name | string}}
+                    </ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
             </ion-row>
             <ion-row class="ion-justify-content-center">
-              <ion-col size="12" sizeMd="6"  class="text-center mt-1">
-                <ion-button fill="outline"> {{'start' | string}} {{'creating' | string}}</ion-button>
+              <ion-col size="12" sizeMd="6" class="text-center mt-1">
+                <ion-button (click)="onStart()" fill="outline"> {{'start' | string}} {{'creating' | string}}
+                </ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-list>
       </ion-accordion>
     </ion-accordion-group>
+  </ion-card>
+
+  <ion-card>
+    <p-table [value]="getRangeArray(hoursCtrl?.value)"  responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+        <tr>
+          <th [width]="'30px'">{{'hour' | string}}</th>
+          <th *ngFor="let allocation of allocationData">{{'class' | string}} {{allocation.class['name']}}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-hour>
+        <tr>
+          <td><span class="p-column-title">{{'hour' | string}}</span>{{hour + 1}}</td>
+          <td class="droppers" *ngFor="let allocation of allocationData">
+            <div class="drop-column"><span class="valign">{{'hour' | string}}{{hour + 1}}</span></div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </ion-card>
 
 </ion-content>
