@@ -37,7 +37,8 @@
           <ion-col size="12">
             <ion-item class="mt-1" button [detail]="false">
               <ion-label (click)="modeToggle.checked = !modeToggle.checked">{{'thisIsAnEvent' | string}}: </ion-label>
-              <ion-toggle #modeToggle slot="end" (ionChange)="onChangeType($event)" [(ngModel)]="isEvent" [ngModelOptions]="{standalone: true}"></ion-toggle>
+              <ion-toggle #modeToggle slot="end" (ionChange)="onChangeType($event)" [(ngModel)]="isEvent"
+                [ngModelOptions]="{standalone: true}"></ion-toggle>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -50,7 +51,8 @@
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <quill-editor [modules]="quillModules" [styles]="{minHeight: '15vh'}" formControlName="content"></quill-editor>
+        <quill-editor [modules]="quillModules" [styles]="{minHeight: '15vh'}" formControlName="content"
+          (onContentChanged)="quillChange($event)"></quill-editor>
       </ion-card-content>
     </ion-card>
   </form>
@@ -68,16 +70,17 @@
               <ion-label (click)="sendToggle.checked = !sendToggle.checked">{{'target' | string}} {{'to' | string}}
                 {{'college' | string}}
               </ion-label>
-              <ion-toggle #sendToggle slot="end" (ionChange)="onTargetCollege()" [(ngModel)]="sendToCollege" [ngModelOptions]="{standalone: true}">
+              <ion-toggle #sendToggle slot="end" (ionChange)="onTargetCollege()" [(ngModel)]="sendToCollege"
+                [ngModelOptions]="{standalone: true}">
               </ion-toggle>
             </ion-item>
           </ion-col>
           <ion-col size="12" size-md="6" [hidden]="sendToCollege">
             <ion-item class="mt-1" (click)="onChooseTarget(eSourceTargetType.department)">
               <ion-label position="floating">{{'departments' | string}}</ion-label>
-              <ionic-selectable #dpts itemValueField="_id"
-                itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end" [canClear]="true"
-                [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true" formControlName="departments">
+              <ionic-selectable #dpts itemValueField="_id" itemTextField="name" [isMultiple]="true" [canSearch]="true"
+                closeButtonSlot="end" [canClear]="true" [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true"
+                formControlName="departments">
                 <ng-template ionicSelectableTitleTemplate>
                   {{'choose' | string}} {{'departments' | string}}
                 </ng-template>
@@ -90,9 +93,9 @@
           <ion-col size="12" size-md="6" [hidden]="sendToCollege">
             <ion-item class="mt-1" (click)="onChooseTarget(eSourceTargetType.batch)">
               <ion-label position="floating">{{'batches' | string}}</ion-label>
-              <ionic-selectable #batches itemValueField="_id"
-                itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end" [canClear]="true"
-                [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true" formControlName="batches">
+              <ionic-selectable #batches itemValueField="_id" itemTextField="name" [isMultiple]="true"
+                [canSearch]="true" closeButtonSlot="end" [canClear]="true" [shouldFocusSearchbar]="true"
+                [shouldStoreItemValue]="true" formControlName="batches">
                 <ng-template ionicSelectableTitleTemplate>
                   {{'choose' | string}} {{'batches' | string}}
                 </ng-template>
@@ -105,9 +108,9 @@
           <ion-col size="12" size-md="6" [hidden]="sendToCollege">
             <ion-item class="mt-1" (click)="onChooseTarget(eSourceTargetType.class)">
               <ion-label position="floating">{{'classes' | string}}</ion-label>
-              <ionic-selectable #classes itemValueField="_id"
-                itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end" [canClear]="true"
-                [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true" formControlName="classes">
+              <ionic-selectable #classes itemValueField="_id" itemTextField="name" [isMultiple]="true"
+                [canSearch]="true" closeButtonSlot="end" [canClear]="true" [shouldFocusSearchbar]="true"
+                [shouldStoreItemValue]="true" formControlName="classes">
                 <ng-template ionicSelectableTitleTemplate>
                   {{'choose' | string}} {{'classes' | string}}
                 </ng-template>
@@ -120,9 +123,9 @@
           <ion-col size="12" size-md="6" [hidden]="sendToCollege">
             <ion-item class="mt-1" (click)="onChooseTarget(eSourceTargetType.room)">
               <ion-label position="floating">{{'rooms' | string}}</ion-label>
-              <ionic-selectable #rooms itemValueField="_id"
-                itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end" [canClear]="true"
-                [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true" formControlName="rooms">
+              <ionic-selectable #rooms itemValueField="_id" itemTextField="name" [isMultiple]="true" [canSearch]="true"
+                closeButtonSlot="end" [canClear]="true" [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true"
+                formControlName="rooms">
                 <ng-template ionicSelectableTitleTemplate>
                   {{'choose' | string}} {{'rooms' | string}}
                 </ng-template>
@@ -135,9 +138,9 @@
           <ion-col size="12" size-md="6" [hidden]="sendToCollege">
             <ion-item class="mt-1" (click)="onChooseTarget('user')">
               <ion-label position="floating">{{'custom' | string}} {{'users' | string}}</ion-label>
-              <ionic-selectable #users itemValueField="_id"
-                itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end" [canClear]="true"
-                [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true" formControlName="users">
+              <ionic-selectable #users itemValueField="_id" itemTextField="name" [isMultiple]="true" [canSearch]="true"
+                closeButtonSlot="end" [canClear]="true" [shouldFocusSearchbar]="true" [shouldStoreItemValue]="true"
+                formControlName="users">
                 <ng-template ionicSelectableTitleTemplate>
                   {{'choose' | string}} {{'custom' | string}} {{'users' | string}}
                 </ng-template>
@@ -161,7 +164,8 @@
           <ion-item class="mt-1" button [detail]="false" [disabled]="isUpdate">
             <ion-label (click)="scheduleToggle.checked = !scheduleToggle.checked">{{'publishInstantly' | string}}
             </ion-label>
-            <ion-toggle #scheduleToggle slot="end" [(ngModel)]="sendInstantly"  [disabled]="isUpdate" [ngModelOptions]="{standalone: true}">
+            <ion-toggle #scheduleToggle slot="end" [(ngModel)]="sendInstantly" [disabled]="isUpdate"
+              [ngModelOptions]="{standalone: true}">
             </ion-toggle>
           </ion-item>
         </ion-col>
@@ -169,12 +173,14 @@
       <ion-row class="ion-justify-content-center" [hidden]="scheduleToggle.checked">
         <ion-col size="12" size-lg="6">
           <ion-label>{{'choose' | string}} {{'dateAndTime' | string}}</ion-label>
-          <ion-datetime  [disabled]="isUpdate" [formControl]="sendSchedule" size="cover" [min]="currentTime" max="2999"></ion-datetime>
+          <ion-datetime [disabled]="isUpdate" [formControl]="sendSchedule" size="cover" [min]="currentTime" max="2999">
+          </ion-datetime>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="12" class="mt-1">
-          <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()" [disabled]="!this.notificationForm.valid">
+          <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()"
+            [disabled]="!this.notificationForm.valid">
             <span *ngIf="!loading">{{isUpdate ? 'update' : 'publish' | string}}</span>
             <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
           </ion-button>

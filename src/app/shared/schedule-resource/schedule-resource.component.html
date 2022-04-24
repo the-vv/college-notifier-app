@@ -57,7 +57,7 @@
               style="--offset-y: -150px">
               <ng-template>
                 <ion-datetime #popoverDatetime1 [value]="startTime" presentation="time-date" [min]="minTime" [disabled]="!editable"
-                  (ionChange)="startTime = getIsoDate(popoverDatetime1.value)"></ion-datetime>
+                  (ionChange)="startTime = getIsoDate(popoverDatetime1.value)" [showDefaultButtons]="true"></ion-datetime>
               </ng-template>
             </ion-popover>
           </ion-item>
@@ -72,7 +72,7 @@
               style="--offset-y: -150px">
               <ng-template>
                 <ion-datetime #popoverDatetime2 [value]="endTime" presentation="time-date" [min]="minTime" [disabled]="!editable"
-                  (ionChange)="endTime = getIsoDate(popoverDatetime2.value)"></ion-datetime>
+                  (ionChange)="endTime = getIsoDate(popoverDatetime2.value)" [showDefaultButtons]="true"></ion-datetime>
               </ng-template>
             </ion-popover>
           </ion-item>

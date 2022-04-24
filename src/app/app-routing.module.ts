@@ -81,6 +81,11 @@ const routes: Routes = [
     path: 'calendar',
     loadChildren: () => import('src/app/pages/calendar/calendar.module').then(m => m.CalendarModule),
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'time-table',
+    loadChildren: () => import('src/app/pages/time-table/time-table.module').then(m => m.TimeTableModule),
+    canActivate: [AuthGuard],
   }
 ];
 

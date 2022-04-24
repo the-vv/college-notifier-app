@@ -43,7 +43,7 @@ export class NotificationManagePage implements OnInit {
       [{ color: [] }, { background: [] }],
       [{ font: [] }],
       [{ align: [] }],
-      ['link']
+      ['link', 'image', 'video']
     ]
   };
   public showErrors = false;
@@ -134,6 +134,13 @@ export class NotificationManagePage implements OnInit {
   }
 
   ionViewWillEnter() {
+  }
+
+  quillChange(event: any) {
+    if (new Blob([event.html]).size / 1024 / 1024 > 1) {
+      event?.editor?.history?.undo();
+      this.commonService.showToast(EStrings.editorSizeLimitExceeded);
+    }
   }
 
   async onSubmit() {

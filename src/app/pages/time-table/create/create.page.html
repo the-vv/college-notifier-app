@@ -1,9 +1,84 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>create</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'timeTable' | string}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-card>
+    <ion-accordion-group [value]="accordianVal">
+      <ion-accordion value="colors" value="settings" >
+        <ion-item slot="header">
+          <ion-label>{{'timeTable' | string}} {{'settings' | string}}</ion-label>
+        </ion-item>
+        <ion-item  slot="content" class="m-0 p-0">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-md="6">
+                <ion-item id="open-date-input-1">
+                  <ion-label position="fixed">{{'endDate' | string}}</ion-label>
+                  <ion-input></ion-input>
+                  <ion-popover trigger="open-date-input-1" show-backdrop="false" [alignment]="'center'" side="top">
+                    <ng-template>
+                      <ion-datetime [showDefaultButtons]="true" #popoverDatetime2 [value]="dateRange.start"
+                        presentation="date" (ionChange)="null"></ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </ion-item>
+              </ion-col>
+              <ion-col size="12" size-md="6">
+                <ion-item id="open-date-input-2">
+                  <ion-label position="fixed">{{'startDate' | string}}</ion-label>
+                  <ion-input></ion-input>
+                  <ion-popover trigger="open-date-input-2" show-backdrop="false" [alignment]="'center'" side="top">
+                    <ng-template>
+                      <ion-datetime [showDefaultButtons]="true" #popoverDatetime2 [value]="dateRange.start"
+                        presentation="date" (ionChange)="null"></ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </ion-item>
+              </ion-col>
+              <ion-col size="12" size-md="6">
+                <ion-item>
+                  <ion-label position="floating">{{'department' | string}}</ion-label>
+                  <ionic-selectable #portComponent [formControl]="departmentControl" [items]="availableDpts"
+                    itemValueField="_id" itemTextField="name" [isMultiple]="false" [canSearch]="true" closeButtonSlot="end"
+                    [shouldFocusSearchbar]="true" [shouldStoreItemValue]="false">
+                    <ng-template ionicSelectableTitleTemplate>
+                      {{'choose' | string}} {{'department' | string}}
+                    </ng-template>
+                    <ng-template ionicSelectableValueTemplate let-port="value">
+                      {{departmentControl.value?.name}}
+                    </ng-template>
+                  </ionic-selectable>
+                </ion-item>
+              </ion-col>
+              <ion-col size="12" size-md="6">
+                <ion-item>
+                  <ion-label position="floating">{{'classes' | string}}</ion-label>
+                  <ionic-selectable #portComponent [formControl]="departmentControl" [items]="availableDpts"
+                    itemValueField="_id" itemTextField="name" [isMultiple]="true" [canSearch]="true" closeButtonSlot="end"
+                    [shouldFocusSearchbar]="true" [shouldStoreItemValue]="false">
+                    <ng-template ionicSelectableTitleTemplate>
+                      {{'choose' | string}} {{'classes' | string}}
+                    </ng-template>
+                    <ng-template ionicSelectableValueTemplate let-port="value">
+                      {{departmentControl.value?.name}}
+                    </ng-template>
+                  </ionic-selectable>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-accordion>
+    </ion-accordion-group>
+  </ion-card>
 
 </ion-content>

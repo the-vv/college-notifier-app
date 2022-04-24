@@ -250,6 +250,8 @@ export enum EStrings {
     'assist-professor' = 'Assistant Professor',
     'teaching-staff' = 'Teaching Staff',
     'non-teaching-staff' =   'Non-Teaching Staff',
+    customRoles = 'Custom Roles',
+    editorSizeLimitExceeded = 'Editor Size Limit Exceeded',
 
 
 }
