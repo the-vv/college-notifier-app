@@ -245,6 +245,11 @@ export enum EStrings {
     teachingStaff = 'Teaching Staff',
     nonTeachingStaff = 'Non-Teaching Staff',
     userAlreadyExists = 'User Already Exists',
+    actions = 'Actions',
+    'class-leader' = 'Class Leader',
+    'assist-professor' = 'Assistant Professor',
+    'teaching-staff' = 'Teaching Staff',
+    'non-teaching-staff' =   'Non-Teaching Staff',
 
 
 }

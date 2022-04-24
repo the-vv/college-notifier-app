@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ModalController } from '@ionic/angular';
@@ -18,7 +19,7 @@ export class UserManageComponent implements OnInit {
 
   @Input() role: string;
   @Input() collegeId: string;
-  @Input() userId: string;
+  @Input() user: IUser;
 
   @ViewChild(ImageUploadComponent) imageUploader: ImageUploadComponent;
 
@@ -45,10 +46,15 @@ export class UserManageComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       role: new FormControl(this.role, [Validators.required]),
-      customRole: new FormControl([]),
+      customRoles: new FormControl([]),
       active: new FormControl(true),
       image: new FormControl('')
     });
+    if(this.user) {
+      this.userForm.patchValue(this.user);
+      this.userForm.controls.password.removeValidators(Validators.required);
+      this.userForm.updateValueAndValidity();
+    }
   }
 
   dismissModal() {
@@ -57,7 +63,6 @@ export class UserManageComponent implements OnInit {
 
 
   async onSubmit() {
-    console.log(this.userForm.value);
     try {
       this.loading = true;
       await this.imageUploader.uploadImage();
@@ -66,7 +71,7 @@ export class UserManageComponent implements OnInit {
       this.loading = false;
       return;
     }
-    if (!this.userId) {
+    if (!this.user) {
       const postData: { user: IUser; source: ISource } = {
         user: this.userForm.value,
         source: {
@@ -76,12 +81,26 @@ export class UserManageComponent implements OnInit {
       };
       this.userService.postUserAsync(postData)
         .subscribe(res => {
+          this.loading = false;
           this.commonServicce.showToast(`${EStrings[this.role]} ${EStrings.added}`);
           this.modalController.dismiss();
         }, err => {
+          this.loading = false;
           console.log(err);
           this.commonServicce.showToast(`${EStrings.error}: ${EStrings.users} ${EStrings.create} ${EStrings.failed},
               ${(err.error.message as string).includes('duplicate key error') ? EStrings.userAlreadyExists : err.error.message}`);
+          // this.modalController.dismiss();
+        });
+    } else {
+      this.userService.putUserAsync({...this.userForm.value, _id: this.user._id})
+        .subscribe(res => {
+          this.loading = false;
+          this.commonServicce.showToast(`${EStrings[this.role]} ${EStrings.updated}`);
+          this.modalController.dismiss();
+        }, err => {
+          this.loading = false;
+          console.log(err);
+          this.commonServicce.showToast(`${EStrings.error}: ${err.error.message}`);
           // this.modalController.dismiss();
         });
     }

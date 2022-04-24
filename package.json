@@ -48,6 +48,7 @@
     "express": "^4.15.2",
     "ionic-selectable": "^4.9.0",
     "media-breakpoints-watcher": "^1.0.4",
+    "ng-pluralize": "^1.1.0",
     "ngx-quill": "^16.1.2",
     "primeicons": "^5.0.0",
     "primeng": "^13.1.1",

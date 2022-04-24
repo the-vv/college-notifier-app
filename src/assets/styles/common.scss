@@ -297,3 +297,10 @@ ion-card {
         object-fit: contain;
     }
 }
+
+img.table-avatar {
+    height: 50px !important;
+    width: 50px !important;
+    border-radius: 50%;
+    object-fit: cover;
+}

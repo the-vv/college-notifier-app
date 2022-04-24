@@ -13,6 +13,7 @@ import { Toast } from '@capacitor/toast';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import * as XLSX from 'xlsx';
+import { NgPluralizeService } from 'ng-pluralize';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,8 @@ export class CommonService {
     public loadingController: LoadingController,
     private router: Router,
     private authServce: AuthService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private pluralize: NgPluralizeService
   ) {
     initBreakpoints({
       medium: '(min-width: 768px)',
@@ -116,6 +118,21 @@ export class CommonService {
       ':' + pad(date.getSeconds()) +
       dif + pad(Math.floor(Math.abs(tzo) / 60)) +
       ':' + pad(Math.abs(tzo) % 60);
+  }
+
+  getPluralWord(word: string) {
+    if (!word) { return ''; }
+    return this.pluralize.pluralize(word);
+  }
+
+  getSingularWord(word: string) {
+    if (!word) { return ''; }
+    return this.pluralize.singularize(word);
+  }
+
+  getPluralWordWithCount(word: string, count: number) {
+    if (!word) { return count + ''; }
+    return this.pluralize.fromCount(word, count, true);
   }
 
 

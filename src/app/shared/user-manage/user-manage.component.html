@@ -1,6 +1,6 @@
 <ion-header translucent>
   <ion-toolbar>
-    <ion-title>{{'create' | string}} {{'user' | string}}</ion-title>
+    <ion-title>{{(user ? 'update' : 'create') | string}} {{role | string}}</ion-title>
     <ion-buttons slot="end">
       <ion-button  (click)="dismissModal()">Close</ion-button>
     </ion-buttons>
@@ -34,7 +34,7 @@
             <small class="text-danger" *ngIf="f.email.errors?.email && (f.email.touched || showErrors)">{{'email' | string}}
               {{'isInvalid' | string}}</small>
           </ion-col>
-          <ion-col size="12">
+          <ion-col size="12" *ngIf="!user">
             <ion-item class="mt-1">
               <ion-label position="floating">{{'password' | string}}</ion-label>
               <ion-input type="password" formControlName="password"></ion-input>
@@ -47,7 +47,7 @@
           <ion-col size="12">
             <ion-item class="mt-1">
               <ion-label>{{'customRole' | string}}</ion-label>
-              <ion-select interface="popover" formControlName="customRole" [multiple]="true">
+              <ion-select interface="popover" formControlName="customRoles" [multiple]="true">
                 <ion-select-option *ngFor="let crole of customRoles" [value]="crole.value">{{crole.name | string}}</ion-select-option>
               </ion-select>
             </ion-item>
@@ -65,7 +65,7 @@
 
 <ion-footer>  
   <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
-    <span *ngIf="!loading">{{'signUp' | string}}</span>
+    <span *ngIf="!loading">{{(user ? 'update' : 'create') | string}}</span>
     <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
   </ion-button>
 </ion-footer>

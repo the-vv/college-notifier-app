@@ -11,9 +11,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHeaderService } from './services/resolvers/auth-header.service';
 import { MainResolverService } from './services/resolvers/main-resolver.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { SchedulerModule } from 'angular-calendar-scheduler';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgPluralizeModule } from 'ng-pluralize';
 
 const mainResolverFactory = (provider: MainResolverService) => () => provider.init();
 
@@ -26,8 +24,7 @@ const mainResolverFactory = (provider: MainResolverService) => () => provider.in
         AppRoutingModule,
         SharedModule,
         HttpClientModule,
-        // CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
-        // SchedulerModule.forRoot({ locale: 'en', headerDateFormat: 'daysRange' }),
+        NgPluralizeModule
     ],
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

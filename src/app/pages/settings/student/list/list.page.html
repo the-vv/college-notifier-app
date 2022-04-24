@@ -6,7 +6,7 @@
     <ion-buttons slot="end">
       <ion-menu-button slot="end"></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{'students' | string}}</ion-title>
+    <ion-title>{{commonService.getPluralWord(this.currentRole) | string}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -16,7 +16,7 @@
   <ion-card>
     <ion-row class="v-center ion-justify-content-between">
       <ion-col size="auto" class="ion-text-start">
-        <h6>{{'students' | string}} {{'under' | string}} {{(collegeService.currentCollege$ | async)?.name}}</h6>
+        <h6>{{commonService.getPluralWord(this.currentRole) | string}} {{'under' | string}} {{(collegeService.currentCollege$ | async)?.name}}</h6>
       </ion-col>
       <ion-col size="auto" class="ion-text-end">
         <ion-button color="success" size="small" (click)="showImportFacultyModal()">
@@ -32,14 +32,33 @@
     <p-table responsiveLayout="stack" [value]="studentsData">
       <ng-template pTemplate="header" let-columns>
           <tr>
+              <th>{{'image' | string}}</th>
               <th>{{'name' | string}}</th>
               <th>{{'email' | string}}</th>
+              <th>{{'customRoles' | string}}</th>
+              <th>{{'actions' | string}}</th>
           </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-product let-columns="columns">
+      <ng-template pTemplate="body" let-student let-columns="columns">
           <tr>
-              <td><span class="p-column-title">{{'name' | string}}</span>{{product.name}}</td>
-              <td><span class="p-column-title">{{'email' | string}}</span>{{product.email}}</td>
+              <td><span class="p-column-title">{{'image' | string}}</span>
+                  <img [src]="student.image || 'assets/images/avatar.png'" alt="{{student.name}}" class="table-avatar" />
+              </td>
+              <td><span class="p-column-title">{{'name' | string}}</span>{{student.name}}</td>
+              <td><span class="p-column-title">{{'email' | string}}</span>{{student.email}}</td>
+              <td><span class="p-column-title">{{'customRoles' | string}}</span>
+                {{getCustommRoles(student.customRoles)}}
+              </td>
+              <td><span class="p-column-title">{{'actions' | string}}</span>
+                <ion-button color="warning" size="small" (click)="openStudentCreateModal(student)">
+                  <ion-icon name="create"></ion-icon>
+                  {{'edit' | string}}
+                </ion-button>
+                <ion-button color="danger" size="small" (click)="deleteStudent(student)">
+                  <ion-icon name="trash"></ion-icon>
+                  {{'delete' | string}}
+                </ion-button>
+              </td>
           </tr>
       </ng-template>
   </p-table>

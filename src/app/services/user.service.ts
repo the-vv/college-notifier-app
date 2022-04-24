@@ -24,6 +24,14 @@ export class UserService {
     return this.http.postAsync(data, this.userUrl);
   }
 
+  putUserAsync(data: any) {
+    return this.http.putAsync(data, this.userUrl);
+  }
+
+  deleteUserAsync(id: string) {
+    return this.http.deleteByIdAsync(this.userUrl, id);
+  }
+
   getUserByCollegeIdAsync(collegeId: string, role: EUserRoles) {
     return this.http.getAsync(`${this.userMapUrl}/getByCollege/${collegeId}`, { role });
   }
