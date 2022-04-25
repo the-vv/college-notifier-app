@@ -119,7 +119,7 @@
             <ion-row [dragula]="dragulaName" id="tutor_list" [dragulaModel]="allTutorList">
               <div *ngFor="let t of allTutorList; let i = index;" class="tutor-draggable" [id]="t._id">
                 <ion-item>
-                    <img [src]="t.image || 'assets/images/avatar.png'" class="tutor-avatar" />
+                  <img [src]="t.image || 'assets/images/avatar.png'" class="tutor-avatar" />
                   <ion-label class="mx-1">
                     <h2>{{t.name}}</h2>
                   </ion-label>
@@ -142,23 +142,35 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content class="p-0" style="padding: 0px;">
-    <ion-grid>
-      <ion-row class="ion-nowrap hori-scroller">
-        <ion-col class="class-area"  *ngFor="let allocation of allocationData">
-          <div class="class-header">
-            <h2 class="ion-text-center font-bold">{{'class' | string}} {{allocation.class['name']}}</h2>
-          </div>
-          <div class="droppers">
-            <div class="" *ngFor="let hour of getRangeArray(finalHoursCount)" [dragula]="dragulaName"
-            [dragulaModel]="allocationData" [id]="allocation.class['_id'] + '-' + hour">
-              <div class="drop-column"><span class="valign">{{allocation.class['name']}} {{'hour' | string}} {{hour +
-                1}}</span></div>
+      <ion-grid>
+        <ion-row class="ion-nowrap hori-scroller">
+          <ion-col class="class-area" *ngFor="let allocation of allocationData">
+            <div class="class-header">
+              <h2 class="ion-text-center font-bold">{{'class' | string}} {{allocation.class['name']}}</h2>
             </div>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
+            <div class="droppers">
+              <div class="dropable-area" *ngFor="let hour of getRangeArray(finalHoursCount)" [dragula]="dragulaName"
+                [dragulaModel]="allocationData" [id]="allocation.class['_id'] + '-' + hour"
+                [ngClass]="{nonDroppable: getClassHourAllocation(allocation.class['_id'], hour)}">
+                <div *ngIf="!getClassHourAllocation(allocation.class['_id'], hour)" class="drop-column"><span
+                    class="valign">{{allocation.class['name']}} {{'hour' | string}} {{hour +
+                    1}}</span>
+                </div>
+                <div *ngIf="getClassHourAllocation(allocation.class['_id'], hour)">
+                  <ion-item>
+                    <img [src]="getClassHourTutotr(allocation.class['_id'], hour)['image'] || 'assets/images/avatar.png'" class="tutor-avatar" />
+                    <ion-label class="mx-1">
+                      <h2>{{getClassHourTutotr(allocation.class['_id'], hour)['name']}}</h2>
+                    </ion-label>
+                    <ion-icon name="reorder-three-outline" class="drag-handle"></ion-icon>
+                  </ion-item>
+                </div>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
   </ion-card>
 
 </ion-content>

@@ -12,6 +12,8 @@ import { DepartmentService } from 'src/app/services/department.service';
 import { UserService } from 'src/app/services/user.service';
 import { DragulaService } from 'ng2-dragula';
 
+declare const $: any;
+
 @Component({
   selector: 'app-timetable-create',
   templateUrl: './create.page.html',
@@ -42,6 +44,7 @@ export class CreatePage implements OnInit {
   allTutorList: IUser[] = [];
   subs: Subscription = new Subscription();
   dragulaName = 'tutorGrid';
+  dragging = false;
 
 
   constructor(
@@ -56,7 +59,7 @@ export class CreatePage implements OnInit {
       revertOnSpill: true,
       copy: true,
       copyItem: (item: any) => item,
-      accepts: (el, target, source, sibling) => true,
+      accepts: (el, target, source, sibling) => !target.classList.contains('nonDroppable') && target.classList.contains('dropable-area'),
       moves: (el, container, handle) => handle.className.includes('drag-handle')
     });
     this.subs.add(dragulaService.over(this.dragulaName)
@@ -71,14 +74,36 @@ export class CreatePage implements OnInit {
     );
     this.subs.add(dragulaService.drop(this.dragulaName)
       .subscribe(({ el, target, source, sibling }) => {
-        console.log(target.id);
-        console.log(el.id);
+        const classId = target.id.split('-')[0];
+        const hour = target.id.split('-')[1];
+        const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
+        classAllocation.allocation[hour] = el.id;
       })
     );
     this.subs.add(dragulaService.drag(this.dragulaName)
       .subscribe(({ el, source }) => {
+        this.tutorAccordian = undefined;
+        $('body').addClass('prevent-scroll');
       })
     );
+    this.subs.add(dragulaService.dragend(this.dragulaName)
+      .subscribe(({ el }) => {
+        this.tutorAccordian = 'tutor';
+        $('body').removeClass('prevent-scroll');
+      })
+    );
+  }
+
+  getClassHourAllocation(classId: string, hour: number) {
+    const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
+    return classAllocation.allocation[hour];
+  }
+
+  getClassHourTutotr(classId: string, hour: number) {
+    const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
+    const tutorid = classAllocation.allocation[hour];
+    const tutor = this.allTutorList.find(item => item._id === tutorid);
+    return tutor;
   }
 
   ngOnInit() {
@@ -170,7 +195,7 @@ export class CreatePage implements OnInit {
           start: this.dateRange.start,
           end: this.dateRange.end,
         },
-        allocation: []
+        allocation: {}
       });
     }
     console.log(this.allocationData);
