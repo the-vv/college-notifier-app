@@ -12,7 +12,7 @@
 
 <ion-content>
   <ion-card>
-    <ion-accordion-group [value]="accordianVal">
+    <ion-accordion-group [value]="accordianVal" (ionChange)="accChange($event)">
       <ion-accordion value="colors" value="settings">
         <ion-item slot="header">
           <ion-label>{{'timeTable' | string}} {{'settings' | string}}</ion-label>
@@ -108,8 +108,36 @@
     </ion-accordion-group>
   </ion-card>
 
-  <ion-card>
-    <p-table [value]="getRangeArray(hoursCtrl?.value)"  responsiveLayout="scroll">
+  <ion-card *ngIf="showGrid">
+    <ion-accordion-group [value]="tutorAccordian" (ionChange)="tutorAcccChange($event)">
+      <ion-accordion value="colors" value="tutor">
+        <ion-item slot="header">
+          <ion-label>{{'available' | string}} {{'tutors' | string}}</ion-label>
+        </ion-item>
+        <ion-list slot="content" class="m-0 p-0  tutor-container">
+          <ion-grid>
+            <ion-row>
+              <ion-col *ngFor="let t of allTutorList; let i = index;" size="12" size-md="4">
+                <ion-item>
+                  <ion-icon name="pause-outline" class="handles" slot="end"></ion-icon>
+                  <ion-avatar slot="start">
+                    <img [src]="t.image || 'assets/images/avatar.png'" />
+                  </ion-avatar>
+                  <ion-label>
+                    <h2>{{t.name}}</h2>
+                    <p>{{t.role}}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-list>
+      </ion-accordion>
+    </ion-accordion-group>
+  </ion-card>
+
+  <ion-card *ngIf="showGrid">
+    <p-table [value]="getRangeArray(finalHoursCount)" responsiveLayout="scroll">
       <ng-template pTemplate="header">
         <tr>
           <th [width]="'30px'">{{'hour' | string}}</th>
@@ -120,7 +148,7 @@
         <tr>
           <td><span class="p-column-title">{{'hour' | string}}</span>{{hour + 1}}</td>
           <td class="droppers" *ngFor="let allocation of allocationData">
-            <div class="drop-column"><span class="valign">{{'hour' | string}}{{hour + 1}}</span></div>
+            <div class="drop-column"><span class="valign">{{allocation.class['name']}} {{'hour' | string}} {{hour + 1}}</span></div>
           </td>
         </tr>
       </ng-template>

@@ -257,6 +257,9 @@ export enum EStrings {
     active  = 'Active',
     creating = 'Creating',
     hour = 'Hour',
+    available = 'Available',
+    tutors = 'Tutors',
+    tutor = 'Tutor',
 
 
 }
