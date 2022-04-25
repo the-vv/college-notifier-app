@@ -116,19 +116,16 @@
         </ion-item>
         <ion-list slot="content" class="m-0 p-0  tutor-container">
           <ion-grid>
-            <ion-row>
-              <ion-col *ngFor="let t of allTutorList; let i = index;" size="12" size-md="4">
+            <ion-row [dragula]="dragulaName" id="tutor_list" [dragulaModel]="allTutorList">
+              <div *ngFor="let t of allTutorList; let i = index;" class="tutor-draggable" [id]="t._id">
                 <ion-item>
-                  <ion-icon name="pause-outline" class="handles" slot="end"></ion-icon>
-                  <ion-avatar slot="start">
-                    <img [src]="t.image || 'assets/images/avatar.png'" />
-                  </ion-avatar>
-                  <ion-label>
+                    <img [src]="t.image || 'assets/images/avatar.png'" class="tutor-avatar" />
+                  <ion-label class="mx-1">
                     <h2>{{t.name}}</h2>
-                    <p>{{t.role}}</p>
                   </ion-label>
+                  <ion-icon name="reorder-three-outline" class="drag-handle"></ion-icon>
                 </ion-item>
-              </ion-col>
+              </div>
             </ion-row>
           </ion-grid>
         </ion-list>
@@ -137,22 +134,31 @@
   </ion-card>
 
   <ion-card *ngIf="showGrid">
-    <p-table [value]="getRangeArray(finalHoursCount)" responsiveLayout="scroll">
-      <ng-template pTemplate="header">
-        <tr>
-          <th [width]="'30px'">{{'hour' | string}}</th>
-          <th *ngFor="let allocation of allocationData">{{'class' | string}} {{allocation.class['name']}}</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-hour>
-        <tr>
-          <td><span class="p-column-title">{{'hour' | string}}</span>{{hour + 1}}</td>
-          <td class="droppers" *ngFor="let allocation of allocationData">
-            <div class="drop-column"><span class="valign">{{allocation.class['name']}} {{'hour' | string}} {{hour + 1}}</span></div>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-label>
+          {{'allocationGrid' | string}}
+        </ion-label>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="p-0" style="padding: 0px;">
+    <ion-grid>
+      <ion-row class="ion-nowrap hori-scroller">
+        <ion-col class="class-area"  *ngFor="let allocation of allocationData">
+          <div class="class-header">
+            <h2 class="ion-text-center font-bold">{{'class' | string}} {{allocation.class['name']}}</h2>
+          </div>
+          <div class="droppers">
+            <div class="" *ngFor="let hour of getRangeArray(finalHoursCount)" [dragula]="dragulaName"
+            [dragulaModel]="allocationData" [id]="allocation.class['_id'] + '-' + hour">
+              <div class="drop-column"><span class="valign">{{allocation.class['name']}} {{'hour' | string}} {{hour +
+                1}}</span></div>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
   </ion-card>
 
 </ion-content>

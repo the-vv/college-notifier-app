@@ -260,6 +260,7 @@ export enum EStrings {
     available = 'Available',
     tutors = 'Tutors',
     tutor = 'Tutor',
+    allocationGrid = 'Allocation Grid',
 
 
 }

@@ -45,7 +45,7 @@ $valueforfontweightn: "lighter" 200,
 @each $name,
 $val in $valueforfontweightn {
     .font-#{$name} {
-        font-weight: $val;
+        font-weight: $val !important;
     }
 }
 
@@ -286,7 +286,7 @@ $val in $valueforhn {
     cursor: pointer !important;
 }
 
-.p-element.p-datatable-tbody td img {
+.p-element.p-datatable-tbody td img:not(.tutor-avatar) {
    height: 80px;
 }
 

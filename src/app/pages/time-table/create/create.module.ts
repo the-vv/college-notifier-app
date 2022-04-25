@@ -11,6 +11,8 @@ import { CommonExportsModule } from 'src/app/common-exports.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { IonicSelectableModule } from 'ionic-selectable';
 import { TableModule } from 'primeng/table';
+import { DragulaModule, DragulaService } from 'ng2-dragula';
+
 
 @NgModule({
   imports: [
@@ -22,8 +24,12 @@ import { TableModule } from 'primeng/table';
     SharedModule,
     IonicSelectableModule,
     ReactiveFormsModule,
-    TableModule
+    TableModule,
+    DragulaModule
   ],
-  declarations: [CreatePage]
+  declarations: [CreatePage],
+  providers: [
+    DragulaService
+  ]
 })
 export class CreatePageModule {}

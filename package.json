@@ -49,6 +49,7 @@
     "ionic-selectable": "^4.9.0",
     "media-breakpoints-watcher": "^1.0.4",
     "ng-pluralize": "^1.1.0",
+    "ng2-dragula": "^2.1.1",
     "ngx-quill": "^16.1.2",
     "primeicons": "^5.0.0",
     "primeng": "^13.1.1",

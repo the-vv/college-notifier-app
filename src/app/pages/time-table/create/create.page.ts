@@ -10,6 +10,7 @@ import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { UserService } from 'src/app/services/user.service';
+import { DragulaService } from 'ng2-dragula';
 
 @Component({
   selector: 'app-timetable-create',
@@ -29,7 +30,7 @@ export class CreatePage implements OnInit {
   availableDpts: IDepartment[] = [];
   availableClasses: IClass[] = [];
   classesControl = new FormControl([]);
-  hoursCtrl = new FormControl(6);
+  hoursCtrl = new FormControl(3);
   finalHoursCount = 0;
   rolesCtrl = new FormControl([ECustomUserRoles.teachingStaff, ECustomUserRoles.assistProf]);
   hoursCount: string | number = 6;
@@ -39,15 +40,46 @@ export class CreatePage implements OnInit {
   allocationData: ITimeTable[] = [];
   showGrid = false;
   allTutorList: IUser[] = [];
-  private subs: Subscription = new Subscription();
+  subs: Subscription = new Subscription();
+  dragulaName = 'tutorGrid';
+
 
   constructor(
     public commonService: CommonService,
     private collegeService: CollegeService,
     private departmentService: DepartmentService,
     private classServoce: ClassService,
-    private userService: UserService
-  ) { }
+    private userService: UserService,
+    dragulaService: DragulaService
+  ) {
+    dragulaService.createGroup(this.dragulaName, {
+      revertOnSpill: true,
+      copy: true,
+      copyItem: (item: any) => item,
+      accepts: (el, target, source, sibling) => true,
+      moves: (el, container, handle) => handle.className.includes('drag-handle')
+    });
+    this.subs.add(dragulaService.over(this.dragulaName)
+      .subscribe(({ el, container }) => {
+        container.classList.add('drag-over');
+      })
+    );
+    this.subs.add(dragulaService.out(this.dragulaName)
+      .subscribe(({ el, container }) => {
+        container.classList.remove('drag-over');
+      })
+    );
+    this.subs.add(dragulaService.drop(this.dragulaName)
+      .subscribe(({ el, target, source, sibling }) => {
+        console.log(target.id);
+        console.log(el.id);
+      })
+    );
+    this.subs.add(dragulaService.drag(this.dragulaName)
+      .subscribe(({ el, source }) => {
+      })
+    );
+  }
 
   ngOnInit() {
   }
@@ -92,6 +124,7 @@ export class CreatePage implements OnInit {
               ));
               this.classesControl.setValue(this.availableClasses);
               loader.dismiss();
+              this.onStart();
             }, err => {
               loader.dismiss();
               this.commonService.showToast(err.error.message);
