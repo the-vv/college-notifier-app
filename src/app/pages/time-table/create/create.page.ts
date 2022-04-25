@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { endOfDay, startOfDay } from 'date-fns';
 import { Subscription } from 'rxjs';
@@ -19,7 +19,7 @@ declare const $: any;
   templateUrl: './create.page.html',
   styleUrls: ['./create.page.scss'],
 })
-export class CreatePage implements OnInit {
+export class CreatePage implements OnInit, OnDestroy {
 
 
   dateRange: ISchedule = {
@@ -44,7 +44,6 @@ export class CreatePage implements OnInit {
   allTutorList: IUser[] = [];
   subs: Subscription = new Subscription();
   dragulaName = 'tutorGrid';
-  dragging = false;
 
 
   constructor(
@@ -53,7 +52,7 @@ export class CreatePage implements OnInit {
     private departmentService: DepartmentService,
     private classServoce: ClassService,
     private userService: UserService,
-    dragulaService: DragulaService
+    private dragulaService: DragulaService
   ) {
     dragulaService.createGroup(this.dragulaName, {
       revertOnSpill: true,
@@ -92,6 +91,10 @@ export class CreatePage implements OnInit {
         $('body').removeClass('prevent-scroll');
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.dragulaService.destroy(this.dragulaName);
   }
 
   getClassHourAllocation(classId: string, hour: number) {
@@ -198,13 +201,13 @@ export class CreatePage implements OnInit {
         allocation: {}
       });
     }
-    console.log(this.allocationData);
+    // console.log(this.allocationData);
     const loader = await this.commonService.showLoading();
     this.userService.getBySourceCustomRoleAsync(
       ESourceTargetType.department, this.departmentControl.value?._id, this.rolesCtrl.value
     ).subscribe(res => {
       loader.dismiss();
-      console.log(res);
+      // console.log(res);
       this.accordianVal = undefined;
       this.showGrid = true;
       this.allTutorList = res;
