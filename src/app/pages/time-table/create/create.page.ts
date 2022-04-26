@@ -11,6 +11,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { UserService } from 'src/app/services/user.service';
 import { DragulaService } from 'ng2-dragula';
+import { EStrings } from 'src/app/interfaces/strings.enum';
 
 declare const $: any;
 
@@ -26,8 +27,8 @@ export class CreatePage implements OnInit, OnDestroy {
     start: this.commonService.toLocaleIsoDateString(startOfDay(new Date())),
     end: this.commonService.toLocaleIsoDateString(endOfDay(new Date())),
   };
-  accordianVal: 'settings' | undefined = 'settings';
-  tutorAccordian: 'tutor' | undefined = undefined;
+  accordianVal: 'settings' = 'settings';
+  tutorAccordian: 'tutor' = undefined;
   departmentControl = new FormControl([]);
   availableDpts: IDepartment[] = [];
   availableClasses: IClass[] = [];
@@ -42,8 +43,11 @@ export class CreatePage implements OnInit, OnDestroy {
   allocationData: ITimeTable[] = [];
   showGrid = false;
   allTutorList: IUser[] = [];
+  allFilteredTutorList: IUser[] = [];
   subs: Subscription = new Subscription();
   dragulaName = 'tutorGrid';
+  tutorClassAllocations: { hour: number; classId: string }[] = [];
+  dragging = false;
 
 
   constructor(
@@ -58,7 +62,11 @@ export class CreatePage implements OnInit, OnDestroy {
       revertOnSpill: true,
       copy: true,
       copyItem: (item: any) => item,
-      accepts: (el, target, source, sibling) => !target.classList.contains('nonDroppable') && target.classList.contains('dropable-area'),
+      accepts: (el, target, source, sibling) => {
+        const hour = target.id.split('-')[1];
+        const allowed = !this.checkIsHourAllocated(+hour);
+        return !target.classList.contains('nonDroppable') && target.classList.contains('dropable-area') && allowed;
+      },
       moves: (el, container, handle) => handle.className.includes('drag-handle')
     });
     this.subs.add(dragulaService.over(this.dragulaName)
@@ -81,12 +89,26 @@ export class CreatePage implements OnInit, OnDestroy {
     );
     this.subs.add(dragulaService.drag(this.dragulaName)
       .subscribe(({ el, source }) => {
+        this.dragging = true;
         this.tutorAccordian = undefined;
         $('body').addClass('prevent-scroll');
+        const teacherid = el.id;
+        this.tutorClassAllocations = [];
+        this.allocationData.forEach(item => {
+          Object.keys(item.allocation).forEach((hour) => {
+            if (item.allocation[hour] === teacherid) {
+              this.tutorClassAllocations.push({
+                classId: (item.class as IClass)._id,
+                hour: +hour
+              });
+            }
+          });
+        });
       })
     );
     this.subs.add(dragulaService.dragend(this.dragulaName)
       .subscribe(({ el }) => {
+        this.dragging = false;
         this.tutorAccordian = 'tutor';
         $('body').removeClass('prevent-scroll');
       })
@@ -97,16 +119,25 @@ export class CreatePage implements OnInit, OnDestroy {
     this.dragulaService.destroy(this.dragulaName);
   }
 
+  removeClassHourAllocation(classId: string, hour: number) {
+    const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
+    classAllocation.allocation[hour] = undefined;
+  }
+
   getClassHourAllocation(classId: string, hour: number) {
     const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
     return classAllocation.allocation[hour];
   }
 
-  getClassHourTutotr(classId: string, hour: number) {
+  getClassHourTutotr(classId: string, hour: number): IUser | undefined {
     const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
     const tutorid = classAllocation.allocation[hour];
     const tutor = this.allTutorList.find(item => item._id === tutorid);
     return tutor;
+  }
+
+  checkIsHourAllocated(hour: number) {
+    return !!this.tutorClassAllocations.find(item => item.hour === hour);
   }
 
   ngOnInit() {
@@ -119,7 +150,9 @@ export class CreatePage implements OnInit, OnDestroy {
   }
 
   tutorAcccChange(e: any) {
-    this.tutorAccordian = e.detail.value;
+    if ((e?.path[0]?.classList as DOMTokenList)?.contains('accordion-group-expand-compact')) {
+      this.tutorAccordian = e.detail.value;
+    }
   }
 
   setStartDate(date: string) {
@@ -186,6 +219,9 @@ export class CreatePage implements OnInit, OnDestroy {
     if (!(this.hoursCtrl.value && this.rolesCtrl.value?.length && this.departmentControl.value && this.classesControl.value)) {
       return;
     }
+    if (this.showGrid && !await this.commonService.showOkCancelAlert(EStrings.areYouSure, EStrings.youAreGoingToResetAllocationGrid)) {
+      return;
+    }
     this.finalHoursCount = this.hoursCtrl.value;
     this.allocationData = [];
     for (let i = 0; i < this.classesControl.value?.length; i++) {
@@ -211,11 +247,21 @@ export class CreatePage implements OnInit, OnDestroy {
       this.accordianVal = undefined;
       this.showGrid = true;
       this.allTutorList = res;
+      this.allFilteredTutorList = res;
       this.tutorAccordian = 'tutor';
     }, err => {
       loader.dismiss();
       this.commonService.showToast(err.error.message);
     });
+  }
+
+  searchTutor(val: any) {
+    const searchKey = val?.detail?.value as string;
+    if (searchKey) {
+      this.allFilteredTutorList = this.allTutorList.filter(item => item.name.toLowerCase().includes(searchKey.trim().toLowerCase()));
+    } else {
+      this.allFilteredTutorList = this.allTutorList;
+    }
   }
 
   getRangeArray(n: number) {

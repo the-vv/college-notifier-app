@@ -115,9 +115,10 @@
           <ion-label>{{'available' | string}} {{'tutors' | string}}</ion-label>
         </ion-item>
         <ion-list slot="content" class="m-0 p-0  tutor-container">
+          <ion-searchbar showCancelButton="focus" animated (ionChange)="searchTutor($event)"></ion-searchbar>
           <ion-grid>
-            <ion-row [dragula]="dragulaName" id="tutor_list" [dragulaModel]="allTutorList">
-              <div *ngFor="let t of allTutorList; let i = index;" class="tutor-draggable" [id]="t._id">
+            <ion-row [dragula]="dragulaName" id="tutor_list" [dragulaModel]="allFilteredTutorList">
+              <div *ngFor="let t of allFilteredTutorList; let i = index;" class="tutor-draggable" [id]="t._id">
                 <ion-item>
                   <img [src]="t.image || 'assets/images/avatar.png'" class="tutor-avatar" />
                   <ion-label class="mx-1">
@@ -152,17 +153,21 @@
               <div class="dropable-area" *ngFor="let hour of getRangeArray(finalHoursCount)" [dragula]="dragulaName"
                 [dragulaModel]="allocationData" [id]="allocation.class['_id'] + '-' + hour"
                 [ngClass]="{nonDroppable: getClassHourAllocation(allocation.class['_id'], hour)}">
-                <div *ngIf="!getClassHourAllocation(allocation.class['_id'], hour)" class="drop-column"><span
+                <div *ngIf="!getClassHourAllocation(allocation.class['_id'], hour)" class="drop-column"
+                [ngClass]="{'allowedDrop' : dragging && !checkIsHourAllocated(hour), 'invalidDrop': dragging && checkIsHourAllocated(hour)}"><span
                     class="valign">{{allocation.class['name']}} {{'hour' | string}} {{hour +
                     1}}</span>
                 </div>
-                <div *ngIf="getClassHourAllocation(allocation.class['_id'], hour)">
+                <div *ngIf="getClassHourAllocation(allocation.class['_id'], hour)" class="allocated-tutor">
                   <ion-item>
-                    <img [src]="getClassHourTutotr(allocation.class['_id'], hour)['image'] || 'assets/images/avatar.png'" class="tutor-avatar" />
+                    <img
+                      [src]="getClassHourTutotr(allocation.class['_id'], hour)['image'] || 'assets/images/avatar.png'"
+                      class="tutor-avatar" />
                     <ion-label class="mx-1">
                       <h2>{{getClassHourTutotr(allocation.class['_id'], hour)['name']}}</h2>
                     </ion-label>
-                    <ion-icon name="reorder-three-outline" class="drag-handle"></ion-icon>
+                    <ion-icon name="trash-outline" class="cursor-pointer" (click)="removeClassHourAllocation(allocation.class['_id'], hour)" color="danger" >
+                    </ion-icon>
                   </ion-item>
                 </div>
               </div>

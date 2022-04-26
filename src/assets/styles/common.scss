@@ -11,14 +11,14 @@ $valueforn: 1 10px,
 5 60px,
 6 70px;
 
-$bcolorvalues: "danger"#dc3545,
-"dark"var(--ion-color-step-100),
-"warning"#ffc107,
-"info"#101414,
-"success"#198754,
-"secondary"#6c757d,
-"white"#fff,
-"grey"#6c757d;
+$bcolorvalues: "danger" #dc3545,
+"dark" var(--ion-color-step-100),
+"warning" #ffc107,
+"info" #101414,
+"success" #198754,
+"secondary" #6c757d,
+"white" #fff,
+"grey" #6c757d;
 
 
 $valueforfontn: 1 5rem,
@@ -35,11 +35,11 @@ $valueforhn: 1 2.5rem,
 5 1.25rem,
 6 1rem;
 
-$valueforfontweightn: "lighter"200,
-"light"300,
-"normal"400,
-"bold"700,
-"bolder"800;
+$valueforfontweightn: "lighter" 200,
+"light" 300,
+"normal" 400,
+"bold" 700,
+"bolder" 800;
 
 //Global Utility Styles
 
@@ -308,5 +308,11 @@ img.table-avatar {
 }
 
 .prevent-scroll {
-    overflow: hidden;
+    * {
+        overflow: hidden;
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

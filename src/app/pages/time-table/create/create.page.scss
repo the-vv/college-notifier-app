@@ -18,8 +18,29 @@
 
 }
 
+
+
+.allowedDrop {
+    background: repeating-linear-gradient(-55deg,
+            #2e4915,
+            #2e4915 10px,
+            #333 10px,
+            #333 20px);
+    color: white;
+}
+
+.invalidDrop {
+    background: repeating-linear-gradient(-55deg,
+            #4d1b1b,
+            #4d1b1b 10px,
+            #333 10px,
+            #333 20px);
+    color: white;
+}
+
 .tutor-container {
     max-height: 50vh;
+    overflow: auto;
 
     .tutor-draggable {
         margin: 3px;
@@ -57,5 +78,20 @@
 }
 
 .tutor-avatar {
-    height: 20px;
+    height: 25px;
+    width: 25px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.allocated-tutor {    
+    height: 53px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-item {
+        width: 100%;
+    }
+
 }

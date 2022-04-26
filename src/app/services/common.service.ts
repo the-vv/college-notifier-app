@@ -80,6 +80,30 @@ export class CommonService {
     }).then(alert => alert.present());
   }
 
+  showOkCancelAlert(title: string, message: string, okText: string = EStrings.ok, cancelText: string = EStrings.cancel) {
+    return new Promise((resolve, reject) => {
+      this.alertCtrl.create({
+        header: title,
+        message,
+        buttons: [
+          {
+            text: cancelText,
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {
+              resolve(false);
+            }
+          }, {
+            text: okText,
+            handler: () => {
+              resolve(true);
+            }
+          }
+        ]
+      }).then(alert => alert.present());
+    });
+  }
+
   uploadFiles(files: any) {
     return this.http.postAsync(files, [this.commonApiEndPoint, 'upload-files'].join('/'));
   }
