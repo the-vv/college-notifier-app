@@ -179,3 +179,10 @@
   </ion-card>
 
 </ion-content>
+
+<ion-footer>
+  <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
+    <span *ngIf="!loading">{{'submit' | string}}</span>
+    <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+  </ion-button>
+</ion-footer>

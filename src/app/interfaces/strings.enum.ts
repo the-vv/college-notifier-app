@@ -261,7 +261,9 @@ export enum EStrings {
     tutors = 'Tutors',
     tutor = 'Tutor',
     allocationGrid = 'Allocation Grid',
-    youAreGoingToResetAllocationGrid = 'You are going to reset the allocation grid',
+    thisWillResetAllocationGrid = 'This will reset the allocation grid!',
+    proffessor = 'Professor',
+    principal = 'Principal',
 
 
 }

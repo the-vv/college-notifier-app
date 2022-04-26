@@ -48,6 +48,7 @@ export class CreatePage implements OnInit, OnDestroy {
   dragulaName = 'tutorGrid';
   tutorClassAllocations: { hour: number; classId: string }[] = [];
   dragging = false;
+  loading = false;
 
 
   constructor(
@@ -219,7 +220,7 @@ export class CreatePage implements OnInit, OnDestroy {
     if (!(this.hoursCtrl.value && this.rolesCtrl.value?.length && this.departmentControl.value && this.classesControl.value)) {
       return;
     }
-    if (this.showGrid && !await this.commonService.showOkCancelAlert(EStrings.areYouSure, EStrings.youAreGoingToResetAllocationGrid)) {
+    if (this.showGrid && !await this.commonService.showOkCancelAlert(EStrings.areYouSure, EStrings.thisWillResetAllocationGrid)) {
       return;
     }
     this.finalHoursCount = this.hoursCtrl.value;
@@ -227,8 +228,6 @@ export class CreatePage implements OnInit, OnDestroy {
     for (let i = 0; i < this.classesControl.value?.length; i++) {
       this.allocationData.push({
         class: this.classesControl.value[i] as IClass,
-        college: this.collegeService.currentCollege$.value as ICollege,
-        department: this.departmentControl.value as IDepartment,
         hoursCount: this.hoursCtrl.value,
         schedule: {
           start: this.dateRange.start,
@@ -257,7 +256,7 @@ export class CreatePage implements OnInit, OnDestroy {
 
   searchTutor(val: any) {
     const searchKey = val?.detail?.value as string;
-    if (searchKey) {
+    if (searchKey.trim()) {
       this.allFilteredTutorList = this.allTutorList.filter(item => item.name.toLowerCase().includes(searchKey.trim().toLowerCase()));
     } else {
       this.allFilteredTutorList = this.allTutorList;
@@ -266,6 +265,13 @@ export class CreatePage implements OnInit, OnDestroy {
 
   getRangeArray(n: number) {
     return Array(n).fill(0).map((x, i) => i);
+  }
+
+  onSubmit() {
+    if (!this.showGrid) {
+      return;
+    }
+    console.log(this.allocationData);
   }
 
 }

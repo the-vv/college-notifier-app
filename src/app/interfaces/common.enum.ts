@@ -75,4 +75,6 @@ export enum ECustomUserRoles {
     assistProf = 'assist-professor',
     teachingStaff = 'teaching-staff',
     nonTeachingStaff = 'non-teaching-staff',
+    proffessor = 'professor',
+    principal = 'principal',
 }
