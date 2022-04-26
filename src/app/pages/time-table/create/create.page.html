@@ -163,18 +163,19 @@
                     <p-inplace #editor>
                       <ng-template pTemplate="display">
                         <span class="font-bold mr-1">
-                        {{
-                        getCustomHourText(allocation.class['_id'], hour) ?
-                        getCustomHourText(allocation.class['_id'], hour) + '-' :
-                        allocation.class['name']
-                        }} {{'hour' | string}} {{hour + 1}}</span>
+                          {{
+                          getCustomHourText(allocation.class['_id'], hour) ?
+                          getCustomHourText(allocation.class['_id'], hour) + ' -' :
+                          allocation.class['name']
+                          }} {{'hour' | string}} {{hour + 1}}</span>
                         <ion-icon name="create-outline"></ion-icon>
                       </ng-template>
                       <ng-template pTemplate="content">
                         <span class="v-center">
-                          <input placeholder="{{'enterCustomText' | string}}" type="text" [value]="getCustomHourText(allocation.class['_id'], hour) " pInputText #cutromVal>
+                          <input placeholder="{{'enterCustomText' | string}}" type="text"
+                            [value]="getCustomHourText(allocation.class['_id'], hour) " pInputText #customVal>
                           <ion-icon name="checkmark-circle" size="large" color="success" class="cursor-pointer"
-                            (click)="setCustomHourText(allocation.class['_id'], hour, cutromVal.value); editor.deactivate()">
+                            (click)="setCustomHourText(allocation.class['_id'], hour, customVal.value); editor.deactivate()">
                           </ion-icon>
                         </span>
                       </ng-template>

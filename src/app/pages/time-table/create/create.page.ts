@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 import { endOfDay, startOfDay } from 'date-fns';
 import { Subscription } from 'rxjs';
 import { ECustomUserRoles, ESourceTargetType } from 'src/app/interfaces/common.enum';
-import { IBatch, IClass, ICollege, IDepartment, ISchedule, ITimeTable, IUser } from 'src/app/interfaces/common.model';
+import { IBatch, IClass, IDepartment, ISchedule, ITimeTable, ITimeTableSchedule, IUser } from 'src/app/interfaces/common.model';
 import { ClassService } from 'src/app/services/class.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -12,6 +12,7 @@ import { DepartmentService } from 'src/app/services/department.service';
 import { UserService } from 'src/app/services/user.service';
 import { DragulaService } from 'ng2-dragula';
 import { EStrings } from 'src/app/interfaces/strings.enum';
+import { TimeTableService } from 'src/app/services/time-table.service';
 
 declare const $: any;
 
@@ -57,7 +58,8 @@ export class CreatePage implements OnInit, OnDestroy {
     private departmentService: DepartmentService,
     private classServoce: ClassService,
     private userService: UserService,
-    private dragulaService: DragulaService
+    private dragulaService: DragulaService,
+    private timeTableService: TimeTableService
   ) {
     dragulaService.createGroup(this.dragulaName, {
       revertOnSpill: true,
@@ -204,7 +206,6 @@ export class CreatePage implements OnInit, OnDestroy {
               ));
               this.classesControl.setValue(this.availableClasses);
               loader.dismiss();
-              this.onStart();
             }, err => {
               loader.dismiss();
               this.commonService.showToast(err.error.message);
@@ -246,13 +247,6 @@ export class CreatePage implements OnInit, OnDestroy {
     for (let i = 0; i < this.classesControl.value?.length; i++) {
       this.allocationData.push({
         class: this.classesControl.value[i] as IClass,
-        college: this.collegeService.currentCollege$.value as ICollege,
-        department: this.departmentControl.value as IDepartment,
-        hoursCount: this.hoursCtrl.value,
-        schedule: {
-          start: this.dateRange.start,
-          end: this.dateRange.end,
-        },
         allocation: {}
       });
     }
@@ -278,22 +272,11 @@ export class CreatePage implements OnInit, OnDestroy {
     if (!await this.commonService.showOkCancelAlert(EStrings.areYouSure, EStrings.thisWillResetAllocationGrid)) {
       return;
     }
-    this.allocationData = [];
-    for (let i = 0; i < this.classesControl.value?.length; i++) {
-      this.allocationData.push({
-        class: this.classesControl.value[i] as IClass,
-        college: this.collegeService.currentCollege$.value as ICollege,
-        department: this.departmentControl.value as IDepartment,
-        hoursCount: this.hoursCtrl.value,
-        schedule: {
-          start: this.dateRange.start,
-          end: this.dateRange.end,
-        },
-        allocation: {}
-      });
-    }
+    this.allocationData.forEach(item => {
+      item.allocation = {};
+    });
     this.finalHoursCount = 0;
-    setTimeout(() => {
+    setTimeout(() => { // for re-rendering the grid loop for faulty drag and drop bugs
       this.finalHoursCount = this.hoursCtrl.value;
     });
   }
@@ -311,11 +294,29 @@ export class CreatePage implements OnInit, OnDestroy {
     return Array(n).fill(0).map((x, i) => i);
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (!this.showGrid) {
       return;
     }
-    console.log(this.allocationData);
+    const body: ITimeTableSchedule = {
+      college: this.collegeService.currentCollege$.value._id,
+      department: this.departmentControl.value?._id,
+      hoursCount: this.finalHoursCount,
+      schedule: this.dateRange,
+      classes: this.allocationData.map(item => ({
+        class: (item.class as IClass)._id,
+        allocation: item.allocation
+      }))
+    };
+    console.log(body);
+    const loader = await this.commonService.showLoading();
+    this.timeTableService.postAsync(body).subscribe(res => {
+      loader.dismiss();
+      this.commonService.showToast(EStrings.timeTableCreatedSuccessfully);
+    }, err => {
+      loader.dismiss();
+      this.commonService.showToast(err.error.message);
+    });
   }
 
 }

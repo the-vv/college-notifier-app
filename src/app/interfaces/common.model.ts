@@ -157,13 +157,17 @@ export interface IResourceSchedule {
 }
 
 export interface ITimeTable {
-    _id?: string;
     class: string | IClass;
+    allocation?: {
+        [hour: number]: string; // hour: tutorId
+    };
+}
+
+export interface ITimeTableSchedule {
+    _id?: string;
     college: string | ICollege;
     department: string | IDepartment;
     hoursCount: number;
     schedule: ISchedule;
-    allocation?: {
-        [hour: number]: string; // hour: tutorId
-    };
+    classes: ITimeTable[];
 }
