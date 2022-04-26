@@ -264,6 +264,8 @@ export enum EStrings {
     thisWillResetAllocationGrid = 'This will reset the allocation grid!',
     proffessor = 'Professor',
     principal = 'Principal',
+    resetGrid = 'Reset Grid',
+    enterCustomText = 'Enter Custom Text',
 
 
 }

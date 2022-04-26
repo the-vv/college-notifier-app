@@ -323,6 +323,9 @@ export class SchedulerPage implements OnInit {
       }, err => {
         console.log(err);
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+        ev.start = oldSchedule.start;
+        ev.end = oldSchedule.end;
+        this.refresh.next();
       });
   }
 

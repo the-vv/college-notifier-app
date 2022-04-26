@@ -12,6 +12,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { IonicSelectableModule } from 'ionic-selectable';
 import { TableModule } from 'primeng/table';
 import { DragulaModule, DragulaService } from 'ng2-dragula';
+import { InplaceModule } from 'primeng/inplace';
 
 
 @NgModule({
@@ -25,11 +26,12 @@ import { DragulaModule, DragulaService } from 'ng2-dragula';
     IonicSelectableModule,
     ReactiveFormsModule,
     TableModule,
-    DragulaModule
+    DragulaModule,
+    InplaceModule
   ],
   declarations: [CreatePage],
   providers: [
     DragulaService
   ]
 })
-export class CreatePageModule {}
+export class CreatePageModule { }

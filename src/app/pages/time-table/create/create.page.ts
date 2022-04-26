@@ -127,6 +127,9 @@ export class CreatePage implements OnInit, OnDestroy {
 
   getClassHourAllocation(classId: string, hour: number) {
     const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
+    if(classAllocation.allocation[hour]?.startsWith('TEXT:')) {
+      return null;
+    }
     return classAllocation.allocation[hour];
   }
 
@@ -139,6 +142,21 @@ export class CreatePage implements OnInit, OnDestroy {
 
   checkIsHourAllocated(hour: number) {
     return !!this.tutorClassAllocations.find(item => item.hour === hour);
+  }
+
+  setCustomHourText(classId: string, hour: number, text: string) {
+    const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
+    classAllocation.allocation[hour] = `TEXT: ${text}`;
+    console.log(classAllocation.allocation);
+  }
+
+  getCustomHourText(classId: string, hour: number) {
+    const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
+    if(classAllocation.allocation[hour]?.startsWith('TEXT:')) {
+    return classAllocation.allocation[hour].split('TEXT:')[1].trim();
+    } else {
+      return '';
+    }
   }
 
   ngOnInit() {
@@ -228,6 +246,8 @@ export class CreatePage implements OnInit, OnDestroy {
     for (let i = 0; i < this.classesControl.value?.length; i++) {
       this.allocationData.push({
         class: this.classesControl.value[i] as IClass,
+        college: this.collegeService.currentCollege$.value as ICollege,
+        department: this.departmentControl.value as IDepartment,
         hoursCount: this.hoursCtrl.value,
         schedule: {
           start: this.dateRange.start,
@@ -251,6 +271,30 @@ export class CreatePage implements OnInit, OnDestroy {
     }, err => {
       loader.dismiss();
       this.commonService.showToast(err.error.message);
+    });
+  }
+
+  async resetGrid() {
+    if (!await this.commonService.showOkCancelAlert(EStrings.areYouSure, EStrings.thisWillResetAllocationGrid)) {
+      return;
+    }
+    this.allocationData = [];
+    for (let i = 0; i < this.classesControl.value?.length; i++) {
+      this.allocationData.push({
+        class: this.classesControl.value[i] as IClass,
+        college: this.collegeService.currentCollege$.value as ICollege,
+        department: this.departmentControl.value as IDepartment,
+        hoursCount: this.hoursCtrl.value,
+        schedule: {
+          start: this.dateRange.start,
+          end: this.dateRange.end,
+        },
+        allocation: {}
+      });
+    }
+    this.finalHoursCount = 0;
+    setTimeout(() => {
+      this.finalHoursCount = this.hoursCtrl.value;
     });
   }
 

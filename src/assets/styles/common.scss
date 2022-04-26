@@ -176,6 +176,14 @@ $val in $valueforhn {
     height: 100%;
 }
 
+
+.valign-center {
+    display: flex;
+    align-items: center;
+    // justify-content: center;
+    height: 100%;
+}
+
 .flex-dir-row {
     display: flex;
     flex-direction: row;
