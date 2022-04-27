@@ -1,8 +1,54 @@
 <ion-content>
-
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>
+                <ion-label>
+                    {{'active' | string}} {{'timeTable' | string}}
+                </ion-label>
+            </ion-card-title>
+            <ion-card-subtitle class="valign-center">
+                {{departmentControl.value['name']}} {{'department' | string}}
+                <ion-button class="ml-1" (click)="onChangeClick()" fill="clear" size="small" color="primary">
+                    {{'change' | string}}
+                </ion-button>
+            </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            <ng-container *ngFor="let timeTable of activeTimeTables">
+                <p-table [value]="[].constructor(timeTable.hoursCount)" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+                    <ng-template pTemplate="caption">
+                        {{'date' | string}}: {{timeTable.schedule.start | date: config.commonDateFormat}}
+                        <span
+                            *ngIf="(timeTable.schedule.start | date: config.commonDateFormat) !== (timeTable.schedule.end | date: config.commonDateFormat)">-
+                            {{timeTable.schedule.end | date: config.commonDateFormat}}</span>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th *ngFor="let class of timeTable.classes">{{'class' | string}}{{class.class['name']}}</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                        <tr>
+                            <td  *ngFor="let class of timeTable.classes">{{getClassHourAllocation(class.class['_id'], rowIndex)}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </ng-container>
+        </ion-card-content>
+    </ion-card>
     <ion-fab horizontal="end" vertical="bottom" slot="fixed">
         <ion-fab-button [routerLink]="['/', 'time-table', 'create']">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>
+
+    <div class="invisible-component">
+        <ionic-selectable #dptList [formControl]="departmentControl" [items]="availableDpts" itemValueField="_id"
+            itemTextField="name" [isMultiple]="false" [canSearch]="true" closeButtonSlot="end"
+            [shouldFocusSearchbar]="true" [shouldStoreItemValue]="false">
+            <ng-template ionicSelectableTitleTemplate>
+                {{'choose' | string}} {{'department' | string}}
+            </ng-template>
+        </ionic-selectable>
+    </div>
 </ion-content>

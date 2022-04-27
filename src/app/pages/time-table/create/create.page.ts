@@ -308,7 +308,7 @@ export class CreatePage implements OnInit, OnDestroy {
         allocation: item.allocation
       }))
     };
-    console.log(body);
+    // console.log(body);
     const loader = await this.commonService.showLoading();
     this.timeTableService.postAsync(body).subscribe(res => {
       loader.dismiss();

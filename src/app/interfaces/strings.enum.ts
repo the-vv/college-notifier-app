@@ -267,6 +267,9 @@ export enum EStrings {
     resetGrid = 'Reset Grid',
     enterCustomText = 'Enter Custom Text',
     timeTableCreatedSuccessfully = 'Time Table Created Successfully',
+    change = 'Change',
+    timeTables = 'Time Tables',
+    date = 'Date',
 
 
 }
