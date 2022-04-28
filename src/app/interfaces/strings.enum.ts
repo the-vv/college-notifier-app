@@ -270,6 +270,6 @@ export enum EStrings {
     change = 'Change',
     timeTables = 'Time Tables',
     date = 'Date',
-
+    inactive = 'Inactive',
 
 }

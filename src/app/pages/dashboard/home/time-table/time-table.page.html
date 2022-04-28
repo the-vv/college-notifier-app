@@ -3,7 +3,7 @@
         <ion-card-header>
             <ion-card-title>
                 <ion-label>
-                    {{'active' | string}} {{'timeTable' | string}}
+                    {{'active' | string}} {{'timeTables' | string}}
                 </ion-label>
             </ion-card-title>
             <ion-card-subtitle class="valign-center">
@@ -15,27 +15,84 @@
         </ion-card-header>
         <ion-card-content>
             <ng-container *ngFor="let timeTable of activeTimeTables">
-                <p-table [value]="[].constructor(timeTable.hoursCount)" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+                <p-table #activeTable [value]="[].constructor(timeTable.hoursCount)"
+                    styleClass="p-datatable-gridlines mt-1" responsiveLayout="scroll">
                     <ng-template pTemplate="caption">
-                        {{'date' | string}}: {{timeTable.schedule.start | date: config.commonDateFormat}}
+                        {{'date' | string}}: {{timeTable.schedule.start | date: config.commonLongDateFormat}}
                         <span
                             *ngIf="(timeTable.schedule.start | date: config.commonDateFormat) !== (timeTable.schedule.end | date: config.commonDateFormat)">-
-                            {{timeTable.schedule.end | date: config.commonDateFormat}}</span>
+                            {{timeTable.schedule.end | date: config.commonLongDateFormat}}</span>
+                        <ion-button class="ml-1" (click)="activeTable.exportCSV()" fill="clear" size="small"
+                            color="primary">
+                            {{'export' | string}}
+                        </ion-button>
                     </ng-template>
                     <ng-template pTemplate="header">
                         <tr>
-                            <th *ngFor="let class of timeTable.classes">{{'class' | string}}{{class.class['name']}}</th>
+                            <th *ngFor="let class of timeTable.classes">{{'class' | string}} {{class.class['name']}}
+                            </th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
                         <tr>
-                            <td  *ngFor="let class of timeTable.classes">{{getClassHourAllocation(class.class['_id'], rowIndex)}}</td>
+                            <td *ngFor="let class of timeTable.classes">{{getClassHourAllocation(class.class['_id'],
+                                rowIndex, timeTable._id)}}</td>
                         </tr>
                     </ng-template>
                 </p-table>
             </ng-container>
         </ion-card-content>
     </ion-card>
+
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>
+                <ion-label>
+                    {{'inactive' | string}} {{'timeTables' | string}}
+                </ion-label>
+            </ion-card-title>
+        </ion-card-header>
+        <ion-accordion-group>
+            <ion-accordion [value]="timeTable._id"  *ngFor="let timeTable of activeTimeTables">
+                <ion-item slot="header">
+                    <ion-label>
+                        {{timeTable.schedule.start | date: config.commonLongDateFormat}}                      
+                        <span
+                            *ngIf="(timeTable.schedule.start | date: config.commonDateFormat) !== (timeTable.schedule.end | date: config.commonDateFormat)">-
+                            {{timeTable.schedule.end | date: config.commonLongDateFormat}}</span>
+                    </ion-label>
+                </ion-item>
+                <ion-list slot="content">
+                    <p-table #activeTable [value]="[].constructor(timeTable.hoursCount)"
+                    styleClass="p-datatable-gridlines mt-1" responsiveLayout="scroll">
+                    <ng-template pTemplate="caption">  
+                        {{'date' | string}}: {{timeTable.schedule.start | date: config.commonLongDateFormat}}                      
+                        <span
+                            *ngIf="(timeTable.schedule.start | date: config.commonDateFormat) !== (timeTable.schedule.end | date: config.commonDateFormat)">-
+                            {{timeTable.schedule.end | date: config.commonLongDateFormat}}</span>
+                        <ion-button class="ml-1" (click)="activeTable.exportCSV()" fill="clear" size="small"
+                            color="primary">
+                            {{'export' | string}}
+                        </ion-button>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th *ngFor="let class of timeTable.classes">{{'class' | string}} {{class.class['name']}}
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                        <tr>
+                            <td *ngFor="let class of timeTable.classes">{{getClassHourAllocation(class.class['_id'],
+                                rowIndex, timeTable._id)}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                </ion-list>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-card>
+
     <ion-fab horizontal="end" vertical="bottom" slot="fixed">
         <ion-fab-button [routerLink]="['/', 'time-table', 'create']">
             <ion-icon name="add"></ion-icon>

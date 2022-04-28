@@ -44,6 +44,7 @@ export class TimeTablePage implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.add(this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd && (event.url) === '/dashboard/time-table') {
+        console.log('TimeTablePage: ngOnInit');
         this.loaded = true;
         this.initMethod();
       }
@@ -51,26 +52,31 @@ export class TimeTablePage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
+    console.log('ionViewWillEnter');
     if (!this.loaded) {
       this.initMethod();
     }
   }
 
-  initMethod() {
+  async initMethod() {
+    const loader = await this.commonService.showLoading();
     this.dptServce.getByCollegeAsync(this.collegeService.currentCollege$.value._id)
       .subscribe((res: IDepartment[]) => {
+        loader.dismiss();
         this.availableDpts = res;
         if (res.length) {
           this.departmentControl.setValue(this.availableDpts[0]);
           this.timeTableService.getByDepartmentAsync(this.departmentControl.value._id)
             .subscribe((timeTableRes: any) => {
               this.displayTimeTable(timeTableRes);
+              this.loaded = false;
             }, err => {
               console.log(err);
               this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
             });
         }
       }, err => {
+        loader.dismiss();
         console.log(err);
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
       });
@@ -111,7 +117,7 @@ export class TimeTablePage implements OnInit, OnDestroy {
   }
 
   getTutorOrText(value: string) {
-    if(value.startsWith('TEXT: ')) {
+    if (value.startsWith('TEXT: ')) {
       return value.split('TEXT: ')[1];
     } else {
       const tutor = this.activeTutors.find((t: IUser) => t._id === value);
@@ -119,18 +125,20 @@ export class TimeTablePage implements OnInit, OnDestroy {
     }
   }
 
-  getClassHourAllocation(classId: string, hour: number) {
+  getClassHourAllocation(classId: string, hour: number, timeTableId: string) {
     let choosenClass: ITimeTable;
     this.allTimeTables.forEach((timeTable: ITimeTableSchedule) => {
-      timeTable.classes.forEach((cls: ITimeTable) => {
-        // console.log(cls, classId);
-        if ((cls.class as IClass)._id === classId) {
-          choosenClass = cls;
-        }
-      });
+      if (timeTable._id === timeTableId) {
+        timeTable.classes.forEach((cls: ITimeTable) => {
+          // console.log(cls, classId);
+          if ((cls.class as IClass)._id === classId) {
+            choosenClass = cls;
+          }
+        });
+      }
     });
-    const allocation =  choosenClass.allocation[hour];
-    if(!allocation) { return '-'; }
+    const allocation = choosenClass.allocation[hour];
+    if (!allocation) { return '-'; }
     return this.getTutorOrText(allocation);
   }
 

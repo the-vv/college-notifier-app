@@ -129,7 +129,7 @@ export class CreatePage implements OnInit, OnDestroy {
 
   getClassHourAllocation(classId: string, hour: number) {
     const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
-    if(classAllocation.allocation[hour]?.startsWith('TEXT:')) {
+    if (classAllocation.allocation[hour]?.startsWith('TEXT:')) {
       return null;
     }
     return classAllocation.allocation[hour];
@@ -154,8 +154,8 @@ export class CreatePage implements OnInit, OnDestroy {
 
   getCustomHourText(classId: string, hour: number) {
     const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
-    if(classAllocation.allocation[hour]?.startsWith('TEXT:')) {
-    return classAllocation.allocation[hour].split('TEXT:')[1].trim();
+    if (classAllocation.allocation[hour]?.startsWith('TEXT:')) {
+      return classAllocation.allocation[hour].split('TEXT:')[1].trim();
     } else {
       return '';
     }
@@ -210,6 +210,27 @@ export class CreatePage implements OnInit, OnDestroy {
               loader.dismiss();
               this.commonService.showToast(err.error.message);
             });
+        }
+      })
+    );
+    this.subs.add(
+      this.rolesCtrl.valueChanges.subscribe(async (val) => {
+        if (val) {
+          const loader = await this.commonService.showLoading();
+          this.userService.getBySourceCustomRoleAsync(
+            ESourceTargetType.department, this.departmentControl.value?._id, this.rolesCtrl.value
+          ).subscribe(res => {
+            loader.dismiss();
+            // console.log(res);
+            this.accordianVal = undefined;
+            this.showGrid = true;
+            this.allTutorList = res;
+            this.allFilteredTutorList = res;
+            this.tutorAccordian = 'tutor';
+          }, err => {
+            loader.dismiss();
+            this.commonService.showToast(err.error.message);
+          });
         }
       })
     );
