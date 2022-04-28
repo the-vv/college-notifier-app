@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import { DragulaService } from 'ng2-dragula';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { TimeTableService } from 'src/app/services/time-table.service';
+import { Router } from '@angular/router';
 
 declare const $: any;
 
@@ -59,7 +60,8 @@ export class CreatePage implements OnInit, OnDestroy {
     private classServoce: ClassService,
     private userService: UserService,
     private dragulaService: DragulaService,
-    private timeTableService: TimeTableService
+    private timeTableService: TimeTableService,
+    private router: Router
   ) {
     dragulaService.createGroup(this.dragulaName, {
       revertOnSpill: true,
@@ -334,6 +336,7 @@ export class CreatePage implements OnInit, OnDestroy {
     this.timeTableService.postAsync(body).subscribe(res => {
       loader.dismiss();
       this.commonService.showToast(EStrings.timeTableCreatedSuccessfully);
+      this.router.navigate(['/dashboard/time-table'], { replaceUrl: true });
     }, err => {
       loader.dismiss();
       this.commonService.showToast(err.error.message);

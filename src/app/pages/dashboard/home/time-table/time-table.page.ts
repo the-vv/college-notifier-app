@@ -151,8 +151,9 @@ export class TimeTablePage implements OnInit, OnDestroy {
     saveAsPng(node, { filename: EStrings.timetableExport + `-${schedule.slice(5)}`, printDate: false })
       .then(() => {
         $('.hide-when-downloading').show();
-      }).catch(() => {
+      }).catch((e) => {
         $('.hide-when-downloading').show();
+        console.error('Error while exporting', e);
       });
   }
 
