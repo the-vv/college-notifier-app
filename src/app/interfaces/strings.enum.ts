@@ -271,5 +271,6 @@ export enum EStrings {
     timeTables = 'Time Tables',
     date = 'Date',
     inactive = 'Inactive',
+    timetableExport = 'Time Table Export',
 
 }

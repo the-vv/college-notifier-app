@@ -5,13 +5,16 @@ import { NavigationEnd, Router } from '@angular/router';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { IClass, IDepartment, ITimeTable, ITimeTableSchedule, IUser } from 'src/app/interfaces/common.model';
+import { IClass, IDepartment, ISchedule, ITimeTable, ITimeTableSchedule, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { TimeTableService } from 'src/app/services/time-table.service';
+import { saveAsPng, saveAsJpeg } from 'save-html-as-image';
+
+declare const $: any;
 
 @Component({
   selector: 'app-time-table',
@@ -140,6 +143,17 @@ export class TimeTablePage implements OnInit, OnDestroy {
     const allocation = choosenClass.allocation[hour];
     if (!allocation) { return '-'; }
     return this.getTutorOrText(allocation);
+  }
+
+  exportAsImage(nodeId: string, schedule: string) {
+    const node = document.getElementById(nodeId);
+    $('.hide-when-downloading').hide();
+    saveAsPng(node, { filename: EStrings.timetableExport + `-${schedule.slice(5)}`, printDate: false })
+      .then(() => {
+        $('.hide-when-downloading').show();
+      }).catch(() => {
+        $('.hide-when-downloading').show();
+      });
   }
 
 }
