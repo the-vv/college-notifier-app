@@ -93,6 +93,7 @@ export class TimeTablePage implements OnInit, OnDestroy {
     this.userModal.open();
     this.userModal.onClose.pipe(take(1)).subscribe(() => {
       // console.log(this.departmentControl.value);
+      if(!this.departmentControl.value?._id) { return; }
       this.timeTableService.getByDepartmentAsync(this.departmentControl.value._id)
         .subscribe((res: any) => {
           this.displayTimeTable(res);
