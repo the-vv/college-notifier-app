@@ -5,7 +5,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { IClass, IDepartment, ISchedule, ITimeTable, ITimeTableSchedule, IUser } from 'src/app/interfaces/common.model';
+import { IClass, IDepartment, ITimeTable, ITimeTableSchedule, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -47,7 +47,7 @@ export class TimeTablePage implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.add(this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd && (event.url) === '/dashboard/time-table') {
-        console.log('TimeTablePage: ngOnInit');
+        // console.log('TimeTablePage: ngOnInit');
         this.loaded = true;
         this.initMethod();
       }
@@ -55,7 +55,7 @@ export class TimeTablePage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
-    console.log('ionViewWillEnter');
+    // console.log('ionViewWillEnter');
     if (!this.loaded) {
       this.initMethod();
     }
@@ -148,11 +148,14 @@ export class TimeTablePage implements OnInit, OnDestroy {
   exportAsImage(nodeId: string, schedule: string) {
     const node = document.getElementById(nodeId);
     $('.hide-when-downloading').hide();
+    $('.show-when-downloading').show();
     saveAsPng(node, { filename: EStrings.timetableExport + `-${schedule.slice(5)}`, printDate: false })
       .then(() => {
         $('.hide-when-downloading').show();
+        $('.show-when-downloading').hide();
       }).catch((e) => {
         $('.hide-when-downloading').show();
+        $('.show-when-downloading').hide();
         console.error('Error while exporting', e);
       });
   }
@@ -161,11 +164,14 @@ export class TimeTablePage implements OnInit, OnDestroy {
     if (!await this.commonService.showOkCancelAlert(EStrings.confirmDelete, `${EStrings.areYouSureWantToDelete} ${EStrings.timeTable}?`)) {
       return;
     }
+    const loader = await this.commonService.showLoading();
     this.timeTableService.deleteAsync(timeTableId)
       .subscribe(() => {
+        loader.dismiss();
         this.commonService.showToast(EStrings.successfullyDeleted);
         this.initMethod();
       }, err => {
+        loader.dismiss();
         console.log(err);
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
       });

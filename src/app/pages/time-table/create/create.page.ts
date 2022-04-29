@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import { DragulaService } from 'ng2-dragula';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { TimeTableService } from 'src/app/services/time-table.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare const $: any;
 
@@ -51,6 +51,7 @@ export class CreatePage implements OnInit, OnDestroy {
   tutorClassAllocations: { hour: number; classId: string }[] = [];
   dragging = false;
   loading = false;
+  timeTableId: string;
 
 
   constructor(
@@ -61,7 +62,8 @@ export class CreatePage implements OnInit, OnDestroy {
     private userService: UserService,
     private dragulaService: DragulaService,
     private timeTableService: TimeTableService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     dragulaService.createGroup(this.dragulaName, {
       revertOnSpill: true,
@@ -151,7 +153,7 @@ export class CreatePage implements OnInit, OnDestroy {
   setCustomHourText(classId: string, hour: number, text: string) {
     const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
     classAllocation.allocation[hour] = `TEXT: ${text}`;
-    console.log(classAllocation.allocation);
+    // console.log(classAllocation.allocation);
   }
 
   getCustomHourText(classId: string, hour: number) {
@@ -193,6 +195,25 @@ export class CreatePage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
+    this.timeTableId = this.route.snapshot.paramMap.get('id');
+    if (this.timeTableId) {
+      this.timeTableService.getByIdAsync(this.timeTableId).subscribe(data => {
+        if (!data) { return; }
+        console.log(data);
+        this.dateRange = data.schedule;
+        this.allocationData = data.classes;
+        this.departmentControl.setValue(data.department);
+        const clasList: IClass[] = [];
+        this.allocationData.forEach(item => {
+          clasList.push(item.class as IClass);
+        });
+        this.classesControl.setValue(clasList);
+        this.hoursCount = data.hoursCount;
+        this.onStart();
+      }, err => {
+        this.commonService.showToast(err.error.message);
+      });
+    }
     this.getDpts();
     this.subs.add(
       this.departmentControl.valueChanges.subscribe(async (val) => {
@@ -266,12 +287,14 @@ export class CreatePage implements OnInit, OnDestroy {
       return;
     }
     this.finalHoursCount = this.hoursCtrl.value;
-    this.allocationData = [];
-    for (let i = 0; i < this.classesControl.value?.length; i++) {
-      this.allocationData.push({
-        class: this.classesControl.value[i] as IClass,
-        allocation: {}
-      });
+    if (this.showGrid || !this.timeTableId) { // donot reset if editing for first time
+      this.allocationData = [];
+      for (let i = 0; i < this.classesControl.value?.length; i++) {
+        this.allocationData.push({
+          class: this.classesControl.value[i] as IClass,
+          allocation: {}
+        });
+      }
     }
     // console.log(this.allocationData);
     const loader = await this.commonService.showLoading();
@@ -331,16 +354,29 @@ export class CreatePage implements OnInit, OnDestroy {
         allocation: item.allocation
       }))
     };
-    // console.log(body);
-    const loader = await this.commonService.showLoading();
-    this.timeTableService.postAsync(body).subscribe(res => {
-      loader.dismiss();
-      this.commonService.showToast(EStrings.timeTableCreatedSuccessfully);
-      this.router.navigate(['/dashboard/time-table'], { replaceUrl: true });
-    }, err => {
-      loader.dismiss();
-      this.commonService.showToast(err.error.message);
-    });
+    if (!this.timeTableId) {
+      // console.log(body);
+      const loader = await this.commonService.showLoading();
+      this.timeTableService.postAsync(body).subscribe(res => {
+        loader.dismiss();
+        this.commonService.showToast(EStrings.timeTableCreatedSuccessfully);
+        this.router.navigate(['/dashboard/time-table'], { replaceUrl: true });
+      }, err => {
+        loader.dismiss();
+        this.commonService.showToast(err.error.message);
+      });
+    } else {
+      body._id = this.timeTableId;
+      const loader = await this.commonService.showLoading();
+      this.timeTableService.putAsync(body).subscribe(res => {
+        loader.dismiss();
+        this.commonService.showToast(EStrings.timeTableUpdatedSuccessfully);
+        this.router.navigate(['/dashboard/time-table'], { replaceUrl: true });
+      }, err => {
+        loader.dismiss();
+        this.commonService.showToast(err.error.message);
+      });
+    }
   }
 
 }
