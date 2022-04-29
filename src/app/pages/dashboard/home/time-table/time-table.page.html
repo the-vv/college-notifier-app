@@ -15,7 +15,7 @@
         </ion-card-header>
         <ion-card-content>
             <ng-container *ngFor="let timeTable of activeTimeTables">
-                <div class="container" [id]="timeTable._id + '-actve'">
+                <div class="container" [id]="timeTable._id + '-active'">
                     <p-table #activeTable [value]="[].constructor(timeTable.hoursCount)"
                         styleClass="p-datatable-gridlines mt-1" responsiveLayout="scroll">
                         <ng-template pTemplate="caption">
@@ -27,11 +27,21 @@
                                         *ngIf="(timeTable.schedule.start | date: config.commonDateFormat) !== (timeTable.schedule.end | date: config.commonDateFormat)">-
                                         {{timeTable.schedule.end | date: config.commonLongDateFormat}}</span>
                                 </span>
-                                <ion-button class="ml-1 hide-when-downloading"
-                                    (click)="exportAsImage(timeTable._id + '-actve', tdate.innerText)" fill="clear"
-                                    size="small" color="primary">
-                                    {{'export' | string}}
-                                </ion-button>
+                                <span class="buttons-actions hide-when-downloading">
+                                    <ion-button
+                                        (click)="exportAsImage(timeTable._id + '-active', tdate.innerText)" fill="clear"
+                                        size="small" color="primary">
+                                        <ion-icon name="download-outline" slot="icon-only" size="small"></ion-icon>
+                                    </ion-button>
+                                    <ion-button [routerLink]="['/time-table/create', timeTable._id]" fill="clear"
+                                        size="small" color="warning">
+                                        <ion-icon name="create-outline" slot="icon-only" size="small"></ion-icon>
+                                    </ion-button>
+                                    <ion-button (click)="deleteTimeTable(timeTable._id)" fill="clear"
+                                        size="small" color="danger">
+                                        <ion-icon name="trash-outline" slot="icon-only" size="small"></ion-icon>
+                                    </ion-button>
+                                </span>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="header">
@@ -84,11 +94,21 @@
                                             *ngIf="(timeTable.schedule.start | date: config.commonDateFormat) !== (timeTable.schedule.end | date: config.commonDateFormat)">-
                                             {{timeTable.schedule.end | date: config.commonLongDateFormat}}</span>
                                     </span>
-                                    <ion-button class="ml-1 hide-when-downloading"
-                                        (click)="exportAsImage(timeTable._id + '-inactive', tdate.innerText)" fill="clear"
-                                        size="small" color="primary">
-                                        {{'export' | string}}
-                                    </ion-button>
+                                    <span class="buttons-actions hide-when-downloading">
+                                        <ion-button
+                                            (click)="exportAsImage(timeTable._id + '-inactive', tdate.innerText)" fill="clear"
+                                            size="small" color="primary">
+                                            <ion-icon name="download-outline" slot="icon-only" size="small"></ion-icon>
+                                        </ion-button>
+                                        <ion-button [routerLink]="['/time-table/create', timeTable._id]" fill="clear"
+                                            size="small" color="warning">
+                                            <ion-icon name="create-outline" slot="icon-only" size="small"></ion-icon>
+                                        </ion-button>
+                                        <ion-button (click)="deleteTimeTable(timeTable._id)" fill="clear"
+                                            size="small" color="danger">
+                                            <ion-icon name="trash-outline" slot="icon-only" size="small"></ion-icon>
+                                        </ion-button>
+                                    </span>
                                 </div>
                             </ng-template>
                             <ng-template pTemplate="header">

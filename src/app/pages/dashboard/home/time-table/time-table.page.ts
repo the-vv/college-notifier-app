@@ -157,4 +157,17 @@ export class TimeTablePage implements OnInit, OnDestroy {
       });
   }
 
+  async deleteTimeTable(timeTableId: string) {
+    if (!await this.commonService.showOkCancelAlert(EStrings.confirmDelete, `${EStrings.areYouSureWantToDelete} ${EStrings.timeTable}?`)) {
+      return;
+    }
+    this.timeTableService.deleteAsync(timeTableId)
+      .subscribe(() => {
+        this.commonService.showToast(EStrings.successfullyDeleted);
+        this.initMethod();
+      }, err => {
+        console.log(err);
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+      });
+  }
 }

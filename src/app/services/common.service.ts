@@ -81,7 +81,7 @@ export class CommonService {
   }
 
   showOkCancelAlert(title: string, message: string, okText: string = EStrings.ok, cancelText: string = EStrings.cancel) {
-    return new Promise((resolve, reject) => {
+    return new Promise<boolean>((resolve, reject) => {
       this.alertCtrl.create({
         header: title,
         message,

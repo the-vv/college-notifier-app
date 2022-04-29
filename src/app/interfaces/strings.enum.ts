@@ -272,5 +272,6 @@ export enum EStrings {
     date = 'Date',
     inactive = 'Inactive',
     timetableExport = 'Time Table Export',
+    successfullyDeleted = 'Successfully Deleted',
 
 }
