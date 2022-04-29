@@ -199,7 +199,7 @@ export class CreatePage implements OnInit, OnDestroy {
     if (this.timeTableId) {
       this.timeTableService.getByIdAsync(this.timeTableId).subscribe(data => {
         if (!data) { return; }
-        console.log(data);
+        // console.log(data);
         this.dateRange = data.schedule;
         this.allocationData = data.classes;
         this.departmentControl.setValue(data.department);

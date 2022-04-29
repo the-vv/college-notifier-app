@@ -27,7 +27,7 @@ export class SignupPage implements OnInit {
       this.router.events.subscribe((e) => {
         if (e instanceof NavigationEnd) {
           const url = e.url;
-          console.log(url);
+          // console.log(url);
           const urlEnding = url.split('/')[3];
           if (urlEnding === EUserRoles.admin) {
             this.items = [

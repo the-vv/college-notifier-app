@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EUserRoles } from 'src/app/interfaces/common.enum';
+import { Subscription } from 'rxjs';
+import { ERequestStatus, EUserRoles } from 'src/app/interfaces/common.enum';
 import { AuthService } from 'src/app/services/auth.service';
+import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -9,17 +11,31 @@ import { CommonService } from 'src/app/services/common.service';
   templateUrl: './side-menu.component.html',
   styleUrls: ['./side-menu.component.scss'],
 })
-export class SideMenuComponent implements OnInit {
+export class SideMenuComponent implements OnInit, OnDestroy {
 
   public eUserRoles = EUserRoles;
+  public isAdmin = false;
+  private subs = new Subscription();
 
   constructor(
     public authService: AuthService,
     private router: Router,
     private commonService: CommonService,
+    private collegeService: CollegeService
   ) { }
 
   ngOnInit() {
+    this.subs.add(
+      this.collegeService.currentCollege$.subscribe(res => {
+        if (res && res.status === ERequestStatus.active) {
+          this.isAdmin = [EUserRoles.superAdmin, EUserRoles.admin].includes(this.authService.currentUser$.value?.role) ? true : false;
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   goToHome() {
