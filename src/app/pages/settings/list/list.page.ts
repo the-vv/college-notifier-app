@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CollegeService } from 'src/app/services/college.service';
 
 @Component({
   selector: 'app-settings-list',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsListPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    public collegeService: CollegeService
+  ) { }
 
   ngOnInit() {
   }

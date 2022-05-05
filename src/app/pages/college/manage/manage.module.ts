@@ -10,6 +10,7 @@ import { CollegeManagePage } from './manage.page';
 import { CommonExportsModule } from 'src/app/common-exports.module';
 import {AvatarModule} from 'primeng/avatar';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { IonicSelectableModule } from 'ionic-selectable';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommonExportsModule,
     ReactiveFormsModule,
     AvatarModule,
-    SharedModule
+    SharedModule,
+    IonicSelectableModule
   ],
   declarations: [CollegeManagePage]
 })

@@ -27,7 +27,7 @@
                 <ion-label position="floating">{{'email' | string}}</ion-label>
                 <ion-input type="email" formControlName="email"></ion-input>
               </ion-item>
-              <small class="text-danger" *ngIf="f.email.errors?.required && (f.email.touched || showErrors)">{{'email' |
+              <small class="text-danger" *ngIf="f.email.errors?.['required'] && (f.email.touched || showErrors)">{{'email' |
                 string}}
                 {{'isRequired' | string}}</small>
               <small class="text-danger" *ngIf="f.email.errors?.email && (f.email.touched || showErrors)">{{'email' |

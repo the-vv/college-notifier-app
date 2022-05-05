@@ -36,6 +36,10 @@ export class UserService {
     return this.http.getAsync(`${this.userMapUrl}/getByCollege/${collegeId}`, { role });
   }
 
+  getUserMapByUserIdAsync(userId: string) {
+    return this.http.getAsync(`${this.userMapUrl}/getByUser/${userId}`);
+  }
+
   getBySourceAsync(sourceType: ESourceTargetType, sourceId: string, role: EUserRoles, customRole?: ECustomUserRoles) {
     return this.http.getAsync(`${this.userMapUrl}/${sourceType}/${sourceId}`, { role, customRole });
   }

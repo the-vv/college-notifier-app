@@ -1,3 +1,32 @@
-<p>
-  join-college works!
-</p>
+<ion-searchbar showCancelButton="focus" animated (ionChange)="null"></ion-searchbar>
+
+<ion-grid class="ion-align-items-center ion-justify-content-center" #roleContainer>
+  <ion-row class="">
+    <ion-col size="12" size-md="12" size-xl="6" *ngFor="let college of collegesList">
+      <ion-card button class="v-center">
+        <ion-row class="v-center">
+          <ion-col size="5" class="v-center h-100">
+            <img [src]="college.image || '/assets/images/college.png'" alt="" class="card-image">
+          </ion-col>
+          <ion-col size="7" class="">
+            <h3>
+              <ion-text color="dark">{{college.name}}</ion-text>
+            </h3>
+            <p>
+              <ion-text>{{college.address}}</ion-text>
+            </p>
+            <p *ngIf="college.website">
+              <ion-text><a target="_blank" [href]="college.website">{{college.website}}</a></ion-text>
+            </p>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col [classList]="'p-0'">
+            <ion-button expand="block" color="primary" (click)="joinCollege(college._id)"> {{'requestToJoin' |
+              string}}</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-grid>

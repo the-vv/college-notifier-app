@@ -33,6 +33,10 @@ export interface IUser {
     image?: string;
 }
 
+export interface IUserUsername extends IUser {
+    userName: string;
+}
+
 export interface IDepartment {
     _id?: string;
     name: string;
@@ -96,6 +100,7 @@ export interface IUserMap {
     _id?: string;
     user: string | IUser;
     source: ISource;
+    active?: boolean;
 }
 
 export interface ITarget {

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IUser } from '../interfaces/common.model';
+import { IUser, IUserMap } from '../interfaces/common.model';
 import { HttpService } from './http.service';
 import { Storage } from '@capacitor/storage';
-import { EStorageKeys } from '../interfaces/common.enum';
+import { EStorageKeys, EUserRoles } from '../interfaces/common.enum';
 import { Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
 import { EStrings } from '../interfaces/strings.enum';
+import { UserService } from './user.service';
+import { CollegeService } from './college.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +18,19 @@ export class AuthService {
   public currentUserRole: string;
   public currentUser$: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
   public isLoggedIn: boolean;
+  public currentUserMap$: BehaviorSubject<IUserMap> = new BehaviorSubject(null);
+  public isAdmin = false;
   private authAPiUrl = 'api/auth';
 
   constructor(
     private httpService: HttpService,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {
+  }
+
+  get isSuperAdmin(): boolean {
+    return this.currentUserRole === EUserRoles.superAdmin;
   }
 
   initAuth(): Promise<boolean> {
@@ -38,6 +47,8 @@ export class AuthService {
       });
     });
   }
+
+
 
   saveUser(user: IUser) {
     this.currentUser$.next(user);
@@ -82,6 +93,27 @@ export class AuthService {
 
   signupAsync(user: IUser): Observable<any> {
     return this.httpService.postAsync(user, [this.authAPiUrl, 'signup'].join('/'));
+  }
+
+  doUserLogin(userId: string) {
+    return new Promise<IUserMap>((resolve, reject) => {
+      this.userService.getUserMapByUserIdAsync(userId).subscribe((userMap: IUserMap) => {
+        console.log(userMap);
+        this.currentUserMap$.next(userMap);
+        if(!userMap) {
+          this.router.navigate(['/auth/signup', 'join-college'], { replaceUrl: true });
+        } else if(userMap.active === false) {
+          this.router.navigate(['/dashboard'], { replaceUrl: true });
+        } else {
+          const user = userMap.user;
+          
+        }
+        resolve(userMap);
+      }, err => {
+        console.log(err);
+        reject(err);
+      });
+    });
   }
 
 }

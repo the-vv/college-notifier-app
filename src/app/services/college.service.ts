@@ -26,6 +26,7 @@ export class CollegeService {
     this.authService.currentUser$.subscribe(user => {
       if(!user) {
         this.currentCollege$.next(null);
+        this.saveCollege(null);
       }
     });
   }

@@ -35,7 +35,7 @@ export class CreatePage implements OnInit, OnDestroy {
   availableDpts: IDepartment[] = [];
   availableClasses: IClass[] = [];
   classesControl = new FormControl([]);
-  hoursCtrl = new FormControl(3);
+  hoursCtrl = new FormControl(6);
   finalHoursCount = 0;
   rolesCtrl = new FormControl([ECustomUserRoles.teachingStaff, ECustomUserRoles.assistProf]);
   hoursCount: string | number = 6;

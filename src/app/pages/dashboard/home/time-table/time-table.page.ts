@@ -91,14 +91,17 @@ export class TimeTablePage implements OnInit, OnDestroy {
 
   onChangeClick() {
     this.userModal.open();
-    this.userModal.onClose.pipe(take(1)).subscribe(() => {
+    this.userModal.onClose.pipe(take(1)).subscribe(async () => {
       // console.log(this.departmentControl.value);
-      if(!this.departmentControl.value?._id) { return; }
+      if (!this.departmentControl.value?._id) { return; }
+      const loader = await this.commonService.showLoading();
       this.timeTableService.getByDepartmentAsync(this.departmentControl.value._id)
         .subscribe((res: any) => {
+          loader.dismiss();
           this.displayTimeTable(res);
         }, err => {
           console.log(err);
+          loader.dismiss();
           this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
         });
     });

@@ -22,7 +22,7 @@ export class MainResolverService {
 
   init() {
     return new Promise((resolve, reject) => {
-      this.authService.initAuth().then(() => {
+      this.authService.initAuth().then(async () => {
         if (!this.authService.currentUser$.value) {
           this.router.navigate(['/', 'auth', 'login'], { replaceUrl: true });
           return resolve(true);
@@ -46,9 +46,16 @@ export class MainResolverService {
               this.router.navigate(['/', 'auth', 'signup', 'create-college'], { replaceUrl: true });
             });
         }
-        else {
-          console.log('user is not admin');
-          resolve(true);
+        else if (this.authService.currentUser$?.value?.role === EUserRoles.faculty) {
+          console.log('user is faculty');
+          this.authService.doUserLogin(this.authService.currentUser$?.value._id)
+          .then(() => {
+            resolve(true);
+          })
+          .catch(err => {
+            this.router.navigate(['/'], { replaceUrl: true });
+            resolve(true);
+          });
         }
       }).catch(err => {
         reject(err);

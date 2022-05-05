@@ -3,12 +3,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
 import { Subscription } from 'rxjs';
-import { EBreakPoints, ERequestStatus, EUserRoles } from 'src/app/interfaces/common.enum';
-import { ICollege } from 'src/app/interfaces/common.model';
+import { EBreakPoints, ERequestStatus, ESourceTargetType, EUserRoles } from 'src/app/interfaces/common.enum';
+import { ICollege, IUser, IUserUsername } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { UserService } from 'src/app/services/user.service';
 import { ImageUploadComponent } from 'src/app/shared/image-upload/image-upload.component';
 
 @Component({
@@ -25,6 +26,8 @@ export class CollegeManagePage implements OnInit, OnDestroy {
   public loading = false;
   public isUpdate = false;
   public collegeId: string;
+  public availableFaculties: IUserUsername[] = [];
+  public disabledAdmins: IUserUsername[] = [];
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -33,7 +36,8 @@ export class CollegeManagePage implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private authService: AuthService,
     private collegeService: CollegeService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private userService: UserService
   ) { }
 
   get f() { return this.collegeForm.controls; }
@@ -47,7 +51,8 @@ export class CollegeManagePage implements OnInit, OnDestroy {
       address: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       website: ['', [Validators.pattern(/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/)]],
-      image: ['']
+      image: [''],
+      admins: ['', Validators.required]
     });
     this.collegeId = this.activatedRoute.snapshot.params.id;
     if (this.collegeId) {
@@ -55,7 +60,29 @@ export class CollegeManagePage implements OnInit, OnDestroy {
       const loader = await this.commonService.showLoading();
       this.collegeService.getByIdAsync(this.collegeId).subscribe((res: ICollege) => {
         loader.dismiss();
-        this.collegeForm.patchValue(res);
+        this.collegeForm.patchValue({
+          name: res.name,
+          address: res.address,
+          phone: res.phone,
+          website: res.website,
+          image: res.image,
+          admins: (res.admins as IUser[]).map((val: IUser) => val._id)
+        });
+        this.userService.getBySourceAsync(ESourceTargetType.college, this.collegeService.currentCollege$.value._id, EUserRoles.faculty)
+          .subscribe((facRes: IUser[]) => {
+            this.availableFaculties = facRes?.map((val: IUser) => ({ ...val, userName: `${val.name} (${val.email})` }));
+            (res.admins as IUser[]).forEach((val) => {
+              this.availableFaculties.push({ ...val, userName: `${val.name} (${val.email})` });
+            });
+            // remove duplicate values from available faculties
+            this.availableFaculties = this.availableFaculties
+              .filter((val, index, self) => self.findIndex((t) => t._id === val._id) === index);
+            const currentUser = this.authService.currentUser$.value;
+            this.disabledAdmins.push({ ...currentUser, userName: `${currentUser.name} (${currentUser.email})` });
+          }, err => {
+            console.log(err);
+            this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+          });
       },
         (err) => {
           loader.dismiss();
@@ -92,10 +119,15 @@ export class CollegeManagePage implements OnInit, OnDestroy {
       college._id = this.collegeId;
       this.collegeService.putAsync(college).subscribe((res: ICollege) => {
         this.loading = false;
+        this.commonService.showToast(EStrings.collegeUpdatedSuccessfully);
         if (res) {
           this.collegeService.saveCollege(res);
         }
+        if(this.authService.isSuperAdmin) {
         this.router.navigate(['/college/list']);
+        } else {
+          this.router.navigate(['/settings']);
+        }
       }, (err) => {
         this.loading = false;
         Toast.show({

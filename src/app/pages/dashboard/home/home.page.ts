@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -57,6 +58,20 @@ export class HomePage implements OnInit {
       this.subs.add(collegeSubscription);
     } else if (this.authService.currentUserRole === EUserRoles.superAdmin) {
       this.commonService.goToDashboard();
+    } else if(this.authService.currentUserRole === EUserRoles.faculty) {
+      this.authService.doUserLogin(this.authService.currentUser$?.value._id)
+      .then((userMap) => {
+        if(userMap?.active) {
+          this.loading = false;
+          this.commonService.goToDashboard();
+        } else {
+          this.commonService.showSuccessPage(`${EStrings.collegeJoinRequestSemtSuccessFully}`, EStrings.pleaseWaitForApproval, false);
+        }
+      }).catch(err => {
+        console.log(err);
+        this.loading = false;
+        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+      });
     }
   }
 

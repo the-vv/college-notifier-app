@@ -1,7 +1,9 @@
+/* eslint-disable no-underscore-dangle */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ERequestStatus, EUserRoles } from 'src/app/interfaces/common.enum';
+import { IUser } from 'src/app/interfaces/common.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -15,6 +17,8 @@ export class SideMenuComponent implements OnInit, OnDestroy {
 
   public eUserRoles = EUserRoles;
   public isAdmin = false;
+  public isSuperAdmin = false;
+  public userIsActive = false;
   private subs = new Subscription();
 
   constructor(
@@ -28,7 +32,23 @@ export class SideMenuComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.collegeService.currentCollege$.subscribe(res => {
         if (res && res.status === ERequestStatus.active) {
-          this.isAdmin = [EUserRoles.superAdmin, EUserRoles.admin].includes(this.authService.currentUser$.value?.role) ? true : false;
+          this.isSuperAdmin = [EUserRoles.superAdmin].includes(this.authService.currentUser$.value?.role) ? true : false;
+          this.isAdmin = [EUserRoles.admin].includes(this.authService.currentUser$.value?.role) ? true : false;
+          if(!this.isAdmin) {
+            const currentUser = this.authService.currentUser$.value;
+            const collegeAdmins = (res.admins as IUser[]).map((admin: IUser) => admin._id);
+            if (collegeAdmins.includes(currentUser._id)) {
+              this.isAdmin = true;
+            }
+          }
+        }
+      })
+    );
+    this.subs.add(
+      this.authService.currentUserMap$.subscribe(res => {
+        console.log(res);
+        if (res) {
+          this.userIsActive = res.active;
         }
       })
     );
@@ -39,28 +59,28 @@ export class SideMenuComponent implements OnInit, OnDestroy {
   }
 
   goToHome() {
-    if(this.router.url.includes('/dashboard')) {
+    if (this.router.url.includes('/dashboard')) {
       return;
     }
     this.commonService.goToDashboard();
   }
 
   goToReports() {
-    if(this.router.url.includes('/reports')) {
+    if (this.router.url.includes('/reports')) {
       return;
     }
     this.router.navigate(['/', 'reports']);
   }
 
   goToSettings() {
-    if(this.router.url.endsWith('/settings')) {
+    if (this.router.url.endsWith('/settings')) {
       return;
     }
     this.router.navigate(['/', 'settings']);
   }
 
   goToCalendar() {
-    if(this.router.url.endsWith('/calendar')) {
+    if (this.router.url.endsWith('/calendar')) {
       return;
     }
     this.router.navigate(['/', 'calendar']);

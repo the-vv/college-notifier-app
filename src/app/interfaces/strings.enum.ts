@@ -249,12 +249,12 @@ export enum EStrings {
     'class-leader' = 'Class Leader',
     'assist-professor' = 'Assistant Professor',
     'teaching-staff' = 'Teaching Staff',
-    'non-teaching-staff' =   'Non-Teaching Staff',
+    'non-teaching-staff' = 'Non-Teaching Staff',
     customRoles = 'Custom Roles',
     editorSizeLimitExceeded = 'Editor Size Limit Exceeded',
     hoursCount = 'Hours Count',
     hours = 'Hours',
-    active  = 'Active',
+    active = 'Active',
     creating = 'Creating',
     hour = 'Hour',
     available = 'Available',
@@ -274,5 +274,11 @@ export enum EStrings {
     timetableExport = 'Time Table Export',
     successfullyDeleted = 'Successfully Deleted',
     timeTableUpdatedSuccessfully = 'Time Table Updated Successfully',
+    collegeUpdatedSuccessfully = 'College Updated Successfully',
+    requestToJoin = 'Request to Join',
+    collegeJoinRequestSemtSuccessFully = 'College Join Request Sent Successfully',
+    pleaseWaitForApproval = 'Please wait for approval',
+    accessRequests = 'Access Requests',
+
 
 }

@@ -10,6 +10,10 @@ const routes: Routes = [
     path: ':role/list',
     loadChildren: () => import('./student/list/list.module').then( m => m.ListPageModule)
   },
+  {
+    path: 'access-request',
+    loadChildren: () => import('./users/access-request/access-request.module').then( m => m.AccessRequestPageModule)
+  },
 
 ];
 
