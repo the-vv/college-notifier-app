@@ -179,9 +179,10 @@
                       <ng-template pTemplate="content">
                         <span class="v-center">
                           <input placeholder="{{'enterCustomText' | string}}" type="text"
-                            [value]="getCustomHourText(allocation.class['_id'], hour) " pInputText #customVal>
+                            [value]="getCustomHourText(allocation.class['_id'], hour) " pInputText #customVal
+                            (input)="setCustomHourText(allocation.class['_id'], hour, customVal.value)" (blur)="editor.deactivate()">
                           <ion-icon name="checkmark-circle" size="large" color="success" class="cursor-pointer"
-                            (click)="setCustomHourText(allocation.class['_id'], hour, customVal.value); editor.deactivate()">
+                            (click)="editor.deactivate()">
                           </ion-icon>
                         </span>
                       </ng-template>

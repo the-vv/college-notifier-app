@@ -91,6 +91,9 @@ export class CreatePage implements OnInit, OnDestroy {
         const classId = target.id.split('-')[0];
         const hour = target.id.split('-')[1];
         const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
+        if(!classAllocation?.allocation) {
+          classAllocation.allocation = {};
+        }
         classAllocation.allocation[hour] = el.id;
       })
     );
@@ -102,6 +105,7 @@ export class CreatePage implements OnInit, OnDestroy {
         const teacherid = el.id;
         this.tutorClassAllocations = [];
         this.allocationData.forEach(item => {
+          if (!item?.allocation) { return; }
           Object.keys(item.allocation).forEach((hour) => {
             if (item.allocation[hour] === teacherid) {
               this.tutorClassAllocations.push({
@@ -133,10 +137,10 @@ export class CreatePage implements OnInit, OnDestroy {
 
   getClassHourAllocation(classId: string, hour: number) {
     const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
-    if (classAllocation.allocation[hour]?.startsWith('TEXT:')) {
+    if (classAllocation?.allocation?.[hour]?.startsWith('TEXT:')) {
       return null;
     }
-    return classAllocation.allocation[hour];
+    return classAllocation.allocation?.[hour];
   }
 
   getClassHourTutotr(classId: string, hour: number): IUser | undefined {
@@ -152,13 +156,16 @@ export class CreatePage implements OnInit, OnDestroy {
 
   setCustomHourText(classId: string, hour: number, text: string) {
     const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
+    if(!classAllocation?.allocation) {
+      classAllocation.allocation = {};
+    }
     classAllocation.allocation[hour] = `TEXT: ${text}`;
     // console.log(classAllocation.allocation);
   }
 
   getCustomHourText(classId: string, hour: number) {
     const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
-    if (classAllocation.allocation[hour]?.startsWith('TEXT:')) {
+    if (classAllocation.allocation?.[hour]?.startsWith('TEXT:')) {
       return classAllocation.allocation[hour].split('TEXT:')[1].trim();
     } else {
       return '';

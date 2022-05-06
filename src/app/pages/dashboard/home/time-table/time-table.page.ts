@@ -144,7 +144,7 @@ export class TimeTablePage implements OnInit, OnDestroy {
         });
       }
     });
-    const allocation = choosenClass.allocation[hour];
+    const allocation = choosenClass?.allocation?.[hour];
     if (!allocation) { return '-'; }
     return this.getTutorOrText(allocation);
   }
