@@ -77,6 +77,8 @@ export class LoginPage implements OnInit, OnDestroy {
           }
           else if (this.authService.currentUser$?.value?.role === EUserRoles.faculty) {
             this.authService.doUserLogin(this.authService.currentUser$?.value._id);
+          } else if(this.authService.currentUser$?.value?.role === EUserRoles.superAdmin) {
+            this.commonService.goToDashboard();
           }
         }
       }, err => {

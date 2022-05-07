@@ -41,6 +41,9 @@ export class SideMenuComponent implements OnInit, OnDestroy {
               this.isAdmin = true;
             }
           }
+        } else {
+          this.isAdmin = false;
+          this.isSuperAdmin = false;
         }
       })
     );

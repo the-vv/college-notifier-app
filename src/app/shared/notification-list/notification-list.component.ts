@@ -57,20 +57,6 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
   ) {
   }
 
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.getNotifications();
-  }
-
-  ngOnInit() {
-    this.subs.add(this.commonService.breakPointChanges$.subscribe(
-      (val: EBreakPoints) => this.currentBreakPoint = val
-    ));
-  }
-
   getNotifications() {
     return new Promise<void>((resolve, reject) => {
       if (!this.sourceData?.college) {
@@ -119,6 +105,20 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
     }).then(modal => {
       modal.present();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.getNotifications();
+  }
+
+  ngOnInit() {
+    this.subs.add(this.commonService.breakPointChanges$.subscribe(
+      (val: EBreakPoints) => this.currentBreakPoint = val
+    ));
   }
 
   onEdit(notification: INotification, ev: any) {

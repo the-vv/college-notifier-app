@@ -109,6 +109,7 @@ export class RendererPage implements OnInit, AfterViewInit {
       this.loading = false;
       this.commonService.showToast('Form submitted successfully');
       this.submitted = false;
+      this.router.navigate(['/dashboard/forms']);
     }, err => {
       this.loading = false;
       this.commonService.showToast(err.message);

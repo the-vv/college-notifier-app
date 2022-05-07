@@ -56,6 +56,8 @@ export class MainResolverService {
             this.router.navigate(['/'], { replaceUrl: true });
             resolve(true);
           });
+        } else{
+          resolve(true);
         }
       }).catch(err => {
         reject(err);
