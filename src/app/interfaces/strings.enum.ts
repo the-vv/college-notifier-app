@@ -234,7 +234,7 @@ export enum EStrings {
     tenMinutes = '10 Minutes',
     hourInterval = 'Hour Interval',
     calendar = 'Calendar',
-    scheduleMode = 'Schedul Mode',
+    scheduleMode = 'Schedule Mode',
     ok = 'Ok',
     notAvailable = 'Not Available',
     customRole = 'Custom Role',

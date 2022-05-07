@@ -165,7 +165,6 @@
                 <div *ngIf="!getClassHourAllocation(allocation.class['_id'], hour)" class="drop-column"
                   [ngClass]="{'allowedDrop' : dragging && !checkIsHourAllocated(hour), 'invalidDrop': dragging && checkIsHourAllocated(hour)}">
                   <span class="valign">
-                    <!-- {{allocation.class['name']}} {{'hour' | string}} {{hour + 1}} -->
                     <p-inplace #editor>
                       <ng-template pTemplate="display">
                         <span class="font-bold mr-1">

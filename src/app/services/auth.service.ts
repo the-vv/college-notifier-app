@@ -100,13 +100,13 @@ export class AuthService {
       this.userService.getUserMapByUserIdAsync(userId).subscribe((userMap: IUserMap) => {
         console.log(userMap);
         this.currentUserMap$.next(userMap);
-        if(!userMap) {
+        if (!userMap) {
           this.router.navigate(['/auth/signup', 'join-college'], { replaceUrl: true });
-        } else if(userMap.active === false) {
+        } else if (userMap.active === false) {
           this.router.navigate(['/dashboard'], { replaceUrl: true });
         } else {
           const user = userMap.user;
-          
+
         }
         resolve(userMap);
       }, err => {
