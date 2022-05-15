@@ -36,6 +36,10 @@ export class UserService {
     return this.http.getAsync(`${this.userMapUrl}/getByCollege/${collegeId}`, { role });
   }
 
+  getInactiveUserByCollegeIdAsync(collegeId: string) {
+    return this.http.getAsync(`${this.userMapUrl}/getInactiveByCollege/${collegeId}`);
+  }
+
   getUserMapByUserIdAsync(userId: string) {
     return this.http.getAsync(`${this.userMapUrl}/getByUser/${userId}`);
   }

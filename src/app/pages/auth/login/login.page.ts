@@ -75,10 +75,11 @@ export class LoginPage implements OnInit, OnDestroy {
                 this.router.navigate(['/', 'auth', 'signup', 'create-college'], { replaceUrl: true });
               });
           }
-          else if (this.authService.currentUser$?.value?.role === EUserRoles.faculty) {
-            this.authService.doUserLogin(this.authService.currentUser$?.value._id);
-          } else if(this.authService.currentUser$?.value?.role === EUserRoles.superAdmin) {
+          else if (this.authService.currentUser$?.value?.role === EUserRoles.superAdmin) {
             this.commonService.goToDashboard();
+          }
+          else {
+            this.authService.doUserLogin(this.authService.currentUser$?.value._id);
           }
         }
       }, err => {

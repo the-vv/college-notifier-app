@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ERequestStatus, EStorageKeys } from '../interfaces/common.enum';
 import { ICollege } from '../interfaces/common.model';
 import { AuthService } from './auth.service';
+import { ConfigService } from './config.service';
 import { HttpService } from './http.service';
 
 @Injectable({
@@ -16,7 +17,8 @@ export class CollegeService {
 
   constructor(
     private http: HttpService,
-    private authService: AuthService
+    private authService: AuthService,
+    private configService: ConfigService
   ) {
     Storage.get({ key: EStorageKeys.college }).then(college => {
       if (college.value) {
@@ -29,6 +31,7 @@ export class CollegeService {
         this.saveCollege(null);
       }
     });
+    this.authService.setCollegeService(this);
   }
 
   saveCollege(college: ICollege) {

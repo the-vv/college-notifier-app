@@ -142,7 +142,7 @@
         </ion-accordion-group>
     </ion-card>
 
-    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed" *ngIf="config.isHOD || config.isAdmin">
         <ion-fab-button [routerLink]="['/', 'time-table', 'create']">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>

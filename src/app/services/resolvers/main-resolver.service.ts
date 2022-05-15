@@ -5,6 +5,7 @@ import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from '../auth.service';
 import { CollegeService } from '../college.service';
 import { CommonService } from '../common.service';
+import { ConfigService } from '../config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class MainResolverService {
     private authService: AuthService,
     private collegeService: CollegeService,
     private router: Router,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private config: ConfigService
   ) { }
 
   //TODO: add user verification with user id
@@ -31,6 +33,7 @@ export class MainResolverService {
           /* eslint no-underscore-dangle: 0 */
           this.collegeService.getByAdminIdAsync(this.authService.currentUser$.value._id)
             .subscribe(res => {
+              this.config.isAdmin = true;
               this.collegeService.saveCollege(res);
               if (res) {
                 if (res.status === ERequestStatus.pending) {
@@ -46,18 +49,15 @@ export class MainResolverService {
               this.router.navigate(['/', 'auth', 'signup', 'create-college'], { replaceUrl: true });
             });
         }
-        else if (this.authService.currentUser$?.value?.role === EUserRoles.faculty) {
-          console.log('user is faculty');
+        else {
           this.authService.doUserLogin(this.authService.currentUser$?.value._id)
-          .then(() => {
-            resolve(true);
-          })
-          .catch(err => {
-            this.router.navigate(['/'], { replaceUrl: true });
-            resolve(true);
-          });
-        } else{
-          resolve(true);
+            .then(() => {
+              resolve(true);
+            })
+            .catch(err => {
+              this.router.navigate(['/'], { replaceUrl: true });
+              resolve(true);
+            });
         }
       }).catch(err => {
         reject(err);

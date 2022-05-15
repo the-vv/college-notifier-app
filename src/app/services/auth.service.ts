@@ -1,14 +1,16 @@
+/* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IUser, IUserMap } from '../interfaces/common.model';
+import { IBatch, IClass, ICollege, IDepartment, IUser, IUserMap } from '../interfaces/common.model';
 import { HttpService } from './http.service';
 import { Storage } from '@capacitor/storage';
-import { EStorageKeys, EUserRoles } from '../interfaces/common.enum';
+import { ECustomUserRoles, EStorageKeys, EUserRoles } from '../interfaces/common.enum';
 import { Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
 import { EStrings } from '../interfaces/strings.enum';
 import { UserService } from './user.service';
 import { CollegeService } from './college.service';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,18 +21,23 @@ export class AuthService {
   public currentUser$: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
   public isLoggedIn: boolean;
   public currentUserMap$: BehaviorSubject<IUserMap> = new BehaviorSubject(null);
-  public isAdmin = false;
+  // public isAdmin = false;
   private authAPiUrl = 'api/auth';
+  private collegeService: CollegeService;
 
   constructor(
     private httpService: HttpService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private config: ConfigService
   ) {
   }
-
   get isSuperAdmin(): boolean {
     return this.currentUserRole === EUserRoles.superAdmin;
+  }
+
+  public setCollegeService(collegeService: CollegeService) {
+    this.collegeService = collegeService;
   }
 
   initAuth(): Promise<boolean> {
@@ -98,15 +105,27 @@ export class AuthService {
   doUserLogin(userId: string) {
     return new Promise<IUserMap>((resolve, reject) => {
       this.userService.getUserMapByUserIdAsync(userId).subscribe((userMap: IUserMap) => {
-        console.log(userMap);
+        // console.log(userMap);
         this.currentUserMap$.next(userMap);
+        this.collegeService.currentCollege$.next(userMap.source.college as ICollege);
+        // console.log(this.collegeService.currentCollege$.value);
         if (!userMap) {
           this.router.navigate(['/auth/signup', 'join-college'], { replaceUrl: true });
         } else if (userMap.active === false) {
           this.router.navigate(['/dashboard'], { replaceUrl: true });
         } else {
           const user = userMap.user;
-
+          const map = userMap;
+          this.config.isAdmin = ((map.source.college as ICollege).admins as string[]).includes((user as IUser)._id) ||
+            (user as IUser).role === EUserRoles.admin;
+          this.config.departmentAdmin = ((map.source.department as IDepartment)?.admins as string[])?.includes((user as IUser)._id);
+          this.config.batchAdmin = ((map.source.batch as IBatch)?.admins as string[])?.includes((user as IUser)._id);
+          this.config.classAdmin = ((map.source.class as IClass)?.admins as string[])?.includes((user as IUser)._id);
+          this.config.isHOD = (user as IUser).customRoles.includes(ECustomUserRoles.hod);
+          if (!this.router.url.includes('dashboard')) {
+            this.router.navigate(['/dashboard'], { replaceUrl: true });
+          }
+          console.log(JSON.parse(JSON.stringify(this.config)));
         }
         resolve(userMap);
       }, err => {

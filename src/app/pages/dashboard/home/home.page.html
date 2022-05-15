@@ -30,7 +30,7 @@
           <ion-label>{{'notifications' | string}}</ion-label>
         </ion-tab-button>
     
-        <ion-tab-button tab="rooms">
+        <ion-tab-button tab="rooms" *ngIf="config.isAdmin">
           <ion-icon name="home-outline"></ion-icon>
           <ion-label>{{'rooms' | string }}</ion-label>
         </ion-tab-button>

@@ -9,6 +9,7 @@ import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfigService } from 'src/app/services/config.service';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,8 @@ export class HomePage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private commonService: CommonService,
-    private collegeService: CollegeService
+    private collegeService: CollegeService,
+    public config: ConfigService
   ) { }
 
   ngOnInit() {
@@ -58,13 +60,11 @@ export class HomePage implements OnInit {
       this.subs.add(collegeSubscription);
     } else if (this.authService.currentUserRole === EUserRoles.superAdmin) {
       this.commonService.goToDashboard();
-    } else if(this.authService.currentUserRole === EUserRoles.faculty) {
+    } else {
+      this.loading = false;
       this.authService.doUserLogin(this.authService.currentUser$?.value._id)
       .then((userMap) => {
-        if(userMap?.active) {
-          this.loading = false;
-          this.commonService.goToDashboard();
-        } else {
+        if(!userMap?.active) {
           this.commonService.showSuccessPage(`${EStrings.collegeJoinRequestSemtSuccessFully}`, EStrings.pleaseWaitForApproval, false);
         }
       }).catch(err => {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -7,6 +7,7 @@ import { ICollege } from 'src/app/interfaces/common.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ImageUploadComponent } from 'src/app/shared/image-upload/image-upload.component';
 
 @Component({
   selector: 'app-create-college',
@@ -15,6 +16,7 @@ import { CommonService } from 'src/app/services/common.service';
 })
 export class CreateCollegeComponent implements OnInit, OnDestroy {
 
+  @ViewChild(ImageUploadComponent) imageUpload: ImageUploadComponent;
   public currentBreakPoint: EBreakPoints;
   public collegeForm: FormGroup;
   public showErrors = false;
@@ -48,11 +50,19 @@ export class CreateCollegeComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  onSubmit() {
+  async onSubmit() {
     console.log('onSubmit');
     this.showErrors = true;
     this.collegeForm.markAllAsTouched();
     if (this.collegeForm.invalid) {
+      return;
+    }
+    try {
+      this.loading = true;
+      await this.imageUpload.uploadImage();
+    }
+    catch (err) {
+      this.loading = false;
       return;
     }
     /* eslint no-underscore-dangle: 0 */

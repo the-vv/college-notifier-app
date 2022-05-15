@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Component, OnInit } from '@angular/core';
 import { ICollege } from 'src/app/interfaces/common.model';
 import { CollegeService } from 'src/app/services/college.service';
@@ -16,7 +17,7 @@ export class CollegeListPage implements OnInit {
 
   public collegeData: ICollege[] = [];
   public eRequestStatus = ERequestStatus;
-  public loading: boolean = false;
+  public loading = false;
 
   constructor(
     private collegeService: CollegeService,
@@ -24,7 +25,7 @@ export class CollegeListPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    
+
   }
 
   async ionViewWillEnter() {
@@ -54,7 +55,7 @@ export class CollegeListPage implements OnInit {
         this.loading = false;
         Toast.show({
           text: [EStrings.error + ':', , err.error.message].join(' '),
-          });
+        });
       });
   }
 

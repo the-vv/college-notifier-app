@@ -1,4 +1,8 @@
+/* eslint-disable no-underscore-dangle */
 import { Component, OnInit } from '@angular/core';
+import { IUser } from 'src/app/interfaces/common.model';
+import { CollegeService } from 'src/app/services/college.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-access-request',
@@ -7,9 +11,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccessRequestPage implements OnInit {
 
-  constructor() { }
+  userData: IUser[] = [];
+  loading = false;
+
+  constructor(
+    private userService: UserService,
+    private collegeService: CollegeService
+  ) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
+    this.loading = true;
+    this.userService.getInactiveUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id)
+      .subscribe(res => {
+        this.userData = res;
+        console.log(this.userData);
+        this.loading = false;
+      }, err => {
+        this.loading = false;
+        console.log(err);
+      });
   }
 
 }

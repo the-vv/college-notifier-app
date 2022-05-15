@@ -1,9 +1,49 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>accessRequest</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'user' | string}} {{'accessRequests' | string}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-card>
+    <ion-row class="v-center">
+      <ion-col class="ion-text-start">
+        <h3>{{'users' | string }} {{'list' | string }}</h3>
+      </ion-col>
+    </ion-row>
+    <p-table responsiveLayout="stack" [value]="userData" [loading]="loading">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th>{{'image' | string}}</th>
+          <th>{{'name' | string}}</th>
+          <th>{{'email' | string}}</th>
+          <th>{{'role' | string}}</th>
+          <th>{{'actions' | string}}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user let-columns="columns">
+        <tr>
+          <td><span class="p-column-title">{{'image' | string}}</span>
+            <img [src]="user.image || 'assets/images/avatar.png'" alt="{{user.name}}" class="table-avatar" />
+          </td>
+          <td><span class="p-column-title">
+              {{'name' | string}}</span>
+            {{user.name}}
+          </td>
+          <td><span class="p-column-title">{{'email' | string}}</span>{{user.email}}</td>
+          <td><span class="p-column-title">{{'role' | string}}</span>{{user.role | string}}</td>
+          <td>
+            <ion-button color="success" size="small" (click)="onStatusChange(eRequestStatus.active, college._id)">
+              {{'approve' | string}}</ion-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ion-card>
 </ion-content>

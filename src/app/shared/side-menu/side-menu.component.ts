@@ -7,6 +7,7 @@ import { IUser } from 'src/app/interfaces/common.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfigService } from 'src/app/services/config.service';
 
 @Component({
   selector: 'app-side-menu',
@@ -25,7 +26,8 @@ export class SideMenuComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     private router: Router,
     private commonService: CommonService,
-    private collegeService: CollegeService
+    private collegeService: CollegeService,
+    private config: ConfigService
   ) { }
 
   ngOnInit() {

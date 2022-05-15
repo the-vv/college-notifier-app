@@ -46,7 +46,7 @@ export class JoinCollegeComponent implements OnInit {
     this.userService.postUserMapsAsync(postData).subscribe(res => {
       console.log(res);
       this.commonServce.showToast(`${EStrings.college} ${EStrings.requested}`);
-      this.authService.currentUser$.next(res.user);
+      // this.authService.currentUser$.next(res.user);
       this.authService.doUserLogin(this.authService.currentUser$.value._id);
     }, err => {
       console.log(err);

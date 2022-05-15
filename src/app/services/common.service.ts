@@ -60,7 +60,7 @@ export class CommonService {
   goToDashboard() {
     if (this.authServce.currentUser$.value.role === EUserRoles.superAdmin) {
       this.router.navigate(['/admin'], { replaceUrl: true });
-    } else {
+    } else  {
       this.router.navigate(['/dashboard'], { replaceUrl: true });
     }
   }

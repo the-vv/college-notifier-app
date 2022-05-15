@@ -91,7 +91,7 @@ export class CreatePage implements OnInit, OnDestroy {
         const classId = target.id.split('-')[0];
         const hour = target.id.split('-')[1];
         const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
-        if(!classAllocation?.allocation) {
+        if (!classAllocation?.allocation) {
           classAllocation.allocation = {};
         }
         classAllocation.allocation[hour] = el.id;
@@ -156,7 +156,7 @@ export class CreatePage implements OnInit, OnDestroy {
 
   setCustomHourText(classId: string, hour: number, text: string) {
     const classAllocation = this.allocationData.find(item => (item.class as IClass)._id === classId);
-    if(!classAllocation?.allocation) {
+    if (!classAllocation?.allocation) {
       classAllocation.allocation = {};
     }
     classAllocation.allocation[hour] = `TEXT: ${text}`;
@@ -287,7 +287,11 @@ export class CreatePage implements OnInit, OnDestroy {
   }
 
   async onStart() {
-    if (!(this.hoursCtrl.value && this.rolesCtrl.value?.length && this.departmentControl.value && this.classesControl.value)) {
+    if (!(this.hoursCtrl.value &&
+        this.rolesCtrl.value?.length &&
+        this.departmentControl.value &&
+        this.classesControl.value?.length)
+    ) {
       return;
     }
     if (this.showGrid && !await this.commonService.showOkCancelAlert(EStrings.areYouSure, EStrings.thisWillResetAllocationGrid)) {
