@@ -12,6 +12,7 @@ import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { FormService } from 'src/app/services/form.service';
+import { TargetViewComponent } from '../target-view/target-view.component';
 // import { FormViewComponent } from '../form-view/form-view.component';
 
 @Component({
@@ -53,7 +54,8 @@ export class FormListComponent implements OnInit, OnInit, OnChanges, OnDestroy {
     private router: Router,
     private alertController: AlertController,
     private collegeService: CollegeService,
-    private config: ConfigService
+    private config: ConfigService,
+    private modalCtrl: ModalController
   ) {
   }
 
@@ -151,5 +153,19 @@ export class FormListComponent implements OnInit, OnInit, OnChanges, OnDestroy {
     });
     await alert.present();
   }
+
+  viewTarget(form: IForm, ev: any) {
+    ev.stopPropagation();
+    this.modalCtrl.create({
+      component: TargetViewComponent,
+      componentProps: {
+        target: form.target,
+        title: `${form.title} ${EStrings.form} ${EStrings.targets}`
+      },
+    }).then(modal => {
+      modal.present();
+    });
+  }
+
 
 }

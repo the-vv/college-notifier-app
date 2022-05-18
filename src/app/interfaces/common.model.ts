@@ -10,13 +10,13 @@ export interface ISource {
     source: ESourceTargetType;
 }
 
-export interface ITarget {
-    college?: string;
-    department?: string;
-    batch?: string;
-    class?: string;
-    target: ESourceTargetType;
-}
+// export interface ITarget {
+//     college?: string;
+//     department?: string;
+//     batch?: string;
+//     class?: string;
+//     target: ESourceTargetType;
+// }
 
 export interface ISchedule {
     start: Date | string;

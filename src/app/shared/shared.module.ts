@@ -16,6 +16,7 @@ import { FormListComponent } from './form-list/form-list.component';
 import { ScheduleResourceComponent } from './schedule-resource/schedule-resource.component';
 import { UserManageComponent } from './user-manage/user-manage.component';
 import { AvatarModule } from 'primeng/avatar';
+import { TargetViewComponent } from './target-view/target-view.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { AvatarModule } from 'primeng/avatar';
     UserListComponent,
     FormListComponent,
     ScheduleResourceComponent,
-    UserManageComponent
+    UserManageComponent,
+    TargetViewComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +52,8 @@ import { AvatarModule } from 'primeng/avatar';
     UserListComponent,
     FormListComponent,
     ScheduleResourceComponent,
-    UserManageComponent
+    UserManageComponent,
+    TargetViewComponent
   ],
   providers: [
   ]

@@ -1,3 +1,73 @@
-<p>
-  target-view works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{'view' | string}} {{'target' | string}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        {{title}}
+      </ion-card-title>
+      <ion-card-subtitle>
+        {{target?.college?.['name']}}
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-accordion-group>
+      <ion-accordion *ngIf="getAllDpts()?.length">
+        <ion-item slot="header">
+          <ion-label>{{'departments' | string}}</ion-label>
+        </ion-item>
+        <ion-list slot="content">
+          <ion-item *ngFor="let dpt of getAllDpts()">
+            <ion-label>{{dpt.name}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>      
+      <ion-accordion *ngIf="getAllBatches()?.length">
+        <ion-item slot="header">
+          <ion-label>{{'batches' | string}}</ion-label>
+        </ion-item>
+        <ion-list slot="content">
+          <ion-item *ngFor="let batch of getAllBatches()">
+            <ion-label>{{batch.startDate}} - {{batch.endDate}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>      
+      <ion-accordion *ngIf="getAllClasses()?.length">
+        <ion-item slot="header">
+          <ion-label>{{'classes' | string}}</ion-label>
+        </ion-item>
+        <ion-list slot="content">
+          <ion-item *ngFor="let class of getAllClasses()">
+            <ion-label>{{class.name}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>      
+      <ion-accordion *ngIf="getAllRooms()?.length">
+        <ion-item slot="header">
+          <ion-label>{{'rooms' | string}}</ion-label>
+        </ion-item>
+        <ion-list slot="content">
+          <ion-item *ngFor="let room of getAllRooms()">
+            <ion-label>{{room.name}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>      
+      <ion-accordion *ngIf="getAllUsers()?.length">
+        <ion-item slot="header">
+          <ion-label>{{'users' | string}}</ion-label>
+        </ion-item>
+        <ion-list slot="content">
+          <ion-item *ngFor="let user of getAllUsers()">
+            <ion-label>{{user.name}} ({{user.email}})</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>      
+    </ion-accordion-group>
+  </ion-card>
+</ion-content>

@@ -6,7 +6,7 @@
     <h3 style="margin: 0;" class="pt-1 font-bold">
       {{authService.currentUser$.value?.name}}
     </h3>
-    <span class="text-center text-secondary mt-1">{{authService.currentUser$.value?.role | string}}
+    <span class="text-center text-secondary">{{authService.currentUser$.value?.role | string}}
       <span *ngIf="authService.currentUser$.value?.role !== eUserRoles.admin && isAdmin">({{eUserRoles.admin |
         string}})</span>
       <br><small>{{authService.currentUser$.value?.customRoles | string}}</small>

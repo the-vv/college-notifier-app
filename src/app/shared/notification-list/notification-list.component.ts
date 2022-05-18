@@ -13,6 +13,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { NotificationViewComponent } from '../notification-view/notification-view.component';
+import { TargetViewComponent } from '../target-view/target-view.component';
 
 @Component({
   selector: 'app-notification-list',
@@ -55,7 +56,7 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
     private router: Router,
     private alertController: AlertController,
     private collegeService: CollegeService,
-    private config: ConfigService
+    private config: ConfigService,
   ) {
   }
 
@@ -170,6 +171,19 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
 
   public checkIsFutureTime(isoDate: string) {
     return new Date(isoDate).getTime() > new Date().getTime();
+  }
+
+  viewTarget(form: INotification, ev: any) {
+    ev.stopPropagation();
+    this.modalCtrl.create({
+      component: TargetViewComponent,
+      componentProps: {
+        target: form.target,
+        title: `${form.title} ${EStrings.notification} ${EStrings.targets}`
+      },
+    }).then(modal => {
+      modal.present();
+    });
   }
 
 }

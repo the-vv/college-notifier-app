@@ -44,6 +44,9 @@
                                 <ion-button fill="clear" (click)="onDelete(notification, $event)">
                                     <ion-icon name="trash" color="danger"></ion-icon>
                                 </ion-button>
+                                <ion-button fill="clear" (click)="viewTarget(notification, $event)">
+                                    <ion-icon name="home" color="primary"></ion-icon>
+                                </ion-button>
                             </span>
                         </p>
                         <p class="ion-justify-content-end v-center">
@@ -58,6 +61,9 @@
                     </ion-item-option>
                     <ion-item-option color="danger" (click)="onDelete(notification, $event)">
                         <ion-icon slot="top" name="trash"></ion-icon>
+                    </ion-item-option>
+                    <ion-item-option color="primary" (click)="viewTarget(notification, $event)">
+                        <ion-icon slot="top" name="home"></ion-icon>
                     </ion-item-option>
                 </ion-item-options>
             </ion-item-sliding>

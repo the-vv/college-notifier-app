@@ -17,10 +17,6 @@
         <h6>{{'forms' | string}} {{'report' | string}}</h6>
       </ion-col>
       <ion-col size="auto" class="ion-text-end">
-        <!-- <ion-button color="primary" size="small" [routerLink]="['/', 'department', 'manage']">
-        <ion-icon name="add"></ion-icon>
-        {{'create' | string}}
-      </ion-button> -->
       </ion-col>
     </ion-row>
     <p-table responsiveLayout="stack" [sortMode]="'multiple'" [value]="formsData">
@@ -40,12 +36,15 @@
       <ng-template pTemplate="body" let-item let-columns="columns">
         <tr>
           <td><span class="p-column-title">{{'title' | string}}</span>{{item.title}}</td>
-          <td><span class="p-column-title">{{'submissions' | string}}</span><a [routerLink]="['/form/submissions/', item._id]">{{'view' | string}}</a>
+          <td><span class="p-column-title">{{'submissions' | string}}</span>
+            <ion-button fill="clear" [routerLink]="['/form/submissions/', item._id]">{{'view' | string}}</ion-button>
           </td>
           <td><span class="p-column-title">{{'createdBy' | string}}</span>{{item.createdBy?.email}}</td>
           <td><span class="p-column-title">{{'createdAt' | string}}</span>{{item.createdAt | date:
             config.commonDateTimeFormat}}</td>
-          <td><span class="p-column-title">{{'targets' | string}}</span><a routerLink="">{{'view' | string}}</a></td>
+          <td><span class="p-column-title">{{'targets' | string}}</span>
+            <ion-button fill="clear" (click)="viewTarget(item)">{{'view' | string}}</ion-button>
+          </td>
         </tr>
       </ng-template>
     </p-table>

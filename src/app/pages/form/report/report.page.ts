@@ -7,6 +7,8 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { EUserRoles } from 'src/app/interfaces/common.enum';
 import { CollegeService } from 'src/app/services/college.service';
+import { ModalController } from '@ionic/angular';
+import { TargetViewComponent } from 'src/app/shared/target-view/target-view.component';
 
 @Component({
   selector: 'app-form-report',
@@ -24,7 +26,8 @@ export class FormReportPage implements OnInit {
     private authService: AuthService,
     private commonService: CommonService,
     public config: ConfigService,
-    private collegeService: CollegeService
+    private collegeService: CollegeService,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -51,6 +54,17 @@ export class FormReportPage implements OnInit {
         this.commonService.showToast(err.message);
       });
     }
+  }
+
+  viewTarget(form: IForm) {
+    this.modalController.create({
+      component: TargetViewComponent,
+      componentProps: {
+        target: form.target,
+      },
+    }).then(modal => {
+      modal.present();
+    });
   }
 
 
