@@ -17,7 +17,7 @@
         </ion-card-subtitle>
     </ion-card-header>
     <ion-card-content class="padd" *ngIf="!loading; else skelton">
-        <ion-list *ngIf="allNotifications?.length; else noRecords" >
+        <ion-list *ngIf="allNotifications?.length; else noRecords">
             <ion-item-sliding [disabled]="currentBreakPoint === 'medium'" *ngFor="let notification of allNotifications">
                 <ion-item button (click)="openNotification(notification)">
                     <ion-icon [color]="checkIsFutureTime(notification.createdAt) ? 'warning' : 'primary'"
@@ -38,10 +38,12 @@
                                 name="timer-outline" style="font-size: 1.2em;"></ion-icon>
                             {{notification.createdAt | date: 'd/M/yy hh:mm a'}}
                             <span *ngIf="currentBreakPoint === 'medium'">
-                                <ion-button fill="clear" (click)="onEdit(notification, $event)">
+                                <ion-button fill="clear" (click)="onEdit(notification, $event)"
+                                    *ngIf="checkPermission(notification.createdBy?.['_id'])">
                                     <ion-icon name="pencil" color="warning"></ion-icon>
                                 </ion-button>
-                                <ion-button fill="clear" (click)="onDelete(notification, $event)">
+                                <ion-button fill="clear" (click)="onDelete(notification, $event)"
+                                    *ngIf="checkPermission(notification.createdBy?.['_id'])">
                                     <ion-icon name="trash" color="danger"></ion-icon>
                                 </ion-button>
                                 <ion-button fill="clear" (click)="viewTarget(notification, $event)">
@@ -56,10 +58,12 @@
                     </ion-note>
                 </ion-item>
                 <ion-item-options side="end">
-                    <ion-item-option (click)="onEdit(notification, $event)" color="warning">
+                    <ion-item-option (click)="onEdit(notification, $event)" color="warning"
+                        *ngIf="checkPermission(notification.createdBy?.['_id'])">
                         <ion-icon slot="top" name="pencil"></ion-icon>
                     </ion-item-option>
-                    <ion-item-option color="danger" (click)="onDelete(notification, $event)">
+                    <ion-item-option color="danger" (click)="onDelete(notification, $event)"
+                        *ngIf="checkPermission(notification.createdBy?.['_id'])">
                         <ion-icon slot="top" name="trash"></ion-icon>
                     </ion-item-option>
                     <ion-item-option color="primary" (click)="viewTarget(notification, $event)">

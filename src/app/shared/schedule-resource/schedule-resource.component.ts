@@ -34,6 +34,7 @@ export class ScheduleResourceComponent implements OnInit {
   minTime = this.commonService.toLocaleIsoDateString(new Date());
   currentSchedule: IResourceSchedule;
   editable = false;
+  hasUpdatePermission = false;
 
   constructor(
     private modalCtrl: ModalController,
@@ -70,6 +71,7 @@ export class ScheduleResourceComponent implements OnInit {
       this.resourceServoce.getScheduleAsync(this.scheduleId).subscribe(res => {
         loading.dismiss();
         this.currentSchedule = res;
+        this.hasUpdatePermission = this.config.sameUserOrAdmin((res.createdBy as IUser)._id);
         this.scheduleForm.patchValue({
           description: this.currentSchedule.description,
         });
@@ -78,6 +80,8 @@ export class ScheduleResourceComponent implements OnInit {
         loading.dismiss();
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
       });
+    } else {
+      this.hasUpdatePermission = true;
     }
   }
 
@@ -167,13 +171,8 @@ export class ScheduleResourceComponent implements OnInit {
     }
   }
 
-  getCreatedByUser(notification: IResourceSchedule) {
-    return `${(notification.createdBy as IUser).name} | ${EStrings[(notification.createdBy as IUser).role]}`;
-  }
-
-  hasEditPermission(notification: IResourceSchedule) {
-    return this.authService.currentUser$.value.role === EUserRoles.admin
-      || this.authService.currentUser$.value._id === notification.createdBy;
+  getCreatedByUser(schedule: IResourceSchedule) {
+    return `${(schedule.createdBy as IUser).name} | ${EStrings[(schedule.createdBy as IUser).role]}`;
   }
 
 }

@@ -30,10 +30,10 @@
                         <p class="ion-justify-content-end v-center">
                             {{form.createdAt | date: 'd/M/yy hh:mm a'}}
                             <span *ngIf="currentBreakPoint === 'medium'">
-                                <ion-button fill="clear" (click)="onEdit(form, $event)">
+                                <ion-button fill="clear" (click)="onEdit(form, $event)" *ngIf="checkPermission(form.createdBy?.['_id'])">
                                     <ion-icon name="pencil" color="warning"></ion-icon>
                                 </ion-button>
-                                <ion-button fill="clear" (click)="onDelete(form, $event)">
+                                <ion-button fill="clear" (click)="onDelete(form, $event)" *ngIf="checkPermission(form.createdBy?.['_id'])">
                                     <ion-icon name="trash" color="danger"></ion-icon>
                                 </ion-button>
                                 <ion-button fill="clear" (click)="viewTarget(form, $event)">

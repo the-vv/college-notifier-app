@@ -14,10 +14,11 @@ import {
 } from 'angular-calendar-scheduler';
 import { addDays, addMinutes, addMonths, endOfDay, startOfDay, subMonths } from 'date-fns';
 import { Subject } from 'rxjs';
-import { IResource, IResourceSchedule } from 'src/app/interfaces/common.model';
+import { IResource, IResourceSchedule, IUser } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { ResourceService } from 'src/app/services/resource.service';
 import { ScheduleResourceComponent } from 'src/app/shared/schedule-resource/schedule-resource.component';
 
@@ -67,17 +68,6 @@ export class SchedulerPage implements OnInit {
   prevBtnDisabled = false;
   nextBtnDisabled = false;
 
-  actions: CalendarSchedulerEventAction[] = [
-    {
-      when: 'enabled',
-      label: '<span class="valign-center">cancel</span>',
-      title: 'Delete',
-      onClick: (event: CalendarSchedulerEvent): void => {
-        console.log('Pressed action \'Delete\' on event ' + event.id);
-      }
-    }
-  ];
-
   constructor(
     @Inject(LOCALE_ID) locale: string,
     private dateAdapter: DateAdapter,
@@ -86,7 +76,8 @@ export class SchedulerPage implements OnInit {
     private collegeService: CollegeService,
     private commonService: CommonService,
     private modalCtrl: ModalController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private config: ConfigService
   ) {
 
     this.locale = locale;
@@ -156,21 +147,21 @@ export class SchedulerPage implements OnInit {
               primary: '#78d2ff',
               secondary: '#91f4ff'
             },
-            actions: [
+            actions: this.config.sameUserOrAdmin((el.createdBy as IUser)?._id) ? [
               {
                 when: 'enabled',
                 label: '<i class="bi bi-trash"></i>',
                 title: 'Delete',
                 onClick: (event) => this.deleteSchedule(event)
               }
-            ],
+            ] : [],
             // status: 'ok',
             isClickable: true,
             isDisabled: false,
-            draggable: true,
+            draggable: this.config.sameUserOrAdmin((el.createdBy as IUser)?._id),
             resizable: {
-              beforeStart: true,
-              afterEnd: true
+              beforeStart: this.config.sameUserOrAdmin((el.createdBy as IUser)?._id),
+              afterEnd: this.config.sameUserOrAdmin((el.createdBy as IUser)?._id)
             },
           });
         });

@@ -167,5 +167,8 @@ export class FormListComponent implements OnInit, OnInit, OnChanges, OnDestroy {
     });
   }
 
+  checkPermission(userId: string) {
+    return this.config.sameUserOrAdmin(userId);
+  }
 
 }

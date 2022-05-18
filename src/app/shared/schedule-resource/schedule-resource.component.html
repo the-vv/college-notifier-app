@@ -82,7 +82,7 @@
   </ion-card>
 </ion-content>
 
-<ion-footer *ngIf="editable">
+<ion-footer *ngIf="editable && hasUpdatePermission">
   <ion-button type="submit" size="block" class="mt-1" (click)="onSubmit()">
     <span *ngIf="!loading">{{currentSchedule ? 'update' : 'submit' | string}}</span>
     <ion-spinner *ngIf="loading" name="dots"></ion-spinner>

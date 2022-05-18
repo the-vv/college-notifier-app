@@ -186,4 +186,8 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  checkPermission(userId: string) {
+    return this.config.sameUserOrAdmin(userId);
+  }
+
 }

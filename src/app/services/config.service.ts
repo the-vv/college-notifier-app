@@ -38,4 +38,9 @@ export class ConfigService {
     this.classAdmin = ((map.source.class as IClass)?.admins as string[])?.includes((user as IUser)._id);
     this.isHOD = (user as IUser).customRoles.includes(ECustomUserRoles.hod);
   }
+
+  sameUserOrAdmin(userId: string) {
+    return (this.currentUsermap?.user as IUser)?._id === userId || this.isAdmin;
+  }
+
 }
