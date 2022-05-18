@@ -1,32 +1,35 @@
 <ion-list id="inbox-list">
-  <div class="d-flex ion-align-items-center">
+  <div class="ion-align-items-center ion-justify-content-center profile-center-avatar mb-3">
     <ion-avatar style="margin-left: 10px;">
       <img [src]="authService.currentUser$.value?.image || 'assets/images/avatar.png'">
     </ion-avatar>
-    <ion-list-header class="text-center">
+    <h3 style="margin: 0;" class="pt-1 font-bold">
       {{authService.currentUser$.value?.name}}
-    </ion-list-header>
-    <ion-note>{{authService.currentUser$.value?.role | string}}
-      <span *ngIf="authService.currentUser$.value?.role !== eUserRoles.admin && isAdmin">({{eUserRoles.admin | string}})</span>
-    </ion-note>
+    </h3>
+    <span class="text-center text-secondary mt-1">{{authService.currentUser$.value?.role | string}}
+      <span *ngIf="authService.currentUser$.value?.role !== eUserRoles.admin && isAdmin">({{eUserRoles.admin |
+        string}})</span>
+      <br><small>{{authService.currentUser$.value?.customRoles | string}}</small>
+    </span>
   </div>
-  <ion-menu-toggle auto-hide="false">
+  <ion-menu-toggle auto-hide="false" class="mt-3">
     <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" button
       (click)="goToHome()">
       <ion-icon slot="start" [ios]="'home-outline'" [md]="'home-outline'"></ion-icon>
       <ion-label>{{'home' | string}}</ion-label>
     </ion-item>
-    <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" button *ngIf="(userIsActive || isAdmin) && !isSuperAdmin"
-      (click)="goToCalendar()">
+    <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" button
+      *ngIf="(userIsActive || isAdmin) && !isSuperAdmin" (click)="goToCalendar()">
       <ion-icon slot="start" [ios]="'today-outline'" [md]="'today-outline'"></ion-icon>
       <ion-label>{{'calendar' | string}}</ion-label>
     </ion-item>
-    <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" button *ngIf="(userIsActive || isAdmin) && !isSuperAdmin"
-      (click)="goToReports()">
+    <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" button
+      *ngIf="(userIsActive || isAdmin) && !isSuperAdmin" (click)="goToReports()">
       <ion-icon slot="start" [ios]="'pie-chart-outline'" [md]="'pie-chart-outline'"></ion-icon>
       <ion-label>{{'reports' | string}}</ion-label>
     </ion-item>
-    <ion-item *ngIf="isAdmin && !isSuperAdmin"  routerDirection="root" lines="none" detail="false" routerLinkActive="selected" button (click)="goToSettings()">
+    <ion-item *ngIf="isAdmin && !isSuperAdmin" routerDirection="root" lines="none" detail="false"
+      routerLinkActive="selected" button (click)="goToSettings()">
       <ion-icon slot="start" [ios]="'settings-outline'" [md]="'settings-outline'"></ion-icon>
       <ion-label>{{'settings' | string}}</ion-label>
     </ion-item>

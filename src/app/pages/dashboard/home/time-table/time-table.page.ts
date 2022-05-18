@@ -55,6 +55,7 @@ export class TimeTablePage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
+    console.log(this.config.isHOD);
     // console.log('ionViewWillEnter');
     if (!this.loaded) {
       this.initMethod();
@@ -63,26 +64,39 @@ export class TimeTablePage implements OnInit, OnDestroy {
 
   async initMethod() {
     const loader = await this.commonService.showLoading();
-    this.dptServce.getByCollegeAsync(this.collegeService.currentCollege$.value._id)
-      .subscribe((res: IDepartment[]) => {
-        loader.dismiss();
-        this.availableDpts = res;
-        if (res.length) {
-          this.departmentControl.setValue(this.availableDpts[0]);
-          this.timeTableService.getByDepartmentAsync(this.departmentControl.value._id)
-            .subscribe((timeTableRes: any) => {
-              this.displayTimeTable(timeTableRes);
-              this.loaded = false;
-            }, err => {
-              console.log(err);
-              this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
-            });
-        }
-      }, err => {
-        loader.dismiss();
-        console.log(err);
-        this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
-      });
+    if (this.config.isAdmin) {
+      this.dptServce.getByCollegeAsync(this.collegeService.currentCollege$.value._id)
+        .subscribe((res: IDepartment[]) => {
+          loader.dismiss();
+          this.availableDpts = res;
+          if (res.length) {
+            this.departmentControl.setValue(this.availableDpts[0]);
+            this.timeTableService.getByDepartmentAsync(this.departmentControl.value._id)
+              .subscribe((timeTableRes: any) => {
+                this.displayTimeTable(timeTableRes);
+                this.loaded = false;
+              }, err => {
+                console.log(err);
+                this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+              });
+          }
+        }, err => {
+          loader.dismiss();
+          console.log(err);
+          this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+        });
+    } else {
+      this.departmentControl.setValue(this.config.currentUsermap.source.department);
+      this.timeTableService.getByDepartmentAsync(this.departmentControl.value._id)
+        .subscribe((timeTableRes: any) => {
+          loader.dismiss();
+          this.displayTimeTable(timeTableRes);
+          this.loaded = false;
+        }, err => {
+          console.log(err);
+          this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
+        });
+    }
   }
 
   ngOnDestroy(): void {
@@ -153,7 +167,7 @@ export class TimeTablePage implements OnInit, OnDestroy {
     const node = document.getElementById(nodeId);
     $('.hide-when-downloading').hide();
     $('.show-when-downloading').show();
-    saveAsPng(node, { filename: EStrings.timetableExport + `-${schedule.slice(5)}`, printDate: false })
+    saveAsPng(node, { filename: EStrings.timetableExport + `-${schedule}`, printDate: false })
       .then(() => {
         $('.hide-when-downloading').show();
         $('.show-when-downloading').hide();

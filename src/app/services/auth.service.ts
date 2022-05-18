@@ -112,6 +112,7 @@ export class AuthService {
       this.userService.getUserMapByUserIdAsync(userId).subscribe((userMap: IUserMap) => {
         // console.log(userMap);
         this.currentUserMap$.next(userMap);
+        this.saveUser(userMap.user as IUser);
         this.collegeService.currentCollege$.next(userMap.source.college as ICollege);
         // console.log(this.collegeService.currentCollege$.value);
         if (!userMap) {

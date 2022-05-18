@@ -6,8 +6,11 @@ import { EStrings } from '../interfaces/strings.enum';
 })
 export class StringPipe implements PipeTransform {
 
-  transform(value: string, ...args: unknown[]): string {
-    return EStrings[value] || value;
+  transform(value: string | string[], ...args: unknown[]): string {
+    if(Array.isArray(value) && value.length > 0) {
+      return value.map(item => EStrings[item]).join(', ');
+    }
+    return EStrings[value as string] || value;
   }
 
 }
