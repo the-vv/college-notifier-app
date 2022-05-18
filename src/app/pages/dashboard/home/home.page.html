@@ -35,7 +35,7 @@
           <ion-label>{{'rooms' | string }}</ion-label>
         </ion-tab-button>
     
-        <ion-tab-button tab="resources" *ngIf="authService.currentUserRole !== eUserRoles.student">
+        <ion-tab-button tab="resources"  *ngIf="authService.currentUserRole !== eUserRoles.student">
           <ion-icon name="easel-outline"></ion-icon>
           <ion-label>{{'resources' | string}}</ion-label>
         </ion-tab-button>
@@ -45,7 +45,7 @@
           <ion-label>{{'forms' | string }}</ion-label>
         </ion-tab-button>
     
-        <ion-tab-button tab="time-table">
+        <ion-tab-button tab="time-table" [disabled]="!config.currentUsermap.source.department">
           <ion-icon name="calendar-outline"></ion-icon>
           <ion-label>{{'timeTable' | string}}</ion-label>
         </ion-tab-button>

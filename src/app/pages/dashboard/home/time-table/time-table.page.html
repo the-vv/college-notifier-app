@@ -7,7 +7,7 @@
                 </ion-label>
             </ion-card-title>
             <ion-card-subtitle class="valign-center">
-                {{departmentControl.value['name']}} {{'department' | string}}
+                {{departmentControl.value?.['name']}} {{'department' | string}}
                 <ion-button class="ml-1" *ngIf="config.isAdmin" (click)="onChangeClick()" fill="clear" size="small"
                     color="primary">
                     {{'change' | string}}

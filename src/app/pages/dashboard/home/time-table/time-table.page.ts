@@ -86,6 +86,11 @@ export class TimeTablePage implements OnInit, OnDestroy {
           this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
         });
     } else {
+      if (!this.config.currentUsermap.source.department) {
+        this.commonService.showToast(`${EStrings.error}: ${EStrings.noDepartment}`);
+        loader.dismiss();
+        return;
+      }
       this.departmentControl.setValue(this.config.currentUsermap.source.department);
       this.timeTableService.getByDepartmentAsync(this.departmentControl.value._id)
         .subscribe((timeTableRes: any) => {

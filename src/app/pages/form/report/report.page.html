@@ -43,7 +43,7 @@
         <tr>
           <td><span class="p-column-title">{{'title' | string}}</span>{{item.title}}</td>
           <td><span class="p-column-title">{{'submissions' | string}}</span>
-            <ion-button fill="clear" [routerLink]="['/form/submissions/', item._id]">{{'view' | string}}</ion-button>
+            <ion-button fill="clear" [routerLink]="['/form/submissions/', item._id]" *ngIf="checkPermission(item.createdBy?.['_id'])">{{'view' | string}}</ion-button>
           </td>
           <td><span class="p-column-title">{{'createdBy' | string}}</span>{{item.createdBy?.email}}</td>
           <td><span class="p-column-title">{{'createdAt' | string}}</span>{{item.createdAt | date:

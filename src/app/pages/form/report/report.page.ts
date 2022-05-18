@@ -83,5 +83,9 @@ export class FormReportPage implements OnInit {
     });
   }
 
+  checkPermission(userId: string) {
+    return this.config.sameUserOrAdmin(userId);
+  }
+
 
 }
