@@ -48,8 +48,10 @@ export class MainResolverService {
               this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
               this.router.navigate(['/', 'auth', 'signup', 'create-college'], { replaceUrl: true });
             });
-        }
-        else {
+        } else if (this.authService.currentUser$?.value?.role === EUserRoles.superAdmin) {
+          this.commonService.goToDashboard();
+          resolve(true);
+        } else {
           console.log('calling user login');
           this.authService.doUserLogin(this.authService.currentUser$?.value._id)
             .then(() => {

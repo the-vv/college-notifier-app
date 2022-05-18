@@ -43,8 +43,8 @@ export class SideMenuComponent implements OnInit, OnDestroy {
   setupMenu() {
     this.subs.add(
       this.collegeService.currentCollege$.subscribe(res => {
+        this.isSuperAdmin = [EUserRoles.superAdmin].includes(this.authService.currentUser$.value?.role);
         if (res && res.status === ERequestStatus.active) {
-          this.isSuperAdmin = [EUserRoles.superAdmin].includes(this.authService.currentUser$.value?.role) ? true : false;
           this.isAdmin = [EUserRoles.admin].includes(this.authService.currentUser$.value?.role) ? true : false;
           if (!this.isAdmin) {
             const currentUser = this.authService.currentUser$.value;
@@ -55,7 +55,6 @@ export class SideMenuComponent implements OnInit, OnDestroy {
           }
         } else {
           this.isAdmin = false;
-          this.isSuperAdmin = false;
         }
       })
     );
