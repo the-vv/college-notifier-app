@@ -10,6 +10,7 @@ import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { FormService } from 'src/app/services/form.service';
 // import { FormViewComponent } from '../form-view/form-view.component';
 
@@ -49,10 +50,10 @@ export class FormListComponent implements OnInit, OnInit, OnChanges, OnDestroy {
     private formService: FormService,
     private commonService: CommonService,
     private authService: AuthService,
-    private modalCtrl: ModalController,
     private router: Router,
     private alertController: AlertController,
-    private collegeService: CollegeService
+    private collegeService: CollegeService,
+    private config: ConfigService
   ) {
   }
 
@@ -74,22 +75,33 @@ export class FormListComponent implements OnInit, OnInit, OnChanges, OnDestroy {
     if (!this.sourceData?.college) {
       return;
     }
-    const postSource: ISource = {
-      college: this.collegeService.currentCollege$.value._id,
-      department: (this.sourceData.department as IDepartment)?._id,
-      batch: (this.sourceData.batch as IBatch)?._id,
-      class: (this.sourceData.class as IClass)?._id,
-      room: (this.sourceData.room as IRoom)?._id,
-      source: this.sourceData.source,
-    };
-    this.loading = true;
-    this.formService.getBySourceAndUserAsync(postSource).subscribe(res => {
-      this.allForms = res;
-      this.loading = false;
-    }, err => {
-      this.loading = false;
-      this.commonService.showToast(err.error.message);
-    });
+    if (this.config.isAdmin || this.compact) {
+      const postSource: ISource = {
+        college: this.collegeService.currentCollege$.value._id,
+        department: (this.sourceData.department as IDepartment)?._id,
+        batch: (this.sourceData.batch as IBatch)?._id,
+        class: (this.sourceData.class as IClass)?._id,
+        room: (this.sourceData.room as IRoom)?._id,
+        source: this.sourceData.source,
+      };
+      this.loading = true;
+      this.formService.getBySourceAndUserAsync(postSource).subscribe(res => {
+        this.allForms = res;
+        this.loading = false;
+      }, err => {
+        this.loading = false;
+        this.commonService.showToast(err.error.message);
+      });
+    } else {
+      this.loading = true;
+      this.formService.getByUserMapAsync(this.config.currentUsermap).subscribe(res => {
+        this.allForms = res;
+        this.loading = false;
+      }, err => {
+        this.loading = false;
+        this.commonService.showToast(err.error.message);
+      });
+    }
   }
 
   getStringFromHtml(html: string) {

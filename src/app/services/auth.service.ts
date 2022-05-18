@@ -92,6 +92,11 @@ export class AuthService {
           text: [EStrings.error + ':', EStrings.logout].join(' '),
         });
       });
+    this.config.isAdmin = false;
+    this.config.departmentAdmin = false;
+    this.config.batchAdmin = false;
+    this.config.classAdmin = false;
+    this.config.isHOD = false;
   }
 
   loginAsync(email: string, password: string): Observable<any> {
@@ -114,18 +119,10 @@ export class AuthService {
         } else if (userMap.active === false) {
           this.router.navigate(['/dashboard'], { replaceUrl: true });
         } else {
-          const user = userMap.user;
-          const map = userMap;
-          this.config.isAdmin = ((map.source.college as ICollege).admins as string[]).includes((user as IUser)._id) ||
-            (user as IUser).role === EUserRoles.admin;
-          this.config.departmentAdmin = ((map.source.department as IDepartment)?.admins as string[])?.includes((user as IUser)._id);
-          this.config.batchAdmin = ((map.source.batch as IBatch)?.admins as string[])?.includes((user as IUser)._id);
-          this.config.classAdmin = ((map.source.class as IClass)?.admins as string[])?.includes((user as IUser)._id);
-          this.config.isHOD = (user as IUser).customRoles.includes(ECustomUserRoles.hod);
+          this.config.setUserMap(userMap);
           if (!this.router.url.includes('dashboard')) {
             this.router.navigate(['/dashboard'], { replaceUrl: true });
           }
-          console.log(JSON.parse(JSON.stringify(this.config)));
         }
         resolve(userMap);
       }, err => {

@@ -7,7 +7,6 @@ import { IUser } from 'src/app/interfaces/common.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
-import { ConfigService } from 'src/app/services/config.service';
 
 @Component({
   selector: 'app-side-menu',
@@ -26,19 +25,32 @@ export class SideMenuComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     private router: Router,
     private commonService: CommonService,
-    private collegeService: CollegeService,
-    private config: ConfigService
+    private collegeService: CollegeService
   ) { }
 
   ngOnInit() {
+    this.setupMenu();
+    this.authService.currentUser$.subscribe(res => {
+      if (res) {
+        this.userIsActive = res.active;
+        this.setupMenu();
+      }
+    });
+  }
+
+
+
+  setupMenu() {
     this.subs.add(
       this.collegeService.currentCollege$.subscribe(res => {
         if (res && res.status === ERequestStatus.active) {
           this.isSuperAdmin = [EUserRoles.superAdmin].includes(this.authService.currentUser$.value?.role) ? true : false;
           this.isAdmin = [EUserRoles.admin].includes(this.authService.currentUser$.value?.role) ? true : false;
-          if(!this.isAdmin) {
+          if (!this.isAdmin) {
             const currentUser = this.authService.currentUser$.value;
-            const collegeAdmins = (res.admins as IUser[]).map((admin: IUser) => admin._id);
+            const collegeAdmins = (res.admins as string[]);
+            console.log(currentUser);
+            console.log(collegeAdmins);
             if (collegeAdmins.includes(currentUser._id)) {
               this.isAdmin = true;
             }
@@ -46,14 +58,6 @@ export class SideMenuComponent implements OnInit, OnDestroy {
         } else {
           this.isAdmin = false;
           this.isSuperAdmin = false;
-        }
-      })
-    );
-    this.subs.add(
-      this.authService.currentUserMap$.subscribe(res => {
-        console.log(res);
-        if (res) {
-          this.userIsActive = res.active;
         }
       })
     );

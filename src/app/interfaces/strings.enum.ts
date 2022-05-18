@@ -279,7 +279,7 @@ export enum EStrings {
     collegeJoinRequestSemtSuccessFully = 'College Join Request Sent Successfully',
     pleaseWaitForApproval = 'Please wait for approval',
     accessRequests = 'Access Requests',
-    
+
 
 
 }

@@ -35,4 +35,24 @@ export class AccessRequestPage implements OnInit {
       });
   }
 
+  approveUser(userId: string) {
+    this.loading = true;
+    this.userService.approveUserByIdAsync(userId).subscribe(res => {
+      console.log(res);
+      this.userService.getInactiveUserByCollegeIdAsync(this.collegeService.currentCollege$.value._id)
+        .subscribe(approveRes => {
+          this.loading = false;
+          this.userData = approveRes;
+          console.log(this.userData);
+          this.loading = false;
+        }, err => {
+          this.loading = false;
+          console.log(err);
+        });
+    }, err => {
+      this.loading = false;
+      console.log(err);
+    });
+  }
+
 }

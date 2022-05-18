@@ -6,6 +6,7 @@ import { IResource } from 'src/app/interfaces/common.model';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { ResourceService } from 'src/app/services/resource.service';
 
 @Component({
@@ -25,7 +26,8 @@ export class ResourcesListPage implements OnInit, OnDestroy {
     private resourceService: ResourceService,
     private commonService: CommonService,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    public config: ConfigService
   ) { }
 
   ngOnInit() {

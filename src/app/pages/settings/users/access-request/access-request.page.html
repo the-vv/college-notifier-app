@@ -39,7 +39,7 @@
           <td><span class="p-column-title">{{'email' | string}}</span>{{user.email}}</td>
           <td><span class="p-column-title">{{'role' | string}}</span>{{user.role | string}}</td>
           <td>
-            <ion-button color="success" size="small" (click)="onStatusChange(eRequestStatus.active, college._id)">
+            <ion-button color="success" size="small" (click)="approveUser(user._id)">
               {{'approve' | string}}</ion-button>
           </td>
         </tr>

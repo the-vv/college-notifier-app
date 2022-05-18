@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IForm, ISource } from '../interfaces/common.model';
+import { IForm, ISource, IUserMap } from '../interfaces/common.model';
 import { HttpService } from './http.service';
 
 @Injectable({
@@ -8,42 +8,46 @@ import { HttpService } from './http.service';
 })
 export class FormService {
 
-  private notificationUrl = 'api/form';
+  private formUrl = 'api/form';
 
   constructor(
     private http: HttpService
   ) { }
 
   postAsync(data: IForm): Observable<IForm> {
-    return this.http.postAsync(data, this.notificationUrl);
+    return this.http.postAsync(data, this.formUrl);
   }
 
   putAsync(data: IForm): Observable<IForm> {
-    return this.http.putAsync(data, this.notificationUrl);
+    return this.http.putAsync(data, this.formUrl);
   }
 
   getByCollegeAsync(collegeId: string): Observable<IForm[]> {
-    return this.http.getAsync(`${this.notificationUrl}/getByCollege/${collegeId}`);
+    return this.http.getAsync(`${this.formUrl}/getByCollege/${collegeId}`);
   }
 
   getByIdAsync(id: string): Observable<IForm> {
-    return this.http.getAsync(`${this.notificationUrl}/${id}`);
+    return this.http.getAsync(`${this.formUrl}/${id}`);
   }
 
   getByAdminIdAsync(id: string): Observable<IForm> {
-    return this.http.getAsync(`${this.notificationUrl}/getByAdmin/${id}`);
+    return this.http.getAsync(`${this.formUrl}/getByAdmin/${id}`);
   }
 
   getBySourceAndUserAsync(source: ISource): Observable<IForm[]> {
-    return this.http.postAsync(source, `${this.notificationUrl}/getBySourceAndUser`);
+    return this.http.postAsync(source, `${this.formUrl}/getBySourceAndUser`);
   }
 
-  getByUserIdAsync(id: string): Observable<IForm[]> {
-    return this.http.getAsync(`${this.notificationUrl}/getByUser/${id}`);
+  getByUserMapAsync(map: IUserMap): Observable<IForm[]> {
+    return this.http.postAsync(map, `${this.formUrl}/getByMap`);
   }
+
+  // getByUserMapAsync(map: IUserMap): Observable<IForm[]> {
+  //   return this.http.postAsync(map, `${this.notificationUrl}/getByMap`);
+  // }
 
   deleteAsync(id: string): Observable<IForm> {
-    return this.http.deleteByIdAsync(this.notificationUrl, id);
+    return this.http.deleteByIdAsync(this.formUrl, id);
   }
 
 }

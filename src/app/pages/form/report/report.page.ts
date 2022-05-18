@@ -43,7 +43,7 @@ export class FormReportPage implements OnInit {
       });
     } else {
       const loading = await this.commonService.showLoading();
-      this.formService.getByUserIdAsync(this.authService.currentUser$.value._id).subscribe(forms => {
+      this.formService.getByUserMapAsync(this.config.currentUsermap).subscribe(forms => {
         loading.dismiss();
         this.formsData = forms;
       }, err => {

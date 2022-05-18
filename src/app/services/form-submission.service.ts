@@ -8,42 +8,42 @@ import { HttpService } from './http.service';
 })
 export class FormSubmissionService {
 
-  private notificationUrl = 'api/formSubmission';
+  private formSubmissionUrl = 'api/formSubmission';
 
   constructor(
     private http: HttpService
   ) { }
 
   postAsync(data: IFormSubmission): Observable<IFormSubmission> {
-    return this.http.postAsync(data, this.notificationUrl);
+    return this.http.postAsync(data, this.formSubmissionUrl);
   }
 
   putAsync(data: IFormSubmission): Observable<IFormSubmission> {
-    return this.http.putAsync(data, this.notificationUrl);
+    return this.http.putAsync(data, this.formSubmissionUrl);
   }
 
   getByCollegeAsync(collegeId: string): Observable<IFormSubmission[]> {
-    return this.http.getAsync(`${this.notificationUrl}/getByCollege/${collegeId}`);
+    return this.http.getAsync(`${this.formSubmissionUrl}/getByCollege/${collegeId}`);
   }
 
   getByIdAsync(id: string): Observable<IFormSubmission> {
-    return this.http.getAsync(`${this.notificationUrl}/${id}`);
+    return this.http.getAsync(`${this.formSubmissionUrl}/${id}`);
   }
 
   getByUserIdAsync(id: string): Observable<IFormSubmission[]> {
-    return this.http.getAsync(`${this.notificationUrl}/getByUser/${id}`);
+    return this.http.getAsync(`${this.formSubmissionUrl}/getByUser/${id}`);
   }
 
   getByFormIdAsync(id: string): Observable<IFormSubmission[]> {
-    return this.http.getAsync(`${this.notificationUrl}/getByForm/${id}`);
+    return this.http.getAsync(`${this.formSubmissionUrl}/getByForm/${id}`);
   }
 
   getByFormIdAnduserIdAsync(formId: string, userId: string): Observable<IFormSubmission[]> {
-    return this.http.getAsync(`${this.notificationUrl}/getByFormAnduser/${formId}/${userId}`);
+    return this.http.getAsync(`${this.formSubmissionUrl}/getByFormAnduser/${formId}/${userId}`);
   }
 
   deleteAsync(id: string): Observable<IFormSubmission> {
-    return this.http.deleteByIdAsync(this.notificationUrl, id);
+    return this.http.deleteByIdAsync(this.formSubmissionUrl, id);
   }
 
 }

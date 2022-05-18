@@ -8,6 +8,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { Toast } from '@capacitor/toast';
 import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CollegeService } from 'src/app/services/college.service';
+import { ConfigService } from 'src/app/services/config.service';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,8 @@ export class LoginPage implements OnInit, OnDestroy {
     private commonService: CommonService,
     private authService: AuthService,
     private router: Router,
-    private collegeService: CollegeService
+    private collegeService: CollegeService,
+    private config: ConfigService
   ) { }
 
   get f() { return this.loginForm.controls; }
@@ -59,6 +61,7 @@ export class LoginPage implements OnInit, OnDestroy {
             /* eslint no-underscore-dangle: 0 */
             this.collegeService.getByAdminIdAsync(this.authService.currentUser$.value._id)
               .subscribe(collegeRes => {
+                this.config.isAdmin = true;
                 this.collegeService.saveCollege(collegeRes);
                 if (collegeRes) {
                   if (collegeRes.status === ERequestStatus.pending) {

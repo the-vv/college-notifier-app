@@ -10,6 +10,7 @@ import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { NotificationViewComponent } from '../notification-view/notification-view.component';
 
@@ -53,33 +54,48 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
     private modalCtrl: ModalController,
     private router: Router,
     private alertController: AlertController,
-    private collegeService: CollegeService
+    private collegeService: CollegeService,
+    private config: ConfigService
   ) {
   }
 
   getNotifications() {
+    console.log(this.config.currentUsermap);
     return new Promise<void>((resolve, reject) => {
       if (!this.sourceData?.college) {
         return;
       }
-      const postSource: ISource = {
-        college: this.collegeService.currentCollege$.value._id,
-        department: (this.sourceData.department as IDepartment)?._id,
-        batch: (this.sourceData.batch as IBatch)?._id,
-        class: (this.sourceData.class as IClass)?._id,
-        room: (this.sourceData.room as IRoom)?._id,
-        source: this.sourceData.source,
-      };
-      this.loading = true;
-      this.notificationService.getBySourceAndUserAsync(postSource).subscribe(res => {
-        this.allNotifications = res;
-        this.loading = false;
-        resolve();
-      }, err => {
-        this.loading = false;
-        this.commonService.showToast(err.error.message);
-        reject();
-      });
+      if (this.config.isAdmin || this.compact) {
+        const postSource: ISource = {
+          college: this.collegeService.currentCollege$.value._id,
+          department: (this.sourceData.department as IDepartment)?._id,
+          batch: (this.sourceData.batch as IBatch)?._id,
+          class: (this.sourceData.class as IClass)?._id,
+          room: (this.sourceData.room as IRoom)?._id,
+          source: this.sourceData.source,
+        };
+        this.loading = true;
+        this.notificationService.getBySourceAndUserAsync(postSource).subscribe(res => {
+          this.allNotifications = res;
+          this.loading = false;
+          resolve();
+        }, err => {
+          this.loading = false;
+          this.commonService.showToast(err.error.message);
+          reject();
+        });
+      } else {
+        this.loading = true;
+        this.notificationService.getByUserMapAsync(this.config.currentUsermap).subscribe(res => {
+          this.allNotifications = res;
+          this.loading = false;
+          resolve();
+        }, err => {
+          this.loading = false;
+          this.commonService.showToast(err.error.message);
+          reject();
+        });
+      }
     });
   }
 

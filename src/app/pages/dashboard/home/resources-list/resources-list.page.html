@@ -16,7 +16,7 @@
                             </p>
                         </ion-col>
                     </ion-row>
-                    <ion-row>
+                    <ion-row *ngIf="config.isAdmin">
                         <ion-col size="6">
                             <ion-button expand="block" color="warning" size="small" (click)="onEdit(item, $event)"> {{'edit' |
                                 string}}</ion-button>
@@ -30,7 +30,7 @@
             </ion-col>
         </ion-row>
     </ion-grid>
-    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed" *ngIf="config.isAdmin">
         <ion-fab-button [routerLink]="['/', 'resource', 'manage']">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>

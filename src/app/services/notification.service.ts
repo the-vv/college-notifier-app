@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { INotification, ISource } from '../interfaces/common.model';
+import { INotification, ISource, IUserMap } from '../interfaces/common.model';
 import { HttpService } from './http.service';
 
 @Injectable({
@@ -36,6 +36,10 @@ export class NotificationService {
 
   getBySourceAndUserAsync(source: ISource): Observable<INotification[]> {
     return this.http.postAsync(source, `${this.notificationUrl}/getBySourceAndUser`);
+  }
+
+  getByUserMapAsync(map: IUserMap): Observable<INotification[]> {
+    return this.http.postAsync(map, `${this.notificationUrl}/getByMap`);
   }
 
   deleteAsync(id: string): Observable<INotification> {

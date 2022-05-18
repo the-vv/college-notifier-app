@@ -64,6 +64,10 @@ export class UserService {
     return this.http.getAsync(`${this.userRoomMapUrl}/${roomId}`, { role });
   }
 
+  approveUserByIdAsync(id: string) {
+    return this.http.putByIdAsync(`${this.userMapUrl}/approve`, id, {});
+  }
+
   deleteMultipleRoomUsersMapAsync(roomId: string, userId: string[]) {
     return this.http.deleteMultipleAsync(`${this.userRoomMapUrl}/multiple/${roomId}`, userId);
   }
