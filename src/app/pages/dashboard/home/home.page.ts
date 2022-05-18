@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { ConfigService } from 'src/app/services/config.service';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit,  OnDestroy {
 
   public currentCollege: ICollege;
   public loading = true;
@@ -62,7 +62,8 @@ export class HomePage implements OnInit {
       this.commonService.goToDashboard();
     } else {
       this.loading = false;
-      this.authService.doUserLogin(this.authService.currentUser$?.value._id)
+      console.log('calling user login');
+      this.authService.doUserLogin(this.authService.currentUser$?.value._id, !this.router.url.includes('dashboard'))
       .then((userMap) => {
         if(!userMap?.active) {
           this.commonService.showSuccessPage(`${EStrings.collegeJoinRequestSemtSuccessFully}`, EStrings.pleaseWaitForApproval, false);
@@ -77,6 +78,9 @@ export class HomePage implements OnInit {
 
   ionViewWillLeave() {
     this.subs.unsubscribe();
+  }
+
+  ngOnDestroy(): void {
   }
 
 

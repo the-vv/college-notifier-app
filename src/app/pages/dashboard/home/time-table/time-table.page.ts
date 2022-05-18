@@ -12,7 +12,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { TimeTableService } from 'src/app/services/time-table.service';
-import { saveAsPng, saveAsJpeg } from 'save-html-as-image';
+import { saveAsPng } from 'save-html-as-image';
 
 declare const $: any;
 
@@ -171,7 +171,7 @@ export class TimeTablePage implements OnInit, OnDestroy {
       .then(() => {
         $('.hide-when-downloading').show();
         $('.show-when-downloading').hide();
-      }).catch((e) => {
+      }).catch((e: any) => {
         $('.hide-when-downloading').show();
         $('.show-when-downloading').hide();
         console.error('Error while exporting', e);

@@ -36,7 +36,6 @@ export class ConfigService {
     this.departmentAdmin = ((map.source.department as IDepartment)?.admins as string[])?.includes((user as IUser)._id);
     this.batchAdmin = ((map.source.batch as IBatch)?.admins as string[])?.includes((user as IUser)._id);
     this.classAdmin = ((map.source.class as IClass)?.admins as string[])?.includes((user as IUser)._id);
-    console.log(user);
     this.isHOD = (user as IUser).customRoles.includes(ECustomUserRoles.hod);
   }
 }

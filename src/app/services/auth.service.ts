@@ -107,7 +107,8 @@ export class AuthService {
     return this.httpService.postAsync(user, [this.authAPiUrl, 'signup'].join('/'));
   }
 
-  doUserLogin(userId: string) {
+  doUserLogin(userId: string, redirect = true) {
+    console.log('userlogin method', userId);
     return new Promise<IUserMap>((resolve, reject) => {
       this.userService.getUserMapByUserIdAsync(userId).subscribe((userMap: IUserMap) => {
         // console.log(userMap);
@@ -121,7 +122,7 @@ export class AuthService {
           this.router.navigate(['/dashboard'], { replaceUrl: true });
         } else {
           this.config.setUserMap(userMap);
-          if (!this.router.url.includes('dashboard')) {
+          if (redirect) {
             this.router.navigate(['/dashboard'], { replaceUrl: true });
           }
         }

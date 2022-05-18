@@ -82,6 +82,7 @@ export class LoginPage implements OnInit, OnDestroy {
             this.commonService.goToDashboard();
           }
           else {
+            console.log('calling user login');
             this.authService.doUserLogin(this.authService.currentUser$?.value._id);
           }
         }

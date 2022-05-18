@@ -2,55 +2,75 @@
   <ion-grid class="ion-align-items-center ion-justify-content-center overflow-y-auto ion-padding-bottom" #roleContainer>
     <ion-row class="">
       <ion-col size="12" size-md="12" size-xl="6">
-        <ion-card button class="v-center" [routerLink]="['/', 'department', 'list']">
-            <ion-row class="v-center">
-              <ion-col size="5" class="v-center h-100">
-                <img src="/assets/images/department.webp" alt="" class="card-image">
-              </ion-col>
-              <ion-col size="7" class="">
-                <h3><ion-text color="dark">{{'departments' | string}}</ion-text></h3>
-                <p><ion-text>{{'departmentsDescription' | string}}</ion-text></p>
-              </ion-col>
-            </ion-row>
+        <ion-card button class="v-center" (click)="goToDepartment()"
+        [disabled]="!(config.isAdmin || currentMap?.department)">
+          <ion-row class="v-center">
+            <ion-col size="5" class="v-center h-100">
+              <img src="/assets/images/department.webp" alt="" class="card-image">
+            </ion-col>
+            <ion-col size="7" class="">
+              <h3>
+                <ion-text color="dark">{{'departments' | string}} <span *ngIf="!(config.isAdmin || currentMap?.department)">({{'unavailable' | string}})</span></ion-text>
+              </h3>
+              <p>
+                <ion-text>{{'departmentsDescription' | string}}</ion-text>
+              </p>
+            </ion-col>
+          </ion-row>
         </ion-card>
       </ion-col>
       <ion-col size="12" size-md="12" size-xl="6">
-        <ion-card button class="v-center"  [routerLink]="['/', 'batch', 'list']">
-            <ion-row class="v-center">
-              <ion-col size="5" class="v-center h-100">
-                <img src="/assets/images/batch.webp" alt="" class="card-image">
-              </ion-col>
-              <ion-col size="7" class="">
-                <h3><ion-text color="dark">{{'batches' | string}}</ion-text></h3>
-                <p><ion-text>{{'batchesDescription' | string}}</ion-text></p>
-              </ion-col>
-            </ion-row>
+        <ion-card button class="v-center" (click)="goToBatch()"
+        [disabled]="!(config.isAdmin || currentMap?.batch)">
+          <ion-row class="v-center">
+            <ion-col size="5" class="v-center h-100">
+              <img src="/assets/images/batch.webp" alt="" class="card-image">
+            </ion-col>
+            <ion-col size="7" class="">
+              <h3>
+                <ion-text color="dark">{{'batches' | string}} <span *ngIf="!(config.isAdmin || currentMap?.batch)">({{'unavailable' | string}})</span></ion-text>
+              </h3>
+              <p>
+                <ion-text>{{'batchesDescription' | string}}</ion-text>
+              </p>
+            </ion-col>
+          </ion-row>
         </ion-card>
       </ion-col>
       <ion-col size="12" size-md="12" size-xl="6">
-        <ion-card button class="v-center"  [routerLink]="['/', 'class', 'list']">
-            <ion-row class="v-center">
-              <ion-col size="5" class="v-center h-100">
-                <img src="/assets/images/class.webp" alt="" class="card-image">
-              </ion-col>
-              <ion-col size="7" class="">
-                <h3><ion-text color="dark">{{'classes' | string}}</ion-text></h3>
-                <p><ion-text>{{'classesDescription' | string}}</ion-text></p>
-              </ion-col>
-            </ion-row>
+        <ion-card button class="v-center" (click)="goToClass()"
+        [disabled]="!(config.isAdmin || currentMap?.class)">
+          <ion-row class="v-center">
+            <ion-col size="5" class="v-center h-100">
+              <img src="/assets/images/class.webp" alt="" class="card-image">
+            </ion-col>
+            <ion-col size="7" class="">
+              <h3>
+                <ion-text color="dark">{{'classes' | string}} <span *ngIf="!(config.isAdmin || currentMap?.class)">({{'unavailable' | string}})</span></ion-text>
+              </h3>
+              <p>
+                <ion-text>{{'classesDescription' | string}}</ion-text>
+              </p>
+            </ion-col>
+          </ion-row>
         </ion-card>
       </ion-col>
       <ion-col size="12" size-md="12" size-xl="6">
-        <ion-card button class="v-center"  [routerLink]="['/', 'room', 'list']">
-            <ion-row class="v-center">
-              <ion-col size="5" class="v-center h-100">
-                <img src="/assets/images/room.png" alt="" class="card-image">
-              </ion-col>
-              <ion-col size="7" class="">
-                <h3><ion-text color="dark">{{'rooms' | string}}</ion-text></h3>
-                <p><ion-text>{{'roomsDescription' | string}}</ion-text></p>
-              </ion-col>
-            </ion-row>
+        <ion-card button class="v-center" [routerLink]="['/', 'room', 'list']"
+        [disabled]="!(config.isAdmin || currentMap?.rooms?.length)">
+          <ion-row class="v-center">
+            <ion-col size="5" class="v-center h-100">
+              <img src="/assets/images/room.png" alt="" class="card-image">
+            </ion-col>
+            <ion-col size="7" class="">
+              <h3>
+                <ion-text color="dark">{{'rooms' | string}} <span *ngIf="!(config.isAdmin || currentMap?.rooms?.length)">({{'unavailable' | string}})</span></ion-text>
+              </h3>
+              <p>
+                <ion-text>{{'roomsDescription' | string}}</ion-text>
+              </p>
+            </ion-col>
+          </ion-row>
         </ion-card>
       </ion-col>
     </ion-row>

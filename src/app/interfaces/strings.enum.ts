@@ -279,7 +279,12 @@ export enum EStrings {
     collegeJoinRequestSemtSuccessFully = 'College Join Request Sent Successfully',
     pleaseWaitForApproval = 'Please wait for approval',
     accessRequests = 'Access Requests',
-
+    unavailable = 'Unavailable',
+    departmentsDescription = 'View notifications, manage users, and more in Department',
+    batchesDescription = 'View notifications, manage users, and more in Batch',
+    classesDescription = 'View notifications, manage users, and more in Class',
+    roomsDescription = 'View notifications, manage users, and more in Room',
+    your = 'Your',
 
 
 }

@@ -6,6 +6,7 @@ export interface ISource {
     batch?: string | IBatch;
     class?: string | IClass;
     room?: string | IRoom;
+    rooms?: string[] | IRoom[];
     source: ESourceTargetType;
 }
 

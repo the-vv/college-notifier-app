@@ -47,6 +47,7 @@ export class JoinCollegeComponent implements OnInit {
       console.log(res);
       this.commonServce.showToast(`${EStrings.college} ${EStrings.requested}`);
       // this.authService.currentUser$.next(res.user);
+      console.log('calling user login');
       this.authService.doUserLogin(this.authService.currentUser$.value._id);
     }, err => {
       console.log(err);

@@ -37,7 +37,12 @@ export class RoomListPage implements OnInit {
       .subscribe((res) => {
         laoding.dismiss();
         console.log(res);
-        this.roomsData = res;
+        if (this.config.isAdmin || this.config.departmentAdmin) {
+          this.roomsData = res;
+        } else {
+          const map = this.config.currentUsermap.source;
+          this.roomsData = res.filter(room => (map.rooms as string[]).includes(room._id));
+        }
       }, err => {
         laoding.dismiss();
         this.commonService.showToast(`${EStrings.error}: ${err.error.message}`);
@@ -45,7 +50,7 @@ export class RoomListPage implements OnInit {
   }
 
   getAdminNames(room: IRoom) {
-    return( room.admins as IUser[]).map((admin) => admin.name).join(', ');
+    return (room.admins as IUser[]).map((admin) => admin.name).join(', ');
   }
 
 }

@@ -14,7 +14,8 @@
   <ion-card>
     <ion-row class="v-center ion-justify-content-between">
       <ion-col size="auto" class="ion-text-start">
-        <h6>{{'rooms' | string}} {{'under' | string}} {{(collegeService.currentCollege$ | async)?.name}}</h6>
+        <h6 *ngIf="(this.config.isAdmin || this.config.departmentAdmin); else myRooms">{{'rooms' | string}} {{'under' | string}} {{(collegeService.currentCollege$ | async)?.name}}</h6>
+        <ng-template #myRooms><h6>{{'your' | string}} {{'rooms' | string}}</h6></ng-template>        
       </ion-col>
       <ion-col size="auto" class="ion-text-end">
         <ion-button color="primary" size="small" [routerLink]="['/', 'room', 'manage']">

@@ -60,7 +60,7 @@ export class NotificationListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getNotifications() {
-    console.log(this.config.currentUsermap);
+    // console.log(this.config.currentUsermap);
     return new Promise<void>((resolve, reject) => {
       if (!this.sourceData?.college) {
         return;

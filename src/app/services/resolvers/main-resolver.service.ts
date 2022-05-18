@@ -50,6 +50,7 @@ export class MainResolverService {
             });
         }
         else {
+          console.log('calling user login');
           this.authService.doUserLogin(this.authService.currentUser$?.value._id)
             .then(() => {
               resolve(true);

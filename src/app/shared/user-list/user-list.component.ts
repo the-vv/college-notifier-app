@@ -22,7 +22,7 @@ export class UserListComponent implements OnInit {
 
   public sourceData: ISource;
   @Input() set source(value: ISource) {
-    console.log(value);
+    // console.log(value);
     if (!value) { return; }
     this.sourceData = value;
     switch (value.source) {

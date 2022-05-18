@@ -49,8 +49,6 @@ export class SideMenuComponent implements OnInit, OnDestroy {
           if (!this.isAdmin) {
             const currentUser = this.authService.currentUser$.value;
             const collegeAdmins = (res.admins as string[]);
-            console.log(currentUser);
-            console.log(collegeAdmins);
             if (collegeAdmins.includes(currentUser._id)) {
               this.isAdmin = true;
             }
