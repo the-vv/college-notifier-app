@@ -10,6 +10,7 @@ import { BatchService } from 'src/app/services/batch.service';
 import { ClassService } from 'src/app/services/class.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -34,6 +35,7 @@ export class ClassManagePage implements OnInit {
   public batchControl = new FormControl(null, [Validators.required]);
   public currentSource: ISource;
   public segmentValue: ESegmentViews = ESegmentViews.home;
+  public showEdit = false;
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -45,7 +47,8 @@ export class ClassManagePage implements OnInit {
     private batchService: BatchService,
     private classService: ClassService,
     private userService: UserService,
-    private collegeService: CollegeService
+    private collegeService: CollegeService,
+    public config: ConfigService
   ) { }
 
   get f() { return this.classForm.controls; }
@@ -110,6 +113,13 @@ export class ClassManagePage implements OnInit {
         }
       })
     );
+    if(this.config.currentUsermap || this.config.isAdmin) {
+      const classAdmins = (this.config.currentUsermap?.source.class as IClass)?.admins as string[];
+      console.log(classAdmins);
+      if(classAdmins?.includes((this.config.currentUsermap?.user as IUser)?._id) || this.config.isAdmin) {
+        this.showEdit = true;
+      }
+    }
   }
 
   onChangeSegment(event: any) {

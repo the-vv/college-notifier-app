@@ -8,7 +8,7 @@
     </ion-buttons>
     <ion-title><span *ngIf="isUpdate">{{f.name.value}}</span> {{'department' | string}}</ion-title>
   </ion-toolbar>
-  <ion-toolbar *ngIf="currentBreakPoint !== 'medium' && isUpdate">
+  <ion-toolbar *ngIf="currentBreakPoint !== 'medium' && (isUpdate && showEdit)">
     <ion-segment (ionChange)="onChangeSegment($event)" [swipeGesture]="true" [value]="segmentValue">
       <ion-segment-button value="home">
         <ion-label>{{'home' | string}}</ion-label>
@@ -22,14 +22,14 @@
 
 <ion-content class="position-relative">
   <ion-row class="h-100">
-    <ion-col size-md="8" *ngIf="(currentBreakPoint === 'medium') || (segmentValue === 'home')">
+    <ion-col [sizeMd]="showEdit ? 8 : 12" *ngIf="(currentBreakPoint === 'medium') || (segmentValue === 'home')">
       <ng-container *ngIf="isUpdate; else createTemplate">        
         <app-notification-list [source]="currentSource" [compact]="true"></app-notification-list>
-        <app-user-list [source]="currentSource"></app-user-list>
+        <app-user-list [source]="currentSource" [showEdit]="showEdit"></app-user-list>
       </ng-container>
     </ion-col>
     <ion-col size-md="4" size="12" [class]="currentBreakPoint === 'medium' ? 'bg-dark' : ''"
-      *ngIf="(currentBreakPoint === 'medium') || (segmentValue === 'edit')">
+      *ngIf="((currentBreakPoint === 'medium') || (segmentValue === 'edit')) && showEdit">
       <div class="text-center mt-3">
         <h4>{{(isUpdate ? 'update' : 'create') | string}} {{'department' | string}}</h4>
       </div>

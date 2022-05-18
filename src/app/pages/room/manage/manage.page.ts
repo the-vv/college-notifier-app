@@ -9,6 +9,7 @@ import { EStrings } from 'src/app/interfaces/strings.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { RoomService } from 'src/app/services/room.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -29,6 +30,7 @@ export class RoomManagePage implements OnInit, OnDestroy {
   public loading = false;
   public currentSource: ISource;
   public segmentValue: ESegmentViews = ESegmentViews.home;
+  public showEdit = false;
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -39,7 +41,8 @@ export class RoomManagePage implements OnInit, OnDestroy {
     private authService: AuthService,
     private userService: UserService,
     private collegeService: CollegeService,
-    private roomService: RoomService
+    public config: ConfigService,
+    private roomService: RoomService,
   ) { }
 
   get f() { return this.roomForm.controls; }
@@ -77,6 +80,13 @@ export class RoomManagePage implements OnInit, OnDestroy {
           room: res,
           source: ESourceTargetType.room
         };
+        if(this.config.currentUsermap || this.config.isAdmin) {
+          const roomAdmins = (res.admins as IUser[]).map((val: IUser) => val._id);
+          console.log(roomAdmins);
+          if(roomAdmins?.includes((this.config.currentUsermap?.user as IUser)?._id) || this.config.isAdmin) {
+            this.showEdit = true;
+          }
+        }
       }, (err) => {
         loading.dismiss();
         Toast.show({

@@ -285,6 +285,7 @@ export enum EStrings {
     classesDescription = 'View notifications, manage users, and more in Class',
     roomsDescription = 'View notifications, manage users, and more in Room',
     your = 'Your',
+    map = 'Map',
 
 
 }

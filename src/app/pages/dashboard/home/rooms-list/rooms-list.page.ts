@@ -24,14 +24,14 @@ export class RoomsListPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.currentMap = this.config.currentUsermap.source;
-    const user = this.config.currentUsermap.user as IUser;
+    this.currentMap = this.config.currentUsermap?.source;
+    const user = this.config.currentUsermap?.user as IUser;
     console.log(this.currentMap);
-    if(this.currentMap.department) {
-      if(((this.currentMap.department as IDepartment).admins as string[]).includes(user._id)) {
+    if(this.currentMap?.department) {
+      if(((this.currentMap.department as IDepartment)?.admins as string[])?.includes(user._id)) {
         this.isDptAdmin = true;
       }
-      if(((this.currentMap.batch as IBatch).admins as string[]).includes(user._id)) {
+      if(((this.currentMap?.batch as IBatch)?.admins as string[])?.includes(user._id)) {
         this.isBatchAdmin = true;
       }
     }
@@ -40,7 +40,7 @@ export class RoomsListPage implements OnInit {
   goToDepartment() {
     if (this.config.isAdmin) {
       this.router.navigate(['/', 'department', 'list']);
-    } else if (this.currentMap.department) {
+    } else if (this.currentMap?.department) {
       this.router.navigate(['/', 'department', 'manage', (this.currentMap.department as IDepartment)._id]);
     }
   }
@@ -48,7 +48,7 @@ export class RoomsListPage implements OnInit {
   goToBatch() {
     if (this.config.isAdmin || this.isDptAdmin) {
       this.router.navigate(['/', 'batch', 'list']);
-    } else if (this.currentMap.batch) {
+    } else if (this.currentMap?.batch) {
       this.router.navigate(['/', 'batch', 'manage', (this.currentMap.batch as IBatch)._id]);
     }
   }
@@ -56,7 +56,7 @@ export class RoomsListPage implements OnInit {
   goToClass() {
     if (this.config.isAdmin || this.isBatchAdmin) {
       this.router.navigate(['/', 'class', 'list']);
-    } else if(this.currentMap.class) {
+    } else if(this.currentMap?.class) {
       this.router.navigate(['/', 'class', 'manage', (this.currentMap.class as IClass)._id]);
     }
   }

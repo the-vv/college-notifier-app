@@ -9,6 +9,7 @@ import { EStrings } from 'src/app/interfaces/strings.enum';
 import { BatchService } from 'src/app/services/batch.service';
 import { CollegeService } from 'src/app/services/college.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -31,6 +32,7 @@ export class BatchManagePage implements OnInit, OnDestroy {
   public currentSource: ISource;
   public segmentValue: ESegmentViews = ESegmentViews.home;
   public departmentControl = new FormControl('', [Validators.required]);
+  public showEdit = false;
   private subs: Subscription = new Subscription();
 
   constructor(
@@ -41,7 +43,8 @@ export class BatchManagePage implements OnInit, OnDestroy {
     private departmentService: DepartmentService,
     private batchService: BatchService,
     private userService: UserService,
-    private collegeService: CollegeService
+    private collegeService: CollegeService,
+    private config: ConfigService
   ) { }
 
   get f() { return this.batchForm.controls; }
@@ -84,6 +87,12 @@ export class BatchManagePage implements OnInit, OnDestroy {
           text: [EStrings.error + ':', err.error.message].join(' '),
         });
       });
+    }
+    if(this.config.currentUsermap || this.config.isAdmin) {
+      const batchAdmins = (this.config.currentUsermap?.source.batch as IBatch)?.admins as string[];
+      if(batchAdmins?.includes((this.config.currentUsermap?.user as IUser)?._id) || this.config.isAdmin) {
+        this.showEdit = true;
+      }
     }
     this.userService.getBySourceAsync(ESourceTargetType.college, this.collegeService.currentCollege$.value._id, EUserRoles.faculty)
       .subscribe((res: IUser[]) => {

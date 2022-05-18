@@ -10,7 +10,7 @@
         </ion-item>
         <ion-list slot="content">
           <ng-container *ngIf="!accordianLoading; else loadingTemplate">
-            <p-listbox [options]="allFaculties" [(ngModel)]="selectedUsers" [metaKeySelection]="false" [checkbox]="true"
+            <p-listbox [options]="allFaculties" [(ngModel)]="selectedUsers" [metaKeySelection]="false" [checkbox]="showEdit"
               [filter]="true" [multiple]="true" optionLabel="userName" [listStyle]="{'max-height':'300px'}"
               filterPlaceHolder="{{'search' | string}}">
               <ng-template let-country pTemplate="item">
@@ -28,7 +28,7 @@
         </ion-item>
         <ion-list slot="content">
           <ng-container *ngIf="!accordianLoading; else loadingTemplate">
-            <p-listbox [options]="allStudents" [(ngModel)]="selectedUsers" [metaKeySelection]="false" [checkbox]="true"
+            <p-listbox [options]="allStudents" [(ngModel)]="selectedUsers" [metaKeySelection]="false" [checkbox]="showEdit"
               [filter]="true" [multiple]="true" optionLabel="userName" [listStyle]="{'max-height':'300px'}"
               filterPlaceHolder="{{'search' | string}}">
               <ng-template let-country pTemplate="item">
@@ -42,7 +42,7 @@
       </ion-accordion>
     </ion-accordion-group>
   </ion-card-content>
-  <ion-row>
+  <ion-row *ngIf="showEdit">
     <ion-col>
       <ion-button expand="block" (click)="onMapClick()">{{'map' | string}}</ion-button>
     </ion-col>

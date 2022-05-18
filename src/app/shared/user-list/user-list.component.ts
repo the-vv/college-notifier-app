@@ -45,6 +45,7 @@ export class UserListComponent implements OnInit {
         this.sourceId = null;
     }
   }
+  @Input() public showEdit = false;
 
   @ViewChild('modal') public userModal: IonicSelectableComponent;
   @ViewChild(IonAccordionGroup) public accordionGroup: IonAccordionGroup;
