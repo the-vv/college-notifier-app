@@ -8,7 +8,8 @@
             </ion-card-title>
             <ion-card-subtitle class="valign-center">
                 {{departmentControl.value['name']}} {{'department' | string}}
-                <ion-button class="ml-1" *ngIf="config.isAdmin" (click)="onChangeClick()" fill="clear" size="small" color="primary">
+                <ion-button class="ml-1" *ngIf="config.isAdmin" (click)="onChangeClick()" fill="clear" size="small"
+                    color="primary">
                     {{'change' | string}}
                 </ion-button>
             </ion-card-subtitle>
@@ -22,7 +23,7 @@
                             <div class="valign-center ion-justify-content-between">
                                 <span>
                                     <span class="show-when-downloading" style="display: none;">
-                                        {{departmentControl.value['name']}} {{'department' | string}}, 
+                                        {{departmentControl.value['name']}} {{'department' | string}},
                                     </span>
                                     <span #tdate>
                                         {{timeTable.schedule.start | date:
@@ -33,17 +34,18 @@
                                     </span>
                                 </span>
                                 <span class="buttons-actions hide-when-downloading">
-                                    <ion-button
-                                        (click)="exportAsImage(timeTable._id + '-active', tdate.innerText)" fill="clear"
-                                        size="small" color="primary">
+                                    <ion-button (click)="exportAsImage(timeTable._id + '-active', tdate.innerText)"
+                                        fill="clear" size="small" color="primary">
                                         <ion-icon name="download-outline" slot="icon-only" size="small"></ion-icon>
                                     </ion-button>
-                                    <ion-button  *ngIf="config.isAdmin || config.isHOD" [routerLink]="['/time-table/create', timeTable._id]" fill="clear"
-                                        size="small" color="warning">
+                                    <ion-button *ngIf="config.isAdmin || config.isHOD"
+                                        [routerLink]="['/time-table/create', timeTable._id]" fill="clear" size="small"
+                                        color="warning">
                                         <ion-icon name="create-outline" slot="icon-only" size="small"></ion-icon>
                                     </ion-button>
-                                    <ion-button  *ngIf="config.isAdmin || config.isHOD" (click)="deleteTimeTable(timeTable._id)" fill="clear"
-                                        size="small" color="danger">
+                                    <ion-button *ngIf="config.isAdmin || config.isHOD"
+                                        (click)="deleteTimeTable(timeTable._id)" fill="clear" size="small"
+                                        color="danger">
                                         <ion-icon name="trash-outline" slot="icon-only" size="small"></ion-icon>
                                     </ion-button>
                                 </span>
@@ -70,7 +72,7 @@
         </ion-card-content>
     </ion-card>
 
-    <ion-card>
+    <ion-card *ngIf="remainingTimeTables?.length">
         <ion-card-header>
             <ion-card-title>
                 <ion-label>
@@ -96,7 +98,7 @@
                                 <div class="valign-center ion-justify-content-between">
                                     <span>
                                         <span class="show-when-downloading" style="display: none;">
-                                            {{departmentControl.value['name']}} {{'department' | string}}, 
+                                            {{departmentControl.value['name']}} {{'department' | string}},
                                         </span>
                                         <span #tdate>
                                             {{timeTable.schedule.start | date:
@@ -108,16 +110,18 @@
                                     </span>
                                     <span class="buttons-actions hide-when-downloading">
                                         <ion-button
-                                            (click)="exportAsImage(timeTable._id + '-inactive', tdate.innerText)" fill="clear"
-                                            size="small" color="primary">
+                                            (click)="exportAsImage(timeTable._id + '-inactive', tdate.innerText)"
+                                            fill="clear" size="small" color="primary">
                                             <ion-icon name="download-outline" slot="icon-only" size="small"></ion-icon>
                                         </ion-button>
-                                        <ion-button [routerLink]="['/time-table/create', timeTable._id]" fill="clear"
+                                        <ion-button *ngIf="config.isAdmin || config.isHOD"
+                                            [routerLink]="['/time-table/create', timeTable._id]" fill="clear"
                                             size="small" color="warning">
                                             <ion-icon name="create-outline" slot="icon-only" size="small"></ion-icon>
                                         </ion-button>
-                                        <ion-button (click)="deleteTimeTable(timeTable._id)" fill="clear"
-                                            size="small" color="danger">
+                                        <ion-button *ngIf="config.isAdmin || config.isHOD"
+                                            (click)="deleteTimeTable(timeTable._id)" fill="clear" size="small"
+                                            color="danger">
                                             <ion-icon name="trash-outline" slot="icon-only" size="small"></ion-icon>
                                         </ion-button>
                                     </span>

@@ -112,6 +112,9 @@ export class AuthService {
     return new Promise<IUserMap>((resolve, reject) => {
       this.userService.getUserMapByUserIdAsync(userId).subscribe((userMap: IUserMap) => {
         // console.log(userMap);
+        if(!userMap) {
+          reject('User not found');
+        }
         this.currentUserMap$.next(userMap);
         this.saveUser(userMap.user as IUser);
         this.collegeService.currentCollege$.next(userMap.source.college as ICollege);
