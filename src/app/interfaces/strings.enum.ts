@@ -286,6 +286,8 @@ export enum EStrings {
     roomsDescription = 'View notifications, manage users, and more in Room',
     your = 'Your',
     map = 'Map',
+    all = 'All',
+    export = 'Export',
 
 
 }

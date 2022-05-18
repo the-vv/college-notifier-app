@@ -23,8 +23,14 @@
       </ion-button> -->
       </ion-col>
     </ion-row>
-    <p-table responsiveLayout="stack" [sortMode]="'multiple'" [value]="submissionsData" selectionMode="single"
-      [dataKey]="'_id'">
+    <p-table #dt responsiveLayout="stack" [sortMode]="'multiple'" [value]="submissionsData" selectionMode="single"
+      [dataKey]="'_id'" [columns]="exportColumns">
+      <ng-template pTemplate="caption">
+        <div class="valign-center ion-justify-content-between">
+          <span>{{'all' | string}} {{'users' | string}}</span>
+          <ion-button (click)="dt.exportCSV()" class="mr-2">{{'export' | string}}</ion-button>
+        </div>
+      </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th pSortableColumn="submittedBy">{{'submittedBy' | string}} <p-sortIcon field="submittedBy"></p-sortIcon>

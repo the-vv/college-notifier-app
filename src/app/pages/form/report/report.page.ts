@@ -9,6 +9,7 @@ import { EUserRoles } from 'src/app/interfaces/common.enum';
 import { CollegeService } from 'src/app/services/college.service';
 import { ModalController } from '@ionic/angular';
 import { TargetViewComponent } from 'src/app/shared/target-view/target-view.component';
+import { EStrings } from 'src/app/interfaces/strings.enum';
 
 @Component({
   selector: 'app-form-report',
@@ -20,6 +21,20 @@ export class FormReportPage implements OnInit {
   public formsData: IForm[] = [];
   public eUserRoles = EUserRoles;
   public currentRole: string | EUserRoles;
+  public exportColumns = [
+    {
+      header: EStrings.title,
+      field: 'title',
+    },
+    {
+      header: EStrings.createdAt,
+      field: 'createdAt',
+    },
+    {
+      header: EStrings.createdBy,
+      field: 'createdBy.email',
+    },
+  ];
 
   constructor(
     private formService: FormService,
@@ -61,6 +76,7 @@ export class FormReportPage implements OnInit {
       component: TargetViewComponent,
       componentProps: {
         target: form.target,
+        title: `${form.title} ${EStrings.form} ${EStrings.target}`
       },
     }).then(modal => {
       modal.present();

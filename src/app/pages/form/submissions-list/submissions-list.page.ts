@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IForm, IFormSubmission } from 'src/app/interfaces/common.model';
+import { EStrings } from 'src/app/interfaces/strings.enum';
 import { CommonService } from 'src/app/services/common.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { FormSubmissionService } from 'src/app/services/form-submission.service';
@@ -15,6 +16,16 @@ export class SubmissionsListPage implements OnInit {
 
   public submissionsData: IFormSubmission[] = [];
   public formTitle: string;
+  public exportColumns = [
+    {
+      header: EStrings.submittedBy,
+      field: 'user.email',
+    },
+    {
+      header: EStrings.submittedAt,
+      field: 'createdAt',
+    }
+  ];
 
   constructor(
     private formSubmissionSerivce: FormSubmissionService,

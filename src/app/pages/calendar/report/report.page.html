@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'users' | string}} {{'list' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-card>
+    <p-table #dt responsiveLayout="stack" [value]="scheduleData" [sortMode]="'multiple'" [columns]="exportColumns">
+      <ng-template pTemplate="caption">
+        <div class="valign-center ion-justify-content-between">
+          <span>{{'all' | string}} {{'resource' | string}} {{'Schedules' | string}}</span>
+          <ion-button (click)="dt.exportCSV()" class="mr-2">{{'export' | string}}</ion-button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="resource">{{'resource' | string}}<p-sortIcon field="resource"></p-sortIcon>
+          </th>
+          <th pSortableColumn="createdAt">{{'createdAt' | string}}<p-sortIcon field="createdAt"></p-sortIcon>
+          </th>
+          <th pSortableColumn="createdBy">{{'createdBy' | string}}<p-sortIcon field="createdBy"></p-sortIcon>
+          </th>
+          <th pSortableColumn="startTime">{{'startTime' | string}}<p-sortIcon field="startTime"></p-sortIcon>
+          </th>
+          <th pSortableColumn="endTime">{{'endTime' | string}}<p-sortIcon field="endTime"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-sch let-columns="columns">
+        <tr>
+          <td><span class="p-column-title">{{'resource' | string}}</span>{{sch.resource?.['name']}}</td>
+          <td><span class="p-column-title">{{'createdAt' | string}}</span>{{sch.createdAt | date: 'd/M/yyyy hh:mm a'}}</td>
+          <td><span class="p-column-title">{{'createdBy' | string}}</span>{{sch.createdBy?.['name']}}</td>
+          <td><span class="p-column-title">{{'startTime' | string}}</span>{{sch.schedule.start | date: 'd/M/yyyy hh:mm a'}}</td>
+          <td><span class="p-column-title">{{'endTime' | string}}</span>{{sch.schedule.end | date: 'd/M/yyyy hh:mm a'}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ion-card>
+</ion-content>

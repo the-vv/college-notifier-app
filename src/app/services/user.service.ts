@@ -32,6 +32,10 @@ export class UserService {
     return this.http.deleteByIdAsync(this.userUrl, id);
   }
 
+  getAllusersAsync() {
+    return this.http.getAsync(`${this.userUrl}`);
+  }
+
   getUserByCollegeIdAsync(collegeId: string, role: EUserRoles) {
     return this.http.getAsync(`${this.userMapUrl}/getByCollege/${collegeId}`, { role });
   }

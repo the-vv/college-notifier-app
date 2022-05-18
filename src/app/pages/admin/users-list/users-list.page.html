@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button slot="end"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{'users' | string}} {{'list' | string}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-card>
+    <p-table #dt responsiveLayout="stack" [value]="studentsData" [sortMode]="'multiple'" [columns]="exportColumns">
+      <ng-template pTemplate="caption">
+        <div class="valign-center ion-justify-content-between">
+          <span>{{'all' | string}} {{'users' | string}}</span>
+          <ion-button (click)="dt.exportCSV()" class="mr-2">{{'export' | string}}</ion-button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th>{{'image' | string}}</th>
+          <th pSortableColumn="name">{{'name' | string}}<p-sortIcon field="name"></p-sortIcon>
+          </th>
+          <th pSortableColumn="email">{{'email' | string}}<p-sortIcon field="email"></p-sortIcon>
+          </th>
+          <th pSortableColumn="role">{{'role' | string}}<p-sortIcon field="role"></p-sortIcon>
+          </th>
+          <th pSortableColumn="customRoles">{{'customRoles' | string}}<p-sortIcon field="customRoles"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-student let-columns="columns">
+        <tr>
+          <td><span class="p-column-title">{{'image' | string}}</span>
+            <img [src]="student.image || 'assets/images/avatar.png'" alt="{{student.name}}" class="table-avatar" />
+          </td>
+          <td><span class="p-column-title">{{'name' | string}}</span>{{student.name}}</td>
+          <td><span class="p-column-title">{{'email' | string}}</span>{{student.email}}</td>
+          <td><span class="p-column-title">{{'role' | string}}</span>{{student.role | string}}</td>
+          <td><span class="p-column-title">{{'customRoles' | string}}</span>
+            {{getCustommRoles(student.customRoles)}}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ion-card>
+</ion-content>

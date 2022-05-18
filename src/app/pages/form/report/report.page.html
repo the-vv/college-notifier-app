@@ -19,7 +19,13 @@
       <ion-col size="auto" class="ion-text-end">
       </ion-col>
     </ion-row>
-    <p-table responsiveLayout="stack" [sortMode]="'multiple'" [value]="formsData">
+    <p-table #dt responsiveLayout="stack" [sortMode]="'multiple'" [value]="formsData" [columns]="exportColumns">
+      <ng-template pTemplate="caption">
+        <div class="valign-center ion-justify-content-between">
+          <span>{{'all' | string}} {{'users' | string}}</span>
+          <ion-button (click)="dt.exportCSV()" class="mr-2">{{'export' | string}}</ion-button>
+        </div>
+      </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th pSortableColumn="title">{{'title' | string}} <p-sortIcon field="title"></p-sortIcon>

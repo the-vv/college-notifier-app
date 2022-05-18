@@ -55,6 +55,10 @@ export class ResourceService {
     return this.http.deleteByIdAsync(this.scheduleUrl, id);
   }
 
+  getSchedulesByCollegeAsync(collegeId: string): Observable<IResourceSchedule[]> {
+    return this.http.getAsync(`${this.scheduleUrl}/getByCollege/${collegeId}`);
+  }
+
   getScheduleByResourceAsync(id: string): Observable<IResourceSchedule> {
     return this.http.getAsync(`${this.scheduleUrl}/getByResource/${id}`);
   }

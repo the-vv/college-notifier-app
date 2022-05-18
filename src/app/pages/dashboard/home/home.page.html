@@ -35,7 +35,7 @@
           <ion-label>{{'rooms' | string }}</ion-label>
         </ion-tab-button>
     
-        <ion-tab-button tab="resources">
+        <ion-tab-button tab="resources" *ngIf="authService.currentUserRole !== eUserRoles.student">
           <ion-icon name="easel-outline"></ion-icon>
           <ion-label>{{'resources' | string}}</ion-label>
         </ion-tab-button>

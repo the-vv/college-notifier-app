@@ -20,10 +20,11 @@ export class HomePage implements OnInit,  OnDestroy {
 
   public currentCollege: ICollege;
   public loading = true;
+  public eUserRoles = EUserRoles;
   private subs: Subscription = new Subscription();
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router,
     private commonService: CommonService,
     private collegeService: CollegeService,
