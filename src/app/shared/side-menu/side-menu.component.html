@@ -6,7 +6,9 @@
     <ion-list-header class="text-center">
       {{authService.currentUser$.value?.name}}
     </ion-list-header>
-    <ion-note>{{authService.currentUser$.value?.role | string}}</ion-note>
+    <ion-note>{{authService.currentUser$.value?.role | string}}
+      <span *ngIf="authService.currentUser$.value?.role !== eUserRoles.admin && isAdmin">({{eUserRoles.admin | string}})</span>
+    </ion-note>
   </div>
   <ion-menu-toggle auto-hide="false">
     <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected" button

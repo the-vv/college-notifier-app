@@ -51,12 +51,14 @@
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
+                                <th width="50px">{{'hour' | string}}</th>
                                 <th *ngFor="let class of timeTable.classes">{{'class' | string}} {{class.class['name']}}
                                 </th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
                             <tr>
+                                <td>{{rowIndex + 1}}</td>
                                 <td *ngFor="let class of timeTable.classes">{{getClassHourAllocation(class.class['_id'],
                                     rowIndex, timeTable._id)}}</td>
                             </tr>
@@ -123,6 +125,7 @@
                             </ng-template>
                             <ng-template pTemplate="header">
                                 <tr>
+                                    <th width="50px">{{'hour' | string}}</th>
                                     <th *ngFor="let class of timeTable.classes">{{'class' | string}}
                                         {{class.class['name']}}
                                     </th>
@@ -130,6 +133,7 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
                                 <tr>
+                                    <td>{{rowIndex + 1}}</td>
                                     <td *ngFor="let class of timeTable.classes">
                                         {{getClassHourAllocation(class.class['_id'],
                                         rowIndex, timeTable._id)}}</td>

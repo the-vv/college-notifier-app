@@ -32,7 +32,7 @@ export class FormReportPage implements OnInit {
 
   async ionViewWillEnter() {
     this.currentRole = this.authService.currentUserRole;
-    if (this.currentRole === EUserRoles.admin) {
+    if (this.config.isAdmin) {
       const loading = await this.commonService.showLoading();
       this.formService.getByCollegeAsync(this.collegeService.currentCollege$.value._id).subscribe(forms => {
         loading.dismiss();
