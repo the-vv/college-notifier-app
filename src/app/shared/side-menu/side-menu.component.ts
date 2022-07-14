@@ -32,7 +32,7 @@ export class SideMenuComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setupMenu();
-    this.userIsActive = this.configService.currentUsermap.active;
+    this.userIsActive = this.configService.currentUsermap?.active;
     this.setupMenu();
   }
 
@@ -42,6 +42,8 @@ export class SideMenuComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.collegeService.currentCollege$.subscribe(res => {
         this.isSuperAdmin = [EUserRoles.superAdmin].includes(this.authService.currentUser$.value?.role);
+        console.log('isSuperAdmin', this.isSuperAdmin);
+        console.log(this.authService.currentUser$.value?.role);
         if (res && res.status === ERequestStatus.active) {
           this.isAdmin = [EUserRoles.admin].includes(this.authService.currentUser$.value?.role) ? true : false;
           if (!this.isAdmin) {
