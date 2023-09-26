@@ -176,13 +176,13 @@ export class CreatePage implements OnInit, OnDestroy {
   }
 
   accChange(e: any) {
-    if ((e?.path[0]?.classList as DOMTokenList)?.contains('accordion-group-expand-compact')) {
+    if ((e?.path?.[0]?.classList as DOMTokenList)?.contains('accordion-group-expand-compact')) {
       this.accordianVal = e.detail.value;
     }
   }
 
   tutorAcccChange(e: any) {
-    if ((e?.path[0]?.classList as DOMTokenList)?.contains('accordion-group-expand-compact')) {
+    if ((e?.path?.[0]?.classList as DOMTokenList)?.contains('accordion-group-expand-compact')) {
       this.tutorAccordian = e.detail.value;
     }
   }
@@ -284,6 +284,13 @@ export class CreatePage implements OnInit, OnDestroy {
       loader.dismiss();
       this.commonService.showToast(err.error.message);
     });
+  }
+
+  public enableStartButton() {
+    return this.hoursCtrl.value &&
+      this.rolesCtrl.value?.length &&
+      this.departmentControl.value &&
+      this.classesControl.value?.length;
   }
 
   async onStart() {

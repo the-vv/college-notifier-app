@@ -47,7 +47,7 @@
           <ion-col size="12">
             <ion-item class="mt-1">
               <ion-label>{{'customRole' | string}}</ion-label>
-              <ion-select interface="popover" formControlName="customRoles" [multiple]="true">
+              <ion-select  formControlName="customRoles" [multiple]="true">
                 <ion-select-option *ngFor="let crole of customRoles" [value]="crole.value">{{crole.name | string}}</ion-select-option>
               </ion-select>
             </ion-item>

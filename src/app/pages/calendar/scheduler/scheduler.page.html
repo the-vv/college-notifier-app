@@ -27,7 +27,7 @@
           <ion-col size-md="4" size="12">
             <ion-item>
               <ion-label>{{'view' | string}}</ion-label>
-              <ion-select interface="popover" [ngModel]="viewDays" #viewDayOptionSelect
+              <ion-select  [ngModel]="viewDays" #viewDayOptionSelect
                 (ionChange)="viewDaysOptionChanged(viewDayOptionSelect.value)">
                 <ion-select-option [value]="1">{{'day' | string}}</ion-select-option>
                 <ion-select-option [value]="3">{{'threeDays' | string}}</ion-select-option>
@@ -38,7 +38,7 @@
           <ion-col size-md="5" size="12">
             <ion-item>
               <ion-label>{{'hourInterval' | string}}</ion-label>
-              <ion-select interface="popover" [ngModel]="hourSegments" #houeSegmentSelect1
+              <ion-select  [ngModel]="hourSegments" #houeSegmentSelect1
                 (ionChange)="hourSegmentChanged(houeSegmentSelect1.value)">
                 <ion-select-option [value]="1">{{'oneHour' | string}}</ion-select-option>
                 <ion-select-option [value]="2">{{'halfHour' | string}}</ion-select-option>

@@ -89,7 +89,7 @@
             </ion-row>
             <ion-row class="ion-justify-content-center">
               <ion-col size="12" sizeMd="6" class="text-center mt-1">
-                <ion-button (click)="onStart()" fill="outline"> {{'start' | string}} {{'creating' | string}}
+                <ion-button (click)="onStart()" [disabled]="!enableStartButton()" fill="outline"> {{'start' | string}} {{'creating' | string}}
                 </ion-button>
               </ion-col>
             </ion-row>
@@ -111,7 +111,7 @@
               <ion-col size="12" sizeMd="6">                
                 <ion-item>
                   <ion-label position="floating">{{'customRole' | string}}</ion-label>
-                  <ion-select #cRolesSelect interface="popover" [multiple]="true" [formControl]="rolesCtrl">
+                  <ion-select #cRolesSelect  [multiple]="true" [formControl]="rolesCtrl">
                     <ion-select-option *ngFor="let crole of customRoles" [value]="crole.value">{{crole.name | string}}
                     </ion-select-option>
                   </ion-select>
