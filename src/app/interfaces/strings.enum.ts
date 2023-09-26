@@ -289,6 +289,8 @@ export enum EStrings {
     all = 'All',
     export = 'Export',
     noDepartment = 'No Department',
-
+    chooseResource = 'Choose Resource',
+    chooseResourceDescription = 'Do you want to choose a resource to schedule?',
+    cannotCreateSchedulePastDate = 'Cannot create schedule for past date',
 
 }

@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, ModalController } from '@ionic/angular';
 import {
   CalendarView,
@@ -77,7 +77,8 @@ export class SchedulerPage implements OnInit {
     private commonService: CommonService,
     private modalCtrl: ModalController,
     private alertController: AlertController,
-    private config: ConfigService
+    private config: ConfigService,
+    private router: Router
   ) {
 
     this.locale = locale;
@@ -232,8 +233,19 @@ export class SchedulerPage implements OnInit {
     console.log('hourClicked Hour', hour);
   }
 
-  segmentClicked(segment: SchedulerViewHourSegment): void {
-    if (!this.resourceId || segment.date < new Date()) { return; }
+  async segmentClicked(segment: SchedulerViewHourSegment) {
+    if (segment.date < new Date()) {
+      return this.commonService.showToast(EStrings.cannotCreateSchedulePastDate);
+    }
+    if (!this.resourceId) {
+      const result = await this.commonService.showOkCancelAlert(EStrings.chooseResource, EStrings.chooseResourceDescription);
+      if (result) {
+        this.router.navigate(['/dashboard/resources']);
+        return;
+      } else {
+        return;
+      }
+    }
     const startTime = this.commonService.toLocaleIsoDateString(segment.date);
     const minutesToAdd = 60 / this.calendarScheduler.hourSegments;
     this.modalCtrl.create({
